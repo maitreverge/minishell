@@ -1,0 +1,2 @@
+# minishell
+Your terminal, redefined 🐚
