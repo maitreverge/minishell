@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/24 18:06:36 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/24 18:14:11 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ void	free_tokens(char **t)
 }
 
 /*Make sure to pass the ENTIRE line (got by readline()),
-	otherwise the function might not work properly*/
+	otherwise the function might not work properly.*/
+
+//TODO: handle environment variables passed as input, e.g. "echo $USER"
 void	ft_echo(char *s)
 {
 	char	**tokens;
