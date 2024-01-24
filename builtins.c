@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/24 17:56:27 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/24 18:06:36 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,28 +134,20 @@ void	ft_pwd(void)
 	free(cwd);
 }
 
-void	ft_env(void)
+void	ft_env(char **envp)
 {
-	if (getenv("SHELL") != NULL)
-		printf("SHELL=%s\n", getenv("SHELL"));
-	if (getenv("NAME") != NULL)
-		printf("NAME=%s\n", getenv("NAME"));
-	if (getenv("PWD") != NULL)
-		printf("PWD=%s\n", getenv("PWD"));
-	if (getenv("LOGNAME") != NULL)
-		printf("LOGNAME=%s\n", getenv("LOGNAME"));
-	if (getenv("HOME") != NULL)
-		printf("HOME=%s\n", getenv("HOME"));
-	if (getenv("LANG") != NULL)
-		printf("LANG=%s\n", getenv("LANG"));
-	if (getenv("USER") != NULL)
-		printf("USER=%s\n", getenv("USER"));
-	if (getenv("PATH") != NULL)
-		printf("PATH=%s\n", getenv("PATH"));
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
 }
 
 //test main
-int main(int ac, char **av)//, char **env
+int main(int ac, char **av, char **envp)//, char **env
 {
 	(void)ac;
 	(void)av;
@@ -172,7 +164,7 @@ int main(int ac, char **av)//, char **env
 		else if (ft_strncmp(line, "pwd", 3) == 0)
 			ft_pwd();
 		else if (ft_strncmp(line, "env", 3) == 0)
-			ft_env();
+			ft_env(envp);
 		else if (ft_strncmp(line, "exit", 4) == 0)
 			return (free(line), exit(0), 0);
 		free(line);
