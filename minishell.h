@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/24 15:49:34 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/25 13:56:25 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 # include <term.h>
 
 /*Builtins*/
-void	ft_echo(char *s);
+void	free_tokens(char **t);
+void	ft_echo(char *s, char **envp);
 void	ft_cd(char *path);
 void	ft_pwd(void);
 

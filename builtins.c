@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/24 18:14:11 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/25 14:01:47 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,82 +26,6 @@ void	free_tokens(char **t)
 	}
 	free(t);
 }
-
-/*Make sure to pass the ENTIRE line (got by readline()),
-	otherwise the function might not work properly.*/
-
-//TODO: handle environment variables passed as input, e.g. "echo $USER"
-void	ft_echo(char *s)
-{
-	char	**tokens;
-	int		last;
-	int		i;
-
-	tokens = NULL;
-	if (ft_strchr(s, ' ') != NULL)
-		tokens = ft_split(s, ' ');
-	/*There are no spaces, or there's only one word*/
-	if ((tokens != NULL && tokens[1] == NULL) || tokens == NULL)
-	{
-		printf("\n");
-		free_tokens(tokens);
-		return ;
-	}
-	last = 0;
-	while (tokens[last])
-		last++;
-	if (ft_strncmp(tokens[1], "-n", 3) == 0)
-	{
-		i = 2;
-		while (tokens[i])
-		{
-			if (i == last - 1)
-				printf("%s", tokens[i++]);
-			else
-				printf("%s ", tokens[i++]);
-
-		}
-		free_tokens(tokens);
-		return ;
-	}
-	else
-	{
-		i = 1;
-		while (tokens[i])
-			printf("%s ", tokens[i++]);
-		printf("\n");
-	}
-	free_tokens(tokens);
-}
-/* As an extension to the POSIX.1-2001 standard, glibc's getcwd()
-    allocates the buffer dynamically using malloc(3) if buf is NULL.
-    In this case, the allocated buffer has the length size unless
-  	size is zero, when buf is allocated as big as necessary.
-*/
-// static short check_rel_or_abs_path(void)//char *path
-// {
-// 	char	*cwd;
-
-// 	//cwd = ft_calloc(1000, sizeof(char));
-// 	cwd = NULL;
-// 	cwd = getcwd(cwd, 0);
-// 	if (!cwd)
-// 	{
-// 		free(cwd);
-// 		perror("check_rel_or_abs_path: ");
-// 		exit(-1);
-// 	}
-// 	if (cwd[0] == '~' || cwd[0] == '/')
-// 	{
-// 		free(cwd);
-// 		return (1);
-// 	}
-// 	else
-// 	{
-// 		free(cwd);
-// 		return (2);
-// 	}
-// }
 
 /*cd MUST be called with the full line received from readline(),
 	otherwise it won't work.*/
@@ -160,7 +84,7 @@ int main(int ac, char **av, char **envp)//, char **env
 	{
 		line = readline("minishell$ ");
 		if (ft_strncmp(line, "echo", 4) == 0)
-			ft_echo(line);
+			ft_echo(line, envp);
 		else if (ft_strncmp(line, "cd", 2) == 0)
 			ft_cd(line);
 		else if (ft_strncmp(line, "pwd", 3) == 0)

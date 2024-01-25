@@ -6,7 +6,7 @@
 #    By: glambrig <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/01/24 14:39:48 by glambrig         ###   ########.fr        #
+#    Updated: 2024/01/25 13:17:37 by glambrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
 
 # Source files
-SRC = builtins.c
+SRC = builtins.c \
+		builtins_echo.c
 
 # Object files
 OBJ = $(SRC:.c=.o)
