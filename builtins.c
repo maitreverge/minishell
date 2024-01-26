@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/25 15:50:06 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/26 12:06:30 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int main(int ac, char **av, char **envp)//, char **env
 	{
 		line = readline("minishell$ ");
 		if (ft_strncmp(line, "echo", 4) == 0)
-			ft_echo(line, envp);
+			ft_echo(line, envp, 1);
 		else if (ft_strncmp(line, "cd", 2) == 0)
 			ft_cd(line);
 		else if (ft_strncmp(line, "pwd", 3) == 0)
@@ -94,6 +94,7 @@ int main(int ac, char **av, char **envp)//, char **env
 			ft_env(envp);
 		else if (ft_strncmp(line, "exit", 4) == 0)
 			return (free(line), exit(0), 0);
+		add_history(line);
 		free(line);
 		i++;
 	}

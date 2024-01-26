@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/26 11:48:49 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/26 12:37:04 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	ft_echo(char *s, char **envp, int fd)
 				result = compare_env_var_with_envp(trimmed, envp);
 				// printf("%s ", result);
 				ft_putstr_fd(result, fd);
+				if (i != last)
+					ft_putchar_fd(' ', fd);
 				free(trimmed);
 				free(result);
 				continue ;
@@ -146,8 +148,14 @@ void	ft_echo(char *s, char **envp, int fd)
 				free(result);
 				continue ;
 			}
+			/*Has a $ sign, but isn't in the list of env vars.*/
+			else if (check_if_env_var(trimmed, envp) == 2)
+				continue ;
 			//printf("%s ", trimmed);
-			ft_putstr_fd(result, fd);
+			char *temp;
+			temp = ft_strtrim(trimmed, "\'");
+			ft_putstr_fd(temp, fd);
+			free(temp);
 			ft_putchar_fd(' ', fd);
 			free(trimmed);
 		}
