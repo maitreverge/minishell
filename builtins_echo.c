@@ -6,11 +6,18 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/26 12:37:04 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/26 15:15:15 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	get_last_exit_status(t_exit_status_list *lst)
+{
+	//return (ft_lstlast(lst));
+	(void)lst;//test
+	return (0);//test
+}
 
 /*
 	Determines which environment variable the given string/key corresponds to,
@@ -53,6 +60,8 @@ int	check_if_env_var(char *s, char **envp)
 		if (s[0] != '$')
 			return (0);
 			// !
+		// else if (s[0] == '$' && s[1] == '$')
+		// 	return (1);
 		else
 		{
 			free_v = compare_env_var_with_envp(s, envp);
@@ -79,7 +88,7 @@ int	check_if_env_var(char *s, char **envp)
 		-echo $$ prints shell's PID
 		-echo $? prints exit status of last command
 */
-void	ft_echo(char *s, char **envp, int fd)
+int	ft_echo(char *s, char **envp, int fd)
 {
 	char	**tokens;
 	char 	*trimmed;
@@ -96,7 +105,7 @@ void	ft_echo(char *s, char **envp, int fd)
 		//printf("\n");
 		ft_putstr_fd("\n", fd);
 		free_tokens(tokens);
-		return ;
+		return (0);
 	}
 	last = 0;
 	while (tokens[last])
@@ -118,6 +127,15 @@ void	ft_echo(char *s, char **envp, int fd)
 				free(result);
 				continue ;
 			}
+			else if (trimmed[0] == '$' && trimmed[1] == '?')
+			{
+				free(trimmed);
+				//trimmed = get_last_exit_status(s_exit_status_list);
+				trimmed[0] = '0';///test
+				trimmed[1] = '\0';///test
+			}
+			else if (check_if_env_var(trimmed, envp) == 2)
+				continue ;
 			if (i == last - 1)
 				ft_putstr_fd(trimmed, fd);
 				//printf("%s", trimmed);
@@ -130,7 +148,7 @@ void	ft_echo(char *s, char **envp, int fd)
 			free(trimmed);
 		}
 		free_tokens(tokens);
-		return ;
+		return (0);
 	}
 	else
 	{
@@ -148,6 +166,12 @@ void	ft_echo(char *s, char **envp, int fd)
 				free(result);
 				continue ;
 			}
+			else if (trimmed[0] == '$' && trimmed[1] == '?')
+			{
+				//trimmed = get_last_exit_status(s_exit_status_list);
+				trimmed[0] = '0';///test
+				trimmed[1] = '\0';///test
+			}
 			/*Has a $ sign, but isn't in the list of env vars.*/
 			else if (check_if_env_var(trimmed, envp) == 2)
 				continue ;
@@ -162,4 +186,5 @@ void	ft_echo(char *s, char **envp, int fd)
 		printf("\n");
 	}
 	free_tokens(tokens);
+	return (0);
 }
