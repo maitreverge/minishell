@@ -1,0 +1,280 @@
+---------------------------------------------------------------------------------
+
+READLINE
+
+The readline function is not a standard C function, but it's part of the GNU Readline library, which provides a set of functions for use by applications that allow users to edit command lines as they are typed in.
+
+Function Description: readline reads a line from the terminal and returns it, allowing the user to edit the line with familiar key bindings and history capabilities.
+
+Prototype: char *readline(const char *prompt);
+
+Library: #include <readline/readline.h>
+
+Example:
+
+#include <stdio.h>
+#include <readline/readline.h>
+
+int main() {
+	char *line = readline("Enter a line: ");
+	printf("You entered: %s\n", line);
+	free(line);  // Don't forget to free the memory allocated by readline
+	return 0;
+}
+
+In this example, the program prompts the user to enter a line of text, then prints the entered line. The memory allocated by readline is freed after it's no longer needed.
+
+---------------------------------------------------------------------------------
+
+RL_CLEAR_HISTORY
+
+
+The rl_clear_history function is part of the GNU Readline library, which provides a set of functions for use by applications that allow users to edit command lines as they are typed in.
+
+Function Description: rl_clear_history clears the history list by freeing the memory of each element in the list and setting the length of the list to zero.
+
+Prototype: void rl_clear_history(void);
+
+Library: #include <readline/history.h>
+
+Example:
+
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int main() {
+	char *line;
+	while ((line = readline("Enter a line: ")) != NULL) {
+		if (*line) add_history(line);
+		printf("You entered: %s\n", line);
+		free(line);
+	}
+	rl_clear_history();
+	return 0;
+}
+
+In this example, the program prompts the user to enter lines of text until an EOF (End Of File) character is received (Ctrl+D in Unix-like systems). Each entered line is added to the history.
+After the loop, rl_clear_history is called to clear the history list.
+
+
+---------------------------------------------------------------------------------
+RL_ON_NEW_LINE
+
+The rl_on_new_line function is part of the GNU Readline library, which provides a set of functions for use by applications that allow users to edit command lines as they are typed in.
+
+Function Description: rl_on_new_line tells the readline library that the cursor is on a new line, so it should reset its idea of the cursor position. It's often used after a newline character has been printed or the readline input line has been cleared.
+
+Prototype: int rl_on_new_line(void);
+
+Library: #include <readline/readline.h>
+
+Example:
+
+
+#include <stdio.h>
+#include <readline/readline.h>
+
+int main() {
+	char *line = readline("Enter a line: ");
+	printf("You entered: %s\n", line);
+	free(line);
+	rl_on_new_line();
+	return 0;
+}
+
+In this example, the program prompts the user to enter a line of text, then prints the entered line. After freeing the memory allocated by readline, rl_on_new_line is called to inform readline that the cursor is on a new line
+
+
+---------------------------------------------------------------------------------
+RL_REPLACE_LINE
+
+The rl_replace_line function is part of the GNU Readline library, which provides a set of functions for use by applications that allow users to edit command lines as they are typed in.
+
+Function Description: rl_replace_line replaces the contents of the current readline buffer with the string passed as an argument.
+
+Prototype: int rl_replace_line(const char *text, int clear_undo);
+
+Library: #include <readline/readline.h>
+
+Example:
+
+#include <stdio.h>
+#include <readline/readline.h>
+
+int main() {
+	char *line = readline("Enter a line: ");
+	rl_replace_line("This is a new line", 0);
+	rl_redisplay();
+	free(line);
+	return 0;
+}
+
+In this example, the program prompts the user to enter a line of text. Then, rl_replace_line is called to replace the contents of the readline buffer with "This is a new line". The rl_redisplay function is then called to update the display.
+The memory allocated by readline is freed after it's no longer needed.
+
+
+---------------------------------------------------------------------------------
+RL_REDISPLAY
+
+The rl_redisplay function is part of the GNU Readline library, which provides a set of functions for use by applications that allow users to edit command lines as they are typed in.
+
+Function Description: rl_redisplay causes readline to update the screen to reflect the current contents of the readline buffer.
+
+Prototype: void rl_redisplay(void);
+
+Library: #include <readline/readline.h>
+
+Example:
+
+#include <stdio.h>
+#include <readline/readline.h>
+
+int main() {
+	char *line = readline("Enter a line: ");
+	rl_replace_line("This is a new line", 0);
+	rl_redisplay();
+	free(line);
+	return 0;
+}
+
+In this example, the program prompts the user to enter a line of text. Then, rl_replace_line is called to replace the contents of the readline buffer with "This is a new line". The rl_redisplay function is then called to update the display.
+The memory allocated by readline is freed after it's no longer needed.
+
+
+---------------------------------------------------------------------------------
+ADD_HISTORY
+
+
+
+---------------------------------------------------------------------------------
+
+ACCESS
+---------------------------------------------------------------------------------
+
+OPEN
+---------------------------------------------------------------------------------
+
+READ
+---------------------------------------------------------------------------------
+
+CLOSE
+---------------------------------------------------------------------------------
+
+FORK
+---------------------------------------------------------------------------------
+
+WAIT
+---------------------------------------------------------------------------------
+
+WAITPID
+---------------------------------------------------------------------------------
+
+WAIT3
+---------------------------------------------------------------------------------
+
+WAIT4
+---------------------------------------------------------------------------------
+
+SIGNAL
+---------------------------------------------------------------------------------
+
+SIGACTION
+---------------------------------------------------------------------------------
+
+SIGEMPTYSET
+---------------------------------------------------------------------------------
+
+SIGADDSET
+---------------------------------------------------------------------------------
+
+KILL
+---------------------------------------------------------------------------------
+
+EXIT
+---------------------------------------------------------------------------------
+
+GETCWD
+---------------------------------------------------------------------------------
+
+CHDIR
+---------------------------------------------------------------------------------
+
+STAT
+---------------------------------------------------------------------------------
+
+LSTAT
+---------------------------------------------------------------------------------
+
+FSTAT
+---------------------------------------------------------------------------------
+
+UNLINK
+---------------------------------------------------------------------------------
+
+EXECVE
+---------------------------------------------------------------------------------
+
+DUP
+---------------------------------------------------------------------------------
+
+DUP2
+---------------------------------------------------------------------------------
+
+PIPE
+---------------------------------------------------------------------------------
+
+OPENDIR
+---------------------------------------------------------------------------------
+
+READDIR
+---------------------------------------------------------------------------------
+
+CLOSEDIR
+---------------------------------------------------------------------------------
+
+STRERROR
+---------------------------------------------------------------------------------
+
+PERROR
+---------------------------------------------------------------------------------
+
+ISATTY
+---------------------------------------------------------------------------------
+
+TTYNAME
+---------------------------------------------------------------------------------
+
+TTYSLOT
+---------------------------------------------------------------------------------
+
+IOCTL
+---------------------------------------------------------------------------------
+
+GETENV
+---------------------------------------------------------------------------------
+
+TCSETATTR
+---------------------------------------------------------------------------------
+
+TCGETATTR
+---------------------------------------------------------------------------------
+
+TGETENT
+---------------------------------------------------------------------------------
+
+TGETFLAG
+---------------------------------------------------------------------------------
+
+TGETNUM
+---------------------------------------------------------------------------------
+
+TGETSTR
+---------------------------------------------------------------------------------
+
+TGOTO
+---------------------------------------------------------------------------------
+
+TPUTS
+---------------------------------------------------------------------------------
+
