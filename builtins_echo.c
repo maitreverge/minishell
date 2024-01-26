@@ -6,13 +6,18 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/25 15:26:51 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/26 11:48:49 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*Return value is allocated with malloc and MUST be freed after use.*/
+/*
+	Determines which environment variable the given string/key corresponds to,
+	and returns its value.
+
+	Return value is allocated with malloc and MUST be freed after use.
+*/
 char	*compare_env_var_with_envp(char *str, char **envp)
 {
 	int		i;
@@ -47,6 +52,7 @@ int	check_if_env_var(char *s, char **envp)
 	{
 		if (s[0] != '$')
 			return (0);
+			// !
 		else
 		{
 			free_v = compare_env_var_with_envp(s, envp);
@@ -65,13 +71,15 @@ int	check_if_env_var(char *s, char **envp)
 	return (0);
 }
 
-/*Make sure to pass the ENTIRE line (got by readline()),
-	otherwise the function might not work properly.*/
-/*TODO:
-	echo $$ prints shell's PID
-	echo $? prints exit status of last command
+/*
+	Make sure to pass the ENTIRE line (got by readline()),
+	otherwise the function might not work properly.
 */
-void	ft_echo(char *s, char **envp)
+/*	TODO, for whoever does the parsing:
+		-echo $$ prints shell's PID
+		-echo $? prints exit status of last command
+*/
+void	ft_echo(char *s, char **envp, int fd)
 {
 	char	**tokens;
 	char 	*trimmed;
@@ -85,7 +93,8 @@ void	ft_echo(char *s, char **envp)
 	/*There are no spaces, or there's only one word*/
 	if ((tokens != NULL && tokens[1] == NULL) || tokens == NULL)
 	{
-		printf("\n");
+		//printf("\n");
+		ft_putstr_fd("\n", fd);
 		free_tokens(tokens);
 		return ;
 	}
@@ -101,15 +110,21 @@ void	ft_echo(char *s, char **envp)
 			if (check_if_env_var(trimmed, envp) == 1)
 			{
 				result = compare_env_var_with_envp(trimmed, envp);
-				printf("%s ", result);
+				// printf("%s ", result);
+				ft_putstr_fd(result, fd);
 				free(trimmed);
 				free(result);
 				continue ;
 			}
 			if (i == last - 1)
-				printf("%s", trimmed);
+				ft_putstr_fd(trimmed, fd);
+				//printf("%s", trimmed);
 			else
-				printf("%s ", trimmed);
+			{
+				// printf("%s ", trimmed);
+				ft_putstr_fd(trimmed, fd);
+				ft_putchar_fd(' ', fd);
+			}
 			free(trimmed);
 		}
 		free_tokens(tokens);
@@ -124,12 +139,16 @@ void	ft_echo(char *s, char **envp)
 			if (check_if_env_var(trimmed, envp) == 1)
 			{
 				result = compare_env_var_with_envp(trimmed, envp);
-				printf("%s ", result);
+				// printf("%s ", result);
+				ft_putstr_fd(result, fd);
+				ft_putchar_fd(' ', fd);
 				free(trimmed);
 				free(result);
 				continue ;
 			}
-			printf("%s ", trimmed);
+			//printf("%s ", trimmed);
+			ft_putstr_fd(result, fd);
+			ft_putchar_fd(' ', fd);
 			free(trimmed);
 		}
 		printf("\n");

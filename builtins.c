@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/25 14:01:47 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/25 15:50:06 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	ft_cd(char *s)
 	tokens = NULL;
 	if (ft_strchr(s, ' ') != NULL)
 		tokens = ft_split(s, ' ');
+	/*cd with no parameters changes to home directory*/
 	if ((tokens != NULL && tokens[1] == NULL) || tokens == NULL)
 	{
 		homepath = ft_strjoin("/home/", getenv("USER"));
