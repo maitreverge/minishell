@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/26 12:06:36 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/26 15:16:42 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,16 @@
 # include <curses.h>
 # include <term.h>
 
+typedef struct s_exit_status_list
+{
+	int							status;
+	struct s_exit_status_list	*next;
+}	t_exit_status_list;
+
 /*Builtins*/
 void	free_tokens(char **t);
-void	ft_echo(char *s, char **envp, int fd);
-void	ft_cd(char *path);
-void	ft_pwd(void);
+int		ft_echo(char *s, char **envp, int fd);
+int		ft_cd(char *path);
+int		ft_pwd(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/26 12:06:30 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/26 16:13:56 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_tokens(char **t)
 
 /*cd MUST be called with the full line received from readline(),
 	otherwise it won't work.*/
-void	ft_cd(char *s)
+int	ft_cd(char *s)
 {
 	char 	**tokens;
 	char	*homepath;
@@ -44,14 +44,16 @@ void	ft_cd(char *s)
 		chdir(homepath);
 		free(homepath);
 		free_tokens(tokens);
-		return ;
+		return (0);
 	}
 	else if (tokens != NULL)
 		chdir(tokens[1]);
 	free_tokens(tokens);
+	return (0);
 }
 
-void	ft_pwd(void)
+/*AUSSI CHANGER PWD ENV!*/
+int	ft_pwd(void)
 {
 	char	*cwd;
 
@@ -59,9 +61,10 @@ void	ft_pwd(void)
 	cwd = getcwd(cwd, 0);
 	printf("%s\n", cwd);
 	free(cwd);
+	return (0);
 }
 
-void	ft_env(char **envp)
+int	ft_env(char **envp)
 {
 	int	i;
 
@@ -71,9 +74,10 @@ void	ft_env(char **envp)
 		printf("%s\n", envp[i]);
 		i++;
 	}
+	return (0);
 }
 
-//test main
+//Recuperer env dans structure
 int main(int ac, char **av, char **envp)//, char **env
 {
 	(void)ac;
