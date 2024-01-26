@@ -1,7 +1,7 @@
 #! /bin/sh
 
-gomaster
+git switch master
 git pull
-goflo
+git switch flo_branch
 git pull
-gogeorge
+git switch glambrig
