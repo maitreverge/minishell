@@ -145,136 +145,400 @@ The memory allocated by readline is freed after it's no longer needed.
 ---------------------------------------------------------------------------------
 ADD_HISTORY
 
+The add_history function is part of the GNU Readline library, which provides a set of functions for use by applications that allow users to edit command lines as they are typed in.
+
+Function Description: add_history adds the string passed as an argument to the history list.
+
+Prototype: void add_history(const char *line);
+
+Library: #include <readline/history.h>
+
+Example:
+
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int main() {
+	char *line = readline("Enter a line: ");
+	if (*line) add_history(line);
+	printf("You entered: %s\n", line);
+	free(line);
+	return 0;
+}
+
+In this example, the program prompts the user to enter a line of text. If the entered line is not empty, add_history is called to add the line to the history list. The entered line is then printed,
+and the memory allocated by readline is freed after it's no longer needed.
 
 
 ---------------------------------------------------------------------------------
-
 ACCESS
----------------------------------------------------------------------------------
 
+The access function is a standard C function that checks the file's accessibility.
+
+Function Description: access checks whether the calling process can access the file pathname. It checks the file's permissions based on the mode parameter which can be F_OK (tests for the existence of the file), R_OK (tests for read permission), W_OK (tests for write permission), and X_OK (tests for execute or search permission).
+
+Prototype: int access(const char *pathname, int mode);
+
+Library: #include <unistd.h>
+
+Example:
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+	if (access("myfile.txt", F_OK) != -1) {
+		printf("File exists.\n");
+	} else {
+		printf("File doesn't exist.\n");
+	}
+	return 0;
+}
+
+In this example, the program checks if the file myfile.txt exists. If the file exists,
+it prints "File exists.", otherwise it prints "File doesn't exist.".
+
+---------------------------------------------------------------------------------
 OPEN
----------------------------------------------------------------------------------
 
+The open function is a standard C function that opens a file or device.
+
+Function Description: open opens the file specified by pathname. The flags parameter determines the file access mode (read, write, read/write, create, etc.). It returns a file descriptor for the opened file, or -1 if an error occurs.
+
+Prototype: int open(const char *pathname, int flags);
+
+Library: #include <fcntl.h>
+
+Example:
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+	int fd = open("myfile.txt", O_RDONLY);
+	if (fd == -1) {
+		printf("Failed to open file.\n");
+	} else {
+		printf("File opened successfully.\n");
+		close(fd);
+	}
+	return 0;
+}
+
+In this example, the program attempts to open the file myfile.txt in read-only mode. If the file is opened successfully, it prints "File opened successfully." and then closes the file.
+If the file cannot be opened, it prints "Failed to open file.".
+
+---------------------------------------------------------------------------------
 READ
----------------------------------------------------------------------------------
 
+The read function is a standard C function that reads data from a file.
+
+Function Description: read reads up to count bytes from the file referenced by the file descriptor fd, storing the results in the buffer.
+
+Prototype: ssize_t read(int fd, void *buf, size_t count);
+
+Library: #include <unistd.h>
+
+Example:
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUF_SIZE 1024
+
+int main() {
+	int fd = open("myfile.txt", O_RDONLY);
+	if (fd == -1) {
+		printf("Failed to open file.\n");
+	} else {
+		char buf[BUF_SIZE];
+		ssize_t bytesRead = read(fd, buf, BUF_SIZE - 1);
+		if (bytesRead >= 0) {
+			buf[bytesRead] = '\0';  // Null-terminate the string
+			printf("Read from file: %s\n", buf);
+		} else {
+			printf("Failed to read from file.\n");
+		}
+		close(fd);
+	}
+	return 0;
+}
+
+In this example, the program attempts to open the file myfile.txt in read-only mode. If the file is opened successfully, it reads up to BUF_SIZE - 1 bytes from the file into a buffer, then prints the contents of the buffer. If the file cannot be read,
+it prints "Failed to read from file.". After reading, the file is closed.
+
+
+---------------------------------------------------------------------------------
 CLOSE
----------------------------------------------------------------------------------
 
+The close function is a standard C function that closes a file descriptor.
+
+Function Description: close closes a file descriptor, so that it no longer refers to any file and may be reused. It returns zero on success, or -1 if an error occurs.
+
+Prototype: int close(int fd);
+
+Library: #include <unistd.h>
+
+Example:
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+	int fd = open("myfile.txt", O_RDONLY);
+	if (fd == -1) {
+		printf("Failed to open file.\n");
+	} else {
+		printf("File opened successfully.\n");
+		if (close(fd) == 0) {
+			printf("File closed successfully.\n");
+		} else {
+			printf("Failed to close file.\n");
+		}
+	}
+	return 0;
+}
+
+In this example, the program attempts to open the file myfile.txt in read-only mode. If the file is opened successfully, it prints "File opened successfully.". Then it attempts to close the file. If the file is closed successfully, it prints "File closed successfully.".
+If the file cannot be closed, it prints "Failed to close file.".
+
+---------------------------------------------------------------------------------
 FORK
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 WAIT
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 WAITPID
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 WAIT3
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 WAIT4
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 SIGNAL
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 SIGACTION
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 SIGEMPTYSET
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 SIGADDSET
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 KILL
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 EXIT
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 GETCWD
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 CHDIR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 STAT
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 LSTAT
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 FSTAT
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 UNLINK
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 EXECVE
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 DUP
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 DUP2
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 PIPE
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 OPENDIR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 READDIR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 CLOSEDIR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 STRERROR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 PERROR
----------------------------------------------------------------------------------
 
+
+
+
+--------------------------------------------------------------------------------
 ISATTY
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TTYNAME
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TTYSLOT
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 IOCTL
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 GETENV
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TCSETATTR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TCGETATTR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TGETENT
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TGETFLAG
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TGETNUM
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TGETSTR
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TGOTO
----------------------------------------------------------------------------------
 
+
+
+
+---------------------------------------------------------------------------------
 TPUTS
+
+
+
+
 ---------------------------------------------------------------------------------
 
