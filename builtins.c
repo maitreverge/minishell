@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/26 15:16:23 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/26 16:13:56 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	ft_cd(char *s)
 	return (0);
 }
 
+/*AUSSI CHANGER PWD ENV!*/
 int	ft_pwd(void)
 {
 	char	*cwd;
@@ -76,7 +77,7 @@ int	ft_env(char **envp)
 	return (0);
 }
 
-//test main
+//Recuperer env dans structure
 int main(int ac, char **av, char **envp)//, char **env
 {
 	(void)ac;
