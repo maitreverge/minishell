@@ -6,17 +6,17 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 04:25:36 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/27 04:27:13 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/27 04:49:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_node	*lstnew(int number, int index)
+t_pars	*lstnew(int number, int index)
 {
-	t_node	*new_node;
+	t_pars	*new_node;
 
-	new_node = (t_node *)malloc(sizeof(t_node));
+	new_node = (t_pars *)malloc(sizeof(t_pars));
 	if (!new_node)
 		return (NULL);
 	new_node->nb = number;
@@ -26,9 +26,9 @@ t_node	*lstnew(int number, int index)
 	return (new_node);
 }
 
-t_node	*lstlast(t_node *lst)
+t_pars	*lstlast(t_pars *lst)
 {
-	t_node	*current;
+	t_pars	*current;
 
 	current = lst;
 	if (!current)
@@ -42,18 +42,18 @@ t_node	*lstlast(t_node *lst)
 	return (current);
 }
 
-void	lstadd_back(t_node **lst, t_node *new)
+void	lstadd_back(t_pars **lst, t_pars *new)
 {
-	t_node	*tail;
+	t_pars	*tail;
 
 	tail = lstlast(*lst);
 	tail->next = new;
 	new->prev = tail;
 }
 
-void	lstadd_front(t_node **lst, t_node *new)
+void	lstadd_front(t_pars **lst, t_pars *new)
 {
-	t_node	*head;
+	t_pars	*head;
 
 	head = *lst;
 	head->prev = new;
@@ -61,9 +61,9 @@ void	lstadd_front(t_node **lst, t_node *new)
 	*lst = new;
 }
 
-int	lstsize(t_node *lst)
+int	lstsize(t_pars *lst)
 {
-	t_node	*current;
+	t_pars	*current;
 	int		i;
 
 	current = lst;
