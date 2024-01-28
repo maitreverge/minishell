@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 04:25:36 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/27 04:49:43 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/28 07:23:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ t_pars	*lstnew(int number, int index)
 	new_node = (t_pars *)malloc(sizeof(t_pars));
 	if (!new_node)
 		return (NULL);
-	new_node->nb = number;
-	new_node->master_index = index;
+	// new_node->nb = number;
+	// new_node->master_index = index;
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	return (new_node);

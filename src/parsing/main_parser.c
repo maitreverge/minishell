@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   turbo_parser.c                                     :+:      :+:    :+:   */
+/*   main_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/28 07:25:43 by flverge          ###   ########.fr       */
+/*   Created: 2024/01/28 07:26:07 by flverge           #+#    #+#             */
+/*   Updated: 2024/01/28 07:41:36 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	turbo_parser(void)
+int main(int ac, char **av, char **envp)//, char **env
 {
-	// ! STEP 1 : Take the whole string and "clean it"
-	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else
-	// ! STEP 3 : Allocate substrings into substructures for commands and files
+	// (void)ac;
+	// (void)av;
+	char *line;
+
+	printf("AC = %i\n", ac);
+	line = readline("minishell$ ");
+	printf("Line = %s\n", line);
+	// add_history(line);
+	free(line);
+
 }

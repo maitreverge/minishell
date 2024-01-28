@@ -6,14 +6,14 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/27 04:26:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/28 07:31:37 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "lft/libft.h" // libft george
+// # include "lft/libft.h" // libft george
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
