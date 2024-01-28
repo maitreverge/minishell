@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/28 17:38:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/28 19:09:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../minishell.h"
 
 static char	*ft_strncpy(char *dest, char const *src, size_t n)
 {
@@ -82,31 +82,14 @@ static void	allocation(char **buffer, char const *s, char c, size_t len_s)
 			i++;
 	}
 }
-/*
-Flow d'allocation :
-! Etape 1 : La chaine se met a etre parcourue
-! Etape 2 : subcheck est appellee, qui next les char c consecutifs
-( de la meme facon que ft_countwords le fait)
-*/
-
-/*
-! Etape 3 : l'index J est l'index des blocs de memoire qui consistuent
-le coeur de fonctionnement de ft_split. C'est grace a ce dernier que
-l'on va pouvoir se "deplacer" dans le char **buffer original
-! Etape 4 : Le buffer[j] actuel est calloc
-*/
-/*
-! Etape 5 : le buffer[j] est ensuite rempli avec la
-bonne taille de start et de i
-! Etape 6 : la chaine s principale est continuellement parcourue
-tant que des char c consecutifs sont present apres un mot
-(pareil que ft_countwords
-*/
 
 static size_t	ft_countwords(char const *str, char c)
 {
 	size_t	result;
 	int		i;
+	int s_quote;
+	int d_quote;
+
 
 	result = 0;
 	i = 0;
@@ -114,30 +97,25 @@ static size_t	ft_countwords(char const *str, char c)
 		return (0);
 	while (str[i])
 	{
+		s_quote = 0;
+		d_quote = 0;
 		while (str[i] == c && str[i])
 			i++;
 		if (str[i] != c && str[i])
 		{
 			result++;
-			while (str[i] != c && str[i])
+			while (str[i] && str[i] != c && ((s_quote % 2) || (d_quote % 2)))
+			{
+				if (str[i] == S_QUOTE)
+					s_quote++;
+				else if (str[i] == D_QUOTE)
+					d_quote++;
 				i++;
+			}
 		}
 	}
 	return (result);
 }
-/*
-ft_countwords a pour but de compter le bon nombre de mots
-! La fonction parcours la chaine et fait ceci :
-1.1 : Continue a la parcourir tant que des char c consecutifs sont presents
-ce qui ne compte pas pour des mots
-1.2 : Si un caractere rencontre est different de char c, ceci indique 
-un mot supplementaire, donc result++
-1.3 : la chaine continue ensuite d'etre parcourue tant que la chaine
-existe ET que les char presents sont differents
-
-Ceci permet d'eviter les faux positifs de mots avec des char c
-consecutifs en debut ET et fin de chaine
-*/
 
 char	**ft_split(char const *s, char c)
 {
@@ -151,10 +129,10 @@ char	**ft_split(char const *s, char c)
 	allocation(buffer, s, c, len_s);
 	return (buffer);
 }
+
 /*
-Flow de split
-! Etape 1 : calculer le bon nombre de mots avec ft_countwords
-! Etape 2 : Allocation sur un char** du bon nombre de "blocs"
-+ un bloc pour y stocker la valeur NULL
-! Etape 3 : fonction allocation joue le role de split, voir au dessus
+edge case
+           "ec'h' o"    bonjour
+		   '  '   '   'echo'   
+
 */

@@ -6,11 +6,12 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 07:26:07 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/28 08:30:36 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/28 17:37:20 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+// #include "../../include/minishell.h"
 
 /**
  * @brief My main function for parsing checking only
