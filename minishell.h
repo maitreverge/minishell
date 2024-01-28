@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/28 07:31:37 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/28 08:32:34 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <stdbool.h> // library for handling bool
 # include <fcntl.h>
 # include <signal.h>
 # include <termios.h>
@@ -36,7 +37,7 @@
 # define D_QUOTE '\"'
 # define PIPE '|'
 # define RED_IN '<'
-# define RED_IN_DEL "<<"
+# define RED_IN_DELIM "<<"
 # define RED_OUT '>'
 # define RED_OUT_APP ">>"
 # define DOLL_ENV '$'
@@ -48,7 +49,14 @@
 // ! Master Struct for parsing
 typedef	struct	s_pars
 {
-	
+	char test; // to delete once the init is okay
+	bool command;
+	bool file;
+	bool pipe;
+	bool red_in;
+	bool red_in_delim;
+	bool red_out;
+	bool red_out_app;
 	struct s_pars *prev;
 	struct s_pars *next;
 }	t_pars;
@@ -58,6 +66,8 @@ typedef	struct	s_pars
 
 
 
+// ! Functions prototypes
+void	turbo_parser(char *prompt, t_pars **pars, char **envp);
 
 
 
