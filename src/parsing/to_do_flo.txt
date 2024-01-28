@@ -2,21 +2,34 @@
 
 😎 MAJOR UPDATE :
 
-
 🔥 HOTFIX :
 
-🛠️ WORKING ON :
+🔧 SMALL FIX :
 
-🐛 BUG : 
 
 🚀 FAST SAVE
 
-📖 
+
+🐛 BUG : 
+
+
+🛠️ WORKING ON :
+
+
+
+📖 UPDATE README
+
+
 
 a bit of ✨norm✨
 
 😑 bro...
 
-🔗 REORG :
+🪢 LINKING :
 
-🔧 SMALL FIX : 
+
+📬 ADD FILE :
+
+🧹 DELETE FILE :
+
+🔄 REORG FILES : 
