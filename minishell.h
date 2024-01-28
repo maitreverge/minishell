@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/28 08:32:34 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/28 09:16:37 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ typedef	struct	s_pars
 {
 	char test; // to delete once the init is okay
 	bool command;
+	struct s_command;
 	bool file;
+	struct s_file;
 	bool pipe;
 	bool red_in;
 	bool red_in_delim;
@@ -63,7 +65,22 @@ typedef	struct	s_pars
 
 // ! Parsing Substructures
 
+typedef	struct	s_command
+{
+	char *command;
+	char *options;
+	char *arguments;
+	// check execve for how to parse commands, split from pipex ??
+}	t_command;
 
+typedef	struct	s_file
+{
+	char *file_name;
+	bool file_exist;
+	bool auth_r;
+	bool auth_w;
+	bool auth_x;
+}	t_command;
 
 
 // ! Functions prototypes
