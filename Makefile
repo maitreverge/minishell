@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: glambrig <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/01/25 13:17:37 by glambrig         ###   ########.fr        #
+#    Updated: 2024/01/28 07:49:14 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: all clean fclean re
 
 # Compiler
-CC = gcc
+CC = cc
 
 # Compiler flags
 CFLAGS = -Wall -Wextra -Werror -g
