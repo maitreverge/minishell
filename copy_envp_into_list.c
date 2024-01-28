@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/28 16:18:59 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/28 18:32:11 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_list(t_env_list *lst)
 		free(temp->env_line);
 		free(temp);
 	}
-	free(lst);
+	//free(lst);
 	lst = NULL;
 }
 
@@ -31,8 +31,9 @@ t_env_list	*insert_node(char *s)
 {
 	t_env_list *new;
 
-	new = malloc(sizeof(t_env_list));
+	new = ft_calloc(sizeof(t_env_list), 1);
 	new->env_line = ft_strdup(s);
+	new->next = NULL;
 	return (new);
 }
 
