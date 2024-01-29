@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/28 19:15:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/29 10:19:48 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,18 +87,7 @@ static size_t	ft_countwords(char const *str, char c)
 		d_quote = 0;
 		while (str[i] == c && str[i])
 			i++;
-		if (str[i] != c && str[i])
-		{
-			result++;
-			while (str[i] && str[i] != c && ((s_quote % 2) || (d_quote % 2)))
-			{
-				if (str[i] == S_QUOTE)
-					s_quote++;
-				else if (str[i] == D_QUOTE)
-					d_quote++;
-				i++;
-			}
-		}
+		// implement ruel for simple and double quotes
 	}
 	return (result);
 }
