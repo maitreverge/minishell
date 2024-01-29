@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/28 18:18:58 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/29 15:22:12 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,55 @@ char *realloc(char *old, char *new)
 	return (new_str);
 }
 
-bool unclosed_quotes(char *str)
+// This function needs to check 
+bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a valid argument
 {
 	size_t i;
-	size_t s_quote;
-	size_t d_quote;
+	char starting_quote;
+	char closing_quote;
 
 	i = 0;
-	s_quote = 0;
-	d_quote = 0;
 	while (str[i])
 	{
-		if (str[i] == D_QUOTE)
-			d_quote++;
-		else if (str[i] == S_QUOTE)
-			s_quote++;
+		starting_quote = 0;
+		closing_quote = 0;
+
+		// ! Step one, run accross non quote chars
+		while (str[i] != D_QUOTE && str[i] != S_QUOTE && str[i])
+			i++;
+		
+		if (str[i] == D_QUOTE) // if the current char is a double quote
+		{
+			starting_quote = str[i];
+			i++;
+			while (str[i] && starting_quote != closing_quote)
+			{
+				if (str[i] == starting_quote)
+				{
+					closing_quote = starting_quote;
+					break ;
+				}
+				i++;
+			}
+		}
+		else if (str[i] == S_QUOTE) // if the current char is a single quote
+		{
+			starting_quote = str[i];
+			i++;
+			while (str[i] && starting_quote != closing_quote)
+			{
+				if (str[i] == starting_quote)
+				{
+					closing_quote = starting_quote;
+					break ;
+				}
+				i++;
+			}
+		}
 		i++;
+		
 	}
-	if (s_quote != d_quote)
+	if (starting_quote != closing_quote)
 		return (true);
 	return (false);
 }
