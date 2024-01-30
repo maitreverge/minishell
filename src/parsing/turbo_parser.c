@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/29 15:22:12 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:50:51 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,7 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 		while (str[i] != D_QUOTE && str[i] != S_QUOTE && str[i])
 			i++;
 		
-		if (str[i] == D_QUOTE) // if the current char is a double quote
-		{
-			starting_quote = str[i];
-			i++;
-			while (str[i] && starting_quote != closing_quote)
-			{
-				if (str[i] == starting_quote)
-				{
-					closing_quote = starting_quote;
-					break ;
-				}
-				i++;
-			}
-		}
-		else if (str[i] == S_QUOTE) // if the current char is a single quote
+		if (str[i] == D_QUOTE || str[i] == S_QUOTE) // if the current char is a double quote
 		{
 			starting_quote = str[i];
 			i++;
@@ -70,12 +56,13 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 			}
 		}
 		i++;
-		
 	}
 	if (starting_quote != closing_quote)
 		return (true);
 	return (false);
 }
+
+
 
 char **prompt_cleaning(char *prompt)
 {
