@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/29 13:37:22 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:56:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,35 +69,52 @@ static void	allocation(char **buffer, char const *s, char c, size_t len_s)
 	}
 }
 
-static size_t	ft_countwords(char const *str, char c)
+// split the words, join them later
+static size_t	parsing_countwords(char const *str, char c)
 {
 	size_t	result;
 	int		i;
-	int s_quote;
-	int d_quote;
+	char starting_quote;
+	char closing_quote;
 
-
-	result = 0;
 	i = 0;
-	if (!str)
-		return (0);
 	while (str[i])
 	{
-		s_quote = 0;
-		d_quote = 0;
-		while (str[i] == c && str[i])
+		starting_quote = 0;
+		closing_quote = 0;
+
+		// skip whitespaces
+		
+
+		while (str[i] != D_QUOTE && str[i] != S_QUOTE && str[i])
 			i++;
 		
+		if (str[i] == D_QUOTE || str[i] == S_QUOTE) // if the current char is a double quote
+		{
+			starting_quote = str[i];
+			i++;
+			result++;
+			while (str[i] && starting_quote != closing_quote)
+			{
+				if (str[i] == starting_quote)
+				{
+					closing_quote = starting_quote;
+					break ;
+				}
+				i++;
+			}
+		}
+		i++;
 	}
 	return (result);
 }
 
-char	**ft_split(char const *s, char c)
+char	**parsing_split(char const *s, char c)
 {
 	char	**buffer;
 	size_t	len_s;
 
-	len_s = ft_countwords(s, c);
+	len_s = parsing_countwords(s, c);
 	buffer = (char **)ft_calloc(sizeof(char *), (len_s + 1));
 	if (!buffer)
 		return (NULL);
