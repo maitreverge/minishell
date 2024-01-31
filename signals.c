@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/31 15:30:30 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:24:48 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ void	handle_signal(int sig)
 		rl_redisplay();
 		return ;
 	}
-	else if (sig == SIGQUIT)
-		return ;
 }
 
 int	signals(t_all *all)
@@ -35,14 +33,12 @@ int	signals(t_all *all)
 	struct sigaction	sa;
 
 	g_sig_received = 0;
+	signal(SIGQUIT, SIG_IGN);
 	sigemptyset(&sa.sa_mask);
 	sigaddset(&sa.sa_mask, SIGSTOP);
-	sigaddset(&sa.sa_mask, SIGQUIT);
 	sa.sa_flags = 0;
 	sa.sa_handler = &handle_signal;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
-		return (-1);
-	if (sigaction(SIGQUIT, &sa, NULL) == -1)
 		return (-1);
 	return (g_sig_received);
 }
