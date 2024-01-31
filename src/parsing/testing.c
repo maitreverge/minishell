@@ -81,6 +81,7 @@ size_t	parsing_countwords(char *str)
 		// ! first char is a quote
 		if (is_any_quote(str[i]) && str[i])
 		{
+			// while (is_any_quote(str[i]) && str[i])
 			while (is_any_quote(str[i]) && str[i])
 			{
 				start_quote = str[i];
@@ -90,41 +91,53 @@ size_t	parsing_countwords(char *str)
 					if (str[i] == start_quote)
 					{
 						end_quote = start_quote;
+						i++; // ! added
 						break ;
 					}
 				}
+				end_quote = 0;
+				if (is_whitespace(str[i]) || !str[i])
+				{
+					result++;
+					break;
+				}
 				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
 					i++;
+				if (is_whitespace(str[i]) || !str[i])
+				{
+					result++;
+					break;
+				}
 			}
-			result++;
 		}
 		else if (!is_any_quote(str[i]) && str[i])
 		{
-			while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
-				i++;
-			
-			if (is_any_quote(str[i]) && str[i])
+			while (!is_any_quote(str[i]) && str[i])
 			{
-				while (is_any_quote(str[i]) && str[i])
+				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+					i++;
+				
+				if (is_any_quote(str[i]) && str[i])
 				{
-					start_quote = str[i];
-					while(str[i] && start_quote != end_quote)
+					while (is_any_quote(str[i]) && str[i])
 					{
-						i++;
-						if (str[i] == start_quote)
+						start_quote = str[i];
+						while(str[i] && start_quote != end_quote)
 						{
-							end_quote = start_quote;
-							break ;
+							i++;
+							if (str[i] == start_quote)
+							{
+								end_quote = start_quote;
+								break ;
+							}
 						}
+						while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+							i++;
 					}
-					while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
-						i++;
 				}
+				result++;
 			}
-
-			// result++;
 		}
-		result++;
 	}
 
 
