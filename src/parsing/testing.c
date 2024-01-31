@@ -117,6 +117,12 @@ size_t	parsing_countwords(char *str)
 				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
 					i++;
 				
+				if (is_whitespace(str[i]) || !str[i])
+				{
+					result++;
+					break;
+				}
+				
 				if (is_any_quote(str[i]) && str[i])
 				{
 					while (is_any_quote(str[i]) && str[i])
@@ -131,11 +137,17 @@ size_t	parsing_countwords(char *str)
 								break ;
 							}
 						}
+						end_quote = 0;
 						while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
 							i++;
 					}
 				}
-				result++;
+				if (is_whitespace(str[i]) || !str[i])
+				{
+					result++;
+					break;
+				}
+				// result++;
 			}
 		}
 	}
