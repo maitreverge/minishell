@@ -6,14 +6,14 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/31 10:06:23 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/31 12:33:45 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// # include "lft/libft.h" // libft george
+# include "lft/libft.h" // libft george
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -51,9 +51,9 @@ typedef	struct	s_pars
 {
 	char test; // to delete once the init is okay
 	bool command;
-	struct s_command;
+	struct s_command *cmd;
 	bool file;
-	struct s_file;
+	struct s_file *fl;
 	bool pipe;
 	bool red_in;
 	bool red_in_delim;
@@ -80,11 +80,14 @@ typedef	struct	s_file
 	bool auth_r;
 	bool auth_w;
 	bool auth_x;
-}	t_command;
+}	t_file;
 
 
 // ! Functions prototypes
 void	turbo_parser(char *prompt, t_pars **pars, char **envp);
+bool	whitespace(char c);
+bool	is_any_quote(char c);
+
 
 
 

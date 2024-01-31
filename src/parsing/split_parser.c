@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/30 11:56:44 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/31 10:51:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ static size_t	parsing_countwords(char const *str, char c)
 		closing_quote = 0;
 
 		// skip whitespaces
+		while (is_whitespace(str[i]))
+			i++;
 		
 
 		while (str[i] != D_QUOTE && str[i] != S_QUOTE && str[i])
