@@ -64,11 +64,9 @@ size_t	parsing_countwords(char *str)
 	size_t result; // return value
 	char start_quote;
 	char end_quote;
-	bool esc_whitespace;
 	
 	i = 0;
 	result = 0;
-	esc_whitespace = true;
 
 	while (str[i])
 	{
@@ -138,22 +136,29 @@ size_t	parsing_countwords(char *str)
 							}
 						}
 						end_quote = 0;
+						if (is_whitespace(str[i]) || !str[i])
+						{
+							result++;
+							break;
+						}
 						while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
 							i++;
+						if (is_whitespace(str[i]) || !str[i])
+						{
+							result++;
+							break;
+						}
 					}
 				}
-				if (is_whitespace(str[i]) || !str[i])
-				{
-					result++;
-					break;
-				}
+				// if (is_whitespace(str[i]) || !str[i])
+				// {
+				// 	result++;
+				// 	break;
+				// }
 				// result++;
 			}
 		}
 	}
-
-
-
 	return (result);
 }
 
