@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/28 18:59:50 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/29 15:50:38 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	ft_unset(t_env_list **envp, char *line)
 	t_env_list *prev;
 
 	temp = *envp;
+	prev = temp;////
 	if (line == NULL)
 	{
 		free_list(*envp);
@@ -60,12 +61,12 @@ void	ft_export(t_env_list **envp, char *line)//// void	ft_export(t_env_list *env
 	temp = *envp;
 	s = ft_split(line, ' ');	//otherwise we literally get "export FLO=BG" as the env var
 	if (*envp == NULL)
-		*envp = insert_node(s[1]);
+		*envp = insert_node_env(s[1]);
 	else
 	{
 		while (temp->next != NULL)
 			temp = temp->next;
-		temp->next = insert_node(s[1]);
+		temp->next = insert_node_env(s[1]);
 	}
 	i = 0;
 	while (s[i])

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/28 19:17:47 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:04:53 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,31 +94,30 @@ int	ft_pwd(t_env_list *envp, int fd, bool print)
 
 /*Displays a list of the environment variables for the
 	current terminal session.*/
-int	ft_env(t_env_list *envp, int fd)
+int	ft_env(t_all *all, int fd)
 {
 	t_env_list *temp;
 
-	temp = envp;
+	temp = all->env_lst;
 	if (fd < 0)
 	{
-		free_list(envp);
+		free_list(all->env_lst);
 		perror("ft_env: fd < 0");
-		exit(EXIT_FAILURE);
+		return (exit(EXIT_FAILURE), 1);
 	}
-	while (envp != NULL)
+	while (all->env_lst != NULL)
 	{
-		ft_putstr_fd(envp->env_line, fd);
+		ft_putstr_fd(all->env_lst->env_line, fd);
 		ft_putchar_fd('\n', fd);
-		envp = envp->next;
+		all->env_lst = all->env_lst->next;
 	}
-	envp = temp;
+	all->env_lst = temp;
 	return (0);
 }
 
-int	ft_exit(t_env_list *lst, char *readline_return, int fd, t_exit_status_list *exit_lst)
+int	ft_exit(t_all **all, char *readline_return, int fd)
 {
 	char				**s;
-	t_exit_status_list	*last_status;
 	int					i;
 
 	s = ft_split(readline_return, ' ');
@@ -131,44 +130,49 @@ int	ft_exit(t_env_list *lst, char *readline_return, int fd, t_exit_status_list *
 		return (0);
 	}
 	free(readline_return);
-	free_list(lst);
-	if (exit_lst != NULL)
-	{
-		last_status = (t_exit_status_list *)ft_lstlast((t_list *)exit_lst);
-		exit(last_status->status);
-	}
-	else
-		exit(0);
+	free_list((*all)->env_lst);
+	free((*all));
+	exit((*all)->last_exit_status);
 }
 
-int main(int ac, char **av, char **envp)//, char **env
+int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	char 		*line;
-	t_env_list *lst;
+	t_all		*all;
 
-	lst = copy_env_into_list(envp);
+	all = ft_calloc(sizeof(t_all), 1);
+	all->env_lst = copy_env_into_list(envp);
+	all->last_exit_status = EMPTY_EXIT_LIST;
 	while (1)
 	{
-		line = readline("minishell$ ");
-		if (ft_strncmp(line, "echo", 4) == 0)
-			ft_echo(line, envp, 1);	//replace 1 with fd
-		else if (ft_strncmp(line, "cd", 2) == 0)
-			ft_cd(line, lst);
-		else if (ft_strncmp(line, "pwd", 3) == 0)
-			ft_pwd(lst, 1, true);	//replace 1 with fd
-		else if (ft_strncmp(line, "env", 3) == 0)
-			ft_env(lst, 1);
-		else if (ft_strncmp(line, "export", 6) == 0)
-			ft_export(&lst, line);
-		else if (ft_strncmp(line, "unset", 5) == 0)
-			ft_unset(&lst, line);
-		else if (ft_strncmp(line, "exit", 4) == 0)
-			ft_exit(lst, line, 1, NULL);
-		add_history(line);
-		free(line);
+		if (signals() == -1 || signals() == 2)
+		{
+			free_list(all->env_lst);
+			free(all->readline_line);
+			free(all);	
+			return (exit(0), 1);
+		}
+		all->readline_line = readline("minishell$ ");
+		if (ft_strncmp(all->readline_line, "echo", 4) == 0)
+			ft_echo(all->readline_line, all, 1);	//replace 1 with fd
+		else if (ft_strncmp(all->readline_line, "cd", 2) == 0)
+			ft_cd(all->readline_line, all->env_lst);
+		else if (ft_strncmp(all->readline_line, "pwd", 3) == 0)
+			ft_pwd(all->env_lst, 1, true);	//replace 1 with fd
+		else if (ft_strncmp(all->readline_line, "env", 3) == 0)
+			ft_env(all, 1);
+		else if (ft_strncmp(all->readline_line, "export", 6) == 0)
+			ft_export(&all->env_lst, all->readline_line);
+		else if (ft_strncmp(all->readline_line, "unset", 5) == 0)
+			ft_unset(&all->env_lst, all->readline_line);
+		else if (ft_strncmp(all->readline_line, "exit", 4) == 0)
+			ft_exit(&all, all->readline_line, 1);
+		add_history(all->readline_line);
+		free(all->readline_line);
 	}
-	free_list(lst);
+	free_list(all->env_lst);
+	free(all->readline_line);
+	free(all);
 	return 0;
 }

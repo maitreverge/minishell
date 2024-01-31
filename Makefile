@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: glambrig <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/01/31 10:07:19 by flverge          ###   ########.fr        #
+#    Updated: 2024/01/31 13:31:42 by glambrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC = builtins.c \
 		builtins_echo.c \
 		builtins_export.c \
 		copy_envp_into_list.c \
+		signals.c \
 
 # Object files
 OBJ = $(SRC:.c=.o)
@@ -45,6 +46,7 @@ $(NAME): $(LFT) $(OBJ)
 # Compile libft
 $(LFT):
 	$(MAKE) -C ./lft
+#$(MAKE) bonus -C ./lft
 
 # Clean up object files and executable
 clean:

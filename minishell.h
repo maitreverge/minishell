@@ -3,20 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/31 10:06:23 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/31 13:33:48 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# define EMPTY_EXIT_LIST -999
+# define _GNU_SOURCE //NO idea why this needs to be here, but sigaction doesn't work otherwise
 
-// # include "lft/libft.h" // libft george
-# include <unistd.h>
+# include <signal.h>
+# include "lft/libft.h"
 # include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include <string.h>
 # include <stdbool.h> // library for handling bool
 # include <fcntl.h>
@@ -93,28 +100,34 @@ void	turbo_parser(char *prompt, t_pars **pars, char **envp);
 // * .h George
 
 
-typedef struct s_exit_status_list
-{
-	int							status;
-	struct s_exit_status_list	*next;
-}	t_exit_status_list;
-
 typedef struct s_env_list
 {
 	char *env_line;
 	struct s_env_list *next;
 }	t_env_list;
 
-void		free_list(t_env_list *lst);
-t_env_list	*copy_env_into_list(char **envp);
-t_env_list	*insert_node(char *s);
+typedef struct s_all
+{
+	t_env_list	*env_lst;
+	char		*readline_line;
+	int			last_exit_status;
+}	t_all;
+
+/*Env*/
+void				free_list(t_env_list *lst);
+t_env_list			*copy_env_into_list(char **envp);
+t_env_list			*insert_node_env(char *s);
 
 /*Builtins*/
 void	free_tokens(char **t);
-int		ft_echo(char *s, char **envp, int fd);
+int		ft_echo(char *s, t_all *all, int fd);
 int		ft_cd(char *path, t_env_list *envp);
 int		ft_pwd(t_env_list *envp, int fd, bool print);
 void	ft_export(t_env_list **envp, char *line);
 void	ft_unset(t_env_list **envp, char *line);
+int		ft_exit(t_all **all, char *readline_return, int fd);
+
+/*Signal handler*/
+int		signals(void);
 
 #endif
