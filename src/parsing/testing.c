@@ -62,9 +62,73 @@ size_t	parsing_countwords(char *str)
 {
 	size_t i; // global index
 	size_t result; // return value
-	char start_close;
-	char end_close;
+	char start_quote;
+	char end_quote;
+	bool esc_whitespace;
 	
+	i = 0;
+	result = 0;
+	esc_whitespace = true;
+
+	while (str[i])
+	{
+		start_quote = 0;
+		end_quote = 0;
+		// skip whitespace chars
+		while (is_whitespace(str[i]))
+			i++;
+		
+		// ! first char is a quote
+		if (is_any_quote(str[i]) && str[i])
+		{
+			while (is_any_quote(str[i]) && str[i])
+			{
+				start_quote = str[i];
+				while(str[i] && start_quote != end_quote)
+				{
+					i++;
+					if (str[i] == start_quote)
+					{
+						end_quote = start_quote;
+						break ;
+					}
+				}
+				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+					i++;
+			}
+			result++;
+		}
+		else if (!is_any_quote(str[i]) && str[i])
+		{
+			while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+				i++;
+			
+			if (is_any_quote(str[i]) && str[i])
+			{
+				while (is_any_quote(str[i]) && str[i])
+				{
+					start_quote = str[i];
+					while(str[i] && start_quote != end_quote)
+					{
+						i++;
+						if (str[i] == start_quote)
+						{
+							end_quote = start_quote;
+							break ;
+						}
+					}
+					while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+						i++;
+				}
+			}
+
+			// result++;
+		}
+		result++;
+	}
+
+
+
 	return (result);
 }
 

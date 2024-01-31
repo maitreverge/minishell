@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/31 12:33:45 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:08:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef	struct	s_file
 
 // ! Functions prototypes
 void	turbo_parser(char *prompt, t_pars **pars, char **envp);
-bool	whitespace(char c);
+bool	is_whitespace(char c);
 bool	is_any_quote(char c);
 
 

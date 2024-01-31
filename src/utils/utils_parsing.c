@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/31 12:33:29 by flverge          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:07:51 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-bool whitespace(char c)
+bool is_whitespace(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f')
 		return true;
