@@ -6,14 +6,13 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/31 13:33:48 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/31 14:56:31 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define EMPTY_EXIT_LIST -999
-# define _GNU_SOURCE //NO idea why this needs to be here, but sigaction doesn't work otherwise
+# define _GNU_SOURCE //NO idea why this needs to be here or wtf it does, but sigaction doesn't work otherwise
 
 # include <signal.h>
 # include "lft/libft.h"
@@ -48,6 +47,7 @@
 # define RED_OUT '>'
 # define RED_OUT_APP ">>"
 # define DOLL_ENV '$'
+# define EMPTY_EXIT_LIST -999	//Glambrig
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // * .h Florian
@@ -58,9 +58,9 @@ typedef	struct	s_pars
 {
 	char test; // to delete once the init is okay
 	bool command;
-	struct s_command;
+	//struct s_command;
 	bool file;
-	struct s_file;
+	//struct s_file;
 	bool pipe;
 	bool red_in;
 	bool red_in_delim;
@@ -87,7 +87,7 @@ typedef	struct	s_file
 	bool auth_r;
 	bool auth_w;
 	bool auth_x;
-}	t_command;
+}	t_file;
 
 
 // ! Functions prototypes
@@ -125,9 +125,11 @@ int		ft_cd(char *path, t_env_list *envp);
 int		ft_pwd(t_env_list *envp, int fd, bool print);
 void	ft_export(t_env_list **envp, char *line);
 void	ft_unset(t_env_list **envp, char *line);
-int		ft_exit(t_all **all, char *readline_return, int fd);
+int		ft_exit(t_all *all, char *readline_return, int fd);
 
 /*Signal handler*/
-int		signals(void);
+int		signals(t_all *all);
+
+char	*get_next_line(int fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/29 17:25:11 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/31 15:30:30 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,25 @@ void	handle_signal(int sig)
 	if (sig == SIGINT)
 	{
 		g_sig_received = 1;
-		rl_on_new_line();
+		rl_replace_line("", 0);
 		ft_putstr_fd("\n", 1);//^C
+		rl_on_new_line();
+		rl_redisplay();
+		return ;
 	}
 	else if (sig == SIGQUIT)
-	{
-		ft_putstr_fd("\b\b\r", 1);
 		return ;
-		// g_sig_received = 2;
-		// ft_putstr_fd("exit\n", 1);
-		// exit(0);
-	}
 }
 
-int	signals(void)
+int	signals(t_all *all)
 {
+	(void)all;
 	struct sigaction	sa;
 
 	g_sig_received = 0;
 	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGSTOP);
+	sigaddset(&sa.sa_mask, SIGQUIT);
 	sa.sa_flags = 0;
 	sa.sa_handler = &handle_signal;
 	if (sigaction(SIGINT, &sa, NULL) == -1)

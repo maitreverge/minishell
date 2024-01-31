@@ -56,7 +56,8 @@ SRC = ft_memset.c \
       ft_putnbr_fd.c \
       ./ft_printf/ft_printf.c \
       ./ft_printf/ft_printf_utils.c \
-      ./ft_printf/ft_printf_2utils.c
+      ./ft_printf/ft_printf_2utils.c \
+	  ./gnl/get_next_line.c
 
 BONUSSRC = ft_lstnew.c \
 	   ft_lstadd_front.c \
