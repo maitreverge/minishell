@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_linked_list.h                                  :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/25 15:56:14 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/25 15:57:53 by glambrig         ###   ########.fr       */
+/*   Created: 2023/02/01 13:57:04 by glambrig          #+#    #+#             */
+/*   Updated: 2023/02/07 13:21:23 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_LINKED_LIST_H
-# define ENV_LINKED_LIST_H
+#include <stddef.h>
+#include "libft.h"
 
-# include "minishell.h"
-
-typedef struct s_env_list
+void	ft_bzero(void *loc, size_t n)
 {
-	char *env_line;
-	struct s_env_list *next;
-}	t_env_list;
+	unsigned int	i;
 
-#endif
+	i = 0;
+	while (i < n)
+	{
+		*(char *)(loc + i) = '\0';
+		i++;
+	}
+}

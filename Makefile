@@ -6,7 +6,7 @@
 #    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/01/28 07:49:14 by flverge          ###   ########.fr        #
+#    Updated: 2024/01/31 10:07:19 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 # Source files
 SRC = builtins.c \
-		builtins_echo.c
+		builtins_echo.c \
+		builtins_export.c \
+		copy_envp_into_list.c \
 
 # Object files
 OBJ = $(SRC:.c=.o)
@@ -43,10 +45,6 @@ $(NAME): $(LFT) $(OBJ)
 # Compile libft
 $(LFT):
 	$(MAKE) -C ./lft
-
-# Compile source files into object files
-$(OBJ): $(SRC)
-	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean up object files and executable
 clean:

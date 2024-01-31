@@ -6,38 +6,69 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/26 11:12:56 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/28 18:59:50 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "env_linked_list.h"
 
-/*
-	The reason this is a separate file is this:
+// void	print_list(t_env_list *envp)
+// {
+// 	t_env_list * temp = envp;
 
-	'export' requires having the complete list of existing environment variables
-	stored somewhere in the program, so that we can then add our new env. var.
-	to this list using the 'export' command.
+// 	while (envp != NULL)
+// 	{
+// 		printf("%s\n", envp->env_line);
+// 		envp = envp->next;
+// 	}
+// 	envp = temp;
+// }
 
-	That said, I don't know if what I'm doing here is too much voodoo for our
-	purposes, so I'm containing all of that here in this file. (and env_linked_list.h)
-*/
-
-//First, get env vars working, period.
-//Put all env vars into linked list nodes.
-
-t_env_list	**init_env_list(char **envp)
+/*Removes 'line' from the list of environment variables*/
+void	ft_unset(t_env_list **envp, char *line)
 {
-	t_env_list *head;
-	int			envp_len;
+	t_env_list *temp;
+	t_env_list *prev;
 
-	envp_len = 0;
-	while (envp[envp_len])
-		envp_len++;
-	head = malloc(sizeof(t_env_list) * 1);
-	while (lst->next != NULL)
+	temp = *envp;
+	if (line == NULL)
 	{
-		*lst = ft_calloc(sizeof(t_env_list), 1);
+		free_list(*envp);
+		perror("ft_unset error: line == NULL");
+		exit(EXIT_FAILURE);
 	}
+	while (temp->next != NULL && ft_strncmp(temp->env_line, line, ft_strlen(line)) != 0)
+	{
+		prev = temp;
+		temp = temp->next;
+	}
+	if (temp != NULL)
+	{
+		prev->next = temp->next;
+		free(temp->env_line);
+		free(temp);
+	}	
+}
+
+/*Adds 's' to the list of environment variables*/
+void	ft_export(t_env_list **envp, char *line)//// void	ft_export(t_env_list *envp, char *key, char *value)
+{
+	t_env_list 	*temp;
+	char 		**s;
+	int 		i;
+
+	temp = *envp;
+	s = ft_split(line, ' ');	//otherwise we literally get "export FLO=BG" as the env var
+	if (*envp == NULL)
+		*envp = insert_node(s[1]);
+	else
+	{
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = insert_node(s[1]);
+	}
+	i = 0;
+	while (s[i])
+		free(s[i++]);
+	free(s);
 }

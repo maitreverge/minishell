@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/26 15:15:15 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/28 16:23:24 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ int	check_if_env_var(char *s, char **envp)
 	Make sure to pass the ENTIRE line (got by readline()),
 	otherwise the function might not work properly.
 */
-/*	TODO, for whoever does the parsing:
-		-echo $$ prints shell's PID
+/*	TODO:
 		-echo $? prints exit status of last command
 */
 int	ft_echo(char *s, char **envp, int fd)
