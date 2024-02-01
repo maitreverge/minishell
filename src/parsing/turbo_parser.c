@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/01 13:23:09 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/01 14:01:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,45 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 	return (false);
 }
 
+char **clean_prompt(char **buff, int len)
+{
+	char **result;
+	result = (char **)malloc(sizeof(char *) * len + 1)
+	if (!result)
+		exit(-1); // ! maybe freeing shit right here
+	
+	// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
 
+	
+	// ! STEP 2 : allocating the buffer result with calloc
+
+	
+	// ! STEP 3 : copying the "cleaned" version of each input
+
+	
+	
+
+	return (result);
+}
 
 void	turbo_parser(char *prompt, t_pars **pars, char **envp)
 {
+	int	len_splited_prompt;
+	char **splited_prompt;
 	char **cleaned_prompt;
 	// ? 🤔 Does this function needs to be called during the nodes init 
 	init_pars_struct(pars);
+
+	len_splited_prompt = parsing_countwords(prompt);
 
 	// check la presence d'unclosed quotes.
 	if (unclosed_quotes(prompt))
 		exit (1); // ? need freeing 
 		
 	// ! STEP 1 : Take the whole prompt and split it
-	cleaned_prompt = parsing_split(prompt);
+	splited_prompt = parsing_split(prompt);
+	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt);
+	free_split(splited_prompt);
 	
 	
 	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else

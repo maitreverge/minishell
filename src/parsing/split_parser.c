@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/01 13:12:02 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/01 13:56:33 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 	}
 }
 
-static size_t	parsing_countwords(char *str)
+size_t	parsing_countwords(char *str)
 {
 	size_t i; // global index
 	size_t result; // return value

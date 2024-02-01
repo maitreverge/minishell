@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/01 13:14:35 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/01 13:56:47 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ char	*ft_strncpy(char *dest, char const *src, size_t n);
 
 // split_parser
 char	**parsing_split(char *s);
+size_t	parsing_countwords(char *str);
+
 
 
 
