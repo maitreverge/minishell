@@ -1,20 +1,5 @@
 #include "../../minishell.h"
 
-// void	free_split(char **to_free)
-// {
-// 	char	**current;
-// 	int		i;
-
-// 	i = 0;
-// 	current = to_free;
-// 	while (current[i])
-// 	{
-// 		free(current[i]);
-// 		i++;
-// 	}
-// 	free(to_free);
-// }
-
 static char	*ft_strncpy(char *dest, char const *src, size_t n)
 {
 	size_t	i;
@@ -82,10 +67,10 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 					break;
 			}
 		}
-		else if (!is_any_quote(str[i]) && str[i])
+		else if (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
 		{
 			start = i; // indexing checkpoint
-			while (!is_any_quote(str[i]) && str[i])
+			while (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
 			{
 				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
 					i++;
@@ -104,6 +89,7 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 							if (str[i] == start_quote)
 							{
 								end_quote = start_quote;
+								i++;
 								break ;
 							}
 						}
@@ -163,7 +149,7 @@ size_t	parsing_countwords(char *str)
 					if (str[i] == start_quote)
 					{
 						end_quote = start_quote;
-						i++; // ! added
+						i++;
 						break ;
 					}
 				}
@@ -182,9 +168,9 @@ size_t	parsing_countwords(char *str)
 				}
 			}
 		}
-		else if (!is_any_quote(str[i]) && str[i])
+		else if (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i])) // MAYBE ADD WHITE
 		{
-			while (!is_any_quote(str[i]) && str[i])
+			while (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i])) // MAYBE ADD WHITE
 			{
 				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
 					i++;
@@ -206,6 +192,7 @@ size_t	parsing_countwords(char *str)
 							if (str[i] == start_quote)
 							{
 								end_quote = start_quote;
+								i++; // ! added last minute
 								break ;
 							}
 						}
@@ -263,7 +250,15 @@ int main()
 	free_split(buffer);
 
 	// ! wrong test
-	// "test1 test2   "test3 test4'test5 test6' "test7 test8"
+	/*
+	"test1 test2   "test3 test4'test5 test6' "test7 test8"
+	Supposed to give
+
+	BUFF 0 "test1 test2   "test3
+	BUFF 1 test4'test5 test6'
+	BUFF 2 "test7 test8"
+	
+	*/
 
 	
 
