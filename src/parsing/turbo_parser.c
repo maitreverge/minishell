@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/01 14:01:58 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/01 20:30:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,79 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 char **clean_prompt(char **buff, int len)
 {
 	char **result;
-	result = (char **)malloc(sizeof(char *) * len + 1)
+	char *to_allocate;
+	int i;
+	int j;
+	int k;
+	char starting_quote;
+	char end_quote;
+	int real_len;
+
+	i = 0;
+	starting_quote = 0;
+	end_quote = 0;
+
+	to_allocate = NULL; // null init for safety
+	result = (char **)ft_calloc(sizeof(char *), len + 1);
 	if (!result)
 		exit(-1); // ! maybe freeing shit right here
 	
-	// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
-
-	
-	// ! STEP 2 : allocating the buffer result with calloc
-
-	
-	// ! STEP 3 : copying the "cleaned" version of each input
-
-	
-	
-
+	while (buff[i])
+	{
+		j = 0;
+		real_len = 0;
+		// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
+		while (buff[i][j])
+		{
+			while (!is_any_quote(buff[i][j]) && buff[i][j])
+			{
+				j++;
+				real_len++;
+			}
+			if(is_any_quote(buff[i][j]))
+			{
+				starting_quote = buff[i][j];
+				j++; // skips the quote
+				while (buff[i][j] && buff[i][j] != starting_quote)
+				{
+					j++;
+					real_len++;
+				}
+				j++;
+			}
+		}
+		j = 0;
+		k = 0;
+		// ! STEP 2 : allocating the buffer result with calloc
+		
+		result[i] = ft_calloc(sizeof(char), (real_len + 1));
+		if (!result[i])
+			exit -1; // la maxi security tavu
+		
+		// ! STEP 3 : copying the "cleaned" version of each input
+		while (buff[i][j])
+		{
+			while (!is_any_quote(buff[i][j]) && buff[i][j])
+			{
+				result[i][k] = buff[i][j];
+				j++;
+				k++;
+			}
+			if(is_any_quote(buff[i][j]))
+			{
+				starting_quote = buff[i][j];
+				j++; // skips the quote
+				while (buff[i][j] && buff[i][j] != starting_quote)
+				{
+					result[i][k] = buff[i][j];
+					j++;
+					k++;
+				}
+				j++;
+			}
+		}
+		i++;
+	}
 	return (result);
 }
 
@@ -89,7 +147,7 @@ void	turbo_parser(char *prompt, t_pars **pars, char **envp)
 	char **splited_prompt;
 	char **cleaned_prompt;
 	// ? 🤔 Does this function needs to be called during the nodes init 
-	init_pars_struct(pars);
+	// init_pars_struct(pars);
 
 	len_splited_prompt = parsing_countwords(prompt);
 
@@ -100,6 +158,12 @@ void	turbo_parser(char *prompt, t_pars **pars, char **envp)
 	// ! STEP 1 : Take the whole prompt and split it
 	splited_prompt = parsing_split(prompt);
 	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt);
+	
+	for (int i = 0; i <= len_splited_prompt; i++)
+	{
+		printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
+	}
+
 	free_split(splited_prompt);
 	
 	
