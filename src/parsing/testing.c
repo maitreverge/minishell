@@ -1,5 +1,20 @@
 #include "../../minishell.h"
 
+// void	free_split(char **to_free)
+// {
+// 	char	**current;
+// 	int		i;
+
+// 	i = 0;
+// 	current = to_free;
+// 	while (current[i])
+// 	{
+// 		free(current[i]);
+// 		i++;
+// 	}
+// 	free(to_free);
+// }
+
 static char	*ft_strncpy(char *dest, char const *src, size_t n)
 {
 	size_t	i;
@@ -42,7 +57,6 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 
 		// ! skip to the next following word
 		// need to kickstart start = i in each case
-		
 		if (is_any_quote(str[i]) && str[i])
 		{
 			start = i; // indexing checkpoint
@@ -216,7 +230,7 @@ size_t	parsing_countwords(char *str)
 	return (result);
 }
 
-char	**parsing_split(char const *s)
+char	**parsing_split(char *s)
 {
 	char	**buffer;
 	size_t	len_s;
@@ -231,10 +245,24 @@ char	**parsing_split(char const *s)
 
 int main()
 {
+	char **buffer;
 	char *str = readline("MINISHELL$ ");
-	int len_s = parsing_countwords(str);
 
+
+	int len_s = parsing_countwords(str);
 	printf("There is %i words in the prompt\n", len_s);
+
+	buffer = parsing_split(str);
+
+	for (int i = 0; i <= len_s; i++)
+	{
+		printf("Buffer #%i = %s\n", i+1, buffer[i]);
+	}
+
+
+	free_split(buffer);
+
+
 
 
 
