@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/01 10:30:05 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/01 13:14:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,19 @@ typedef	struct	s_file
 
 // ! Functions prototypes
 
+// turbo_parser
 void	turbo_parser(char *prompt, t_pars **pars, char **envp);
 
 // utils_parsing
 bool	is_whitespace(char c);
 bool	is_any_quote(char c);
 void	free_split(char **to_free);
+char	*ft_strncpy(char *dest, char const *src, size_t n);
+
+// split_parser
+char	**parsing_split(char *s);
+
+
 
 
 

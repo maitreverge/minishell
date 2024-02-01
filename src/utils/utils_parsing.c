@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/01 10:29:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/01 13:10:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,22 @@ void	free_split(char **to_free)
 		i++;
 	}
 	free(to_free);
+}
+
+char	*ft_strncpy(char *dest, char const *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
 }

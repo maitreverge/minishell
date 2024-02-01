@@ -1,23 +1,5 @@
 #include "../../minishell.h"
 
-static char	*ft_strncpy(char *dest, char const *src, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	while (i < n)
-	{
-		dest[i] = '\0';
-		i++;
-	}
-	return (dest);
-}
-
 static void	allocation(char **buffer, char const *str, size_t len_s)
 {
 	size_t	i; // global index
@@ -115,8 +97,6 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 			ft_strncpy(buffer[j], &str[start], i - start);
 			j++;
 		}
-		// while (str[i] == c && str[i])
-		// 	i++;
 	}
 }
 
