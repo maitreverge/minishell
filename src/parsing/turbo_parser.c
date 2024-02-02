@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/01 20:30:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/02 13:59:45 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,24 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 	return (false);
 }
 
+/*
+
+structure de George pour env
+
+typedef struct s_env_list
+{
+	char *env_line;
+	struct s_env_list *next;
+}	t_env_list;
+
+typedef struct s_all
+{
+	t_env_list	*env_lst;
+	char		*readline_line;
+	int			last_exit_status;
+}	t_all;
+
+*/
 char **clean_prompt(char **buff, int len)
 {
 	char **result;
@@ -143,9 +161,11 @@ char **clean_prompt(char **buff, int len)
 
 void	turbo_parser(char *prompt, t_pars **pars, char **envp)
 {
+	// ! brancher la strcuture all de G pour brancher 
 	int	len_splited_prompt;
 	char **splited_prompt;
 	char **cleaned_prompt;
+	
 	// ? 🤔 Does this function needs to be called during the nodes init 
 	// init_pars_struct(pars);
 
@@ -159,10 +179,11 @@ void	turbo_parser(char *prompt, t_pars **pars, char **envp)
 	splited_prompt = parsing_split(prompt);
 	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt);
 	
-	for (int i = 0; i <= len_splited_prompt; i++)
-	{
-		printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
-	}
+	// ! printing the whole shit
+	// for (int i = 0; i <= len_splited_prompt; i++)
+	// {
+	// 	printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
+	// }
 
 	free_split(splited_prompt);
 	
