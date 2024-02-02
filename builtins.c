@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/31 16:11:19 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/01/31 19:38:15 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,5 @@ int main(int ac, char **av, char **envp)
 	}
 	free_list(all.env_lst);
 	free(all.readline_line);
-	//free(all);
 	return 0;
 }
