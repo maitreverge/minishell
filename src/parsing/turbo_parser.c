@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/04 14:22:44 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/04 14:37:12 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,19 @@ bool	is_buff_valid_doll(char *str)
 
 	while (str[i])
 	{
-		while (!is_any_quote(str[i]))
+		while (!is_any_quote(str[i]) && str[i])
 		{
 			if (str[i] == DOLL_ENV && !is_any_quote(str[i + 1]) && str[i + 1])
 				return (true);
 			i++;
 		}
-		if (is_any_quote(str[i]))
+		if (is_any_quote(str[i]) && str[i])
 		{
 			starting_quote = str[i];
 			i++;
-			while (str[i] != starting_quote)
+			while (str[i] != starting_quote && str[i])
 			{
-				if (starting_quote == D_QUOTE && str[i] == DOLL_ENV && str[i + 1])
+				if (starting_quote == D_QUOTE && str[i] == DOLL_ENV && str[i + 1] != starting_quote)
 					return (true);
 				i++;
 			}
