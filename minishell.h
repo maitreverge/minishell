@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/01 13:56:47 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/04 15:27:47 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,20 @@ typedef	struct	s_file
 	bool auth_x;
 }	t_file;
 
+// ! Utils structures
+
+typedef	struct	s_utils
+{
+	char	**result;
+	char	*to_allocate;
+	int		i;
+	int		j;
+	int		k;
+	char	starting_quote;
+	char	end_quote;
+	int		real_len;
+	
+}	t_utils;
 
 // ! Functions prototypes
 
@@ -98,6 +112,9 @@ char	*ft_strncpy(char *dest, char const *src, size_t n);
 char	**parsing_split(char *s);
 size_t	parsing_countwords(char *str);
 
+//pars_struct_fts
+void	init_pars_struct(t_pars **pars);
+void	utils_init_struct(t_utils **utils, int len);
 
 
 

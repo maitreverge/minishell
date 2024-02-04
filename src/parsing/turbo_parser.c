@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/04 14:37:12 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/04 15:36:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,85 +113,77 @@ bool	is_buff_valid_doll(char *str)
 	}
 	return (false);
 }
+
 char **clean_prompt(char **buff, int len)
 {
-	char **result;
-	char *to_allocate;
-	int i;
-	int j;
-	int k;
-	char starting_quote;
-	char end_quote;
-	int real_len;
+	t_utils *u;
 
-	i = 0;
-	starting_quote = 0;
-	end_quote = 0;
+	utils_init_struct(&u, len);
 
-	to_allocate = NULL; // null init for safety
-	result = (char **)ft_calloc(sizeof(char *), len + 1);
-	if (!result)
-		exit(-1); // ! maybe freeing shit right here
-	
-	while (buff[i])
+	while (buff[u->i])
 	{
-		if (is_buff_valid_doll(buff[i]))
-			
-		j = 0;
-		real_len = 0;
-		// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
-		while (buff[i][j])
+		u->j = 0;
+		u->real_len = 0;
+		while (is_buff_valid_doll(buff[u->i]))
 		{
-			while (!is_any_quote(buff[i][j]) && buff[i][j])
+			// custom_parsing;
+			u->i++;
+		}
+		
+			
+		// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
+		while (buff[u->i][u->j])
+		{
+			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
 			{
-				j++;
-				real_len++;
+				u->j++;
+				u->real_len++;
 			}
-			if(is_any_quote(buff[i][j]))
+			if(is_any_quote(buff[u->i][u->j]))
 			{
-				starting_quote = buff[i][j];
-				j++; // skips the quote
-				while (buff[i][j] && buff[i][j] != starting_quote)
+				u->starting_quote = buff[u->i][u->j];
+				u->j++; // skips the quote
+				while (buff[u->i][u->j] && buff[u->i][u->j] != u->starting_quote)
 				{
-					j++;
-					real_len++;
+					u->j++;
+					u->real_len++;
 				}
-				j++;
+				u->j++;
 			}
 		}
-		j = 0;
-		k = 0;
+		u->j = 0;
+		u->k = 0;
 		// ! STEP 2 : allocating the buffer result with calloc
 		
-		result[i] = ft_calloc(sizeof(char), (real_len + 1));
-		if (!result[i])
+		u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
+		if (!u->result[u->i])
 			exit -1; // la maxi security tavu
 		
 		// ! STEP 3 : copying the "cleaned" version of each input
-		while (buff[i][j])
+		while (buff[u->i][u->j])
 		{
-			while (!is_any_quote(buff[i][j]) && buff[i][j])
+			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
 			{
-				result[i][k] = buff[i][j];
-				j++;
-				k++;
+				u->result[u->i][u->k] = buff[u->i][u->j];
+				u->j++;
+				u->k++;
 			}
-			if(is_any_quote(buff[i][j]))
+			if(is_any_quote(buff[u->i][u->j]))
 			{
-				starting_quote = buff[i][j];
-				j++; // skips the quote
-				while (buff[i][j] && buff[i][j] != starting_quote)
+				u->starting_quote = buff[u->i][u->j];
+				u->j++; // skips the quote
+				while (buff[u->i][u->j] && buff[u->i][u->j] != u->starting_quote)
 				{
-					result[i][k] = buff[i][j];
-					j++;
-					k++;
+					u->result[u->i][u->k] = buff[u->i][u->j];
+					u->j++;
+					u->k++;
 				}
-				j++;
+				u->j++;
 			}
 		}
-		i++;
+		u->i++;
 	}
-	return (result);
+	return (u->result);
 }
 
 void	turbo_parser(char *prompt, t_pars **pars, char **envp)
