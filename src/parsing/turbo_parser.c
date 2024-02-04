@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/02 13:59:45 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/04 14:22:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,39 @@ typedef struct s_all
 }	t_all;
 
 */
+
+bool	is_buff_valid_doll(char *str)
+{
+	int i;
+	char starting_quote;
+	char end_quote;
+
+	i = 0;
+	starting_quote = 0;
+	end_quote = 0;
+
+	while (str[i])
+	{
+		while (!is_any_quote(str[i]))
+		{
+			if (str[i] == DOLL_ENV && !is_any_quote(str[i + 1]) && str[i + 1])
+				return (true);
+			i++;
+		}
+		if (is_any_quote(str[i]))
+		{
+			starting_quote = str[i];
+			i++;
+			while (str[i] != starting_quote)
+			{
+				if (starting_quote == D_QUOTE && str[i] == DOLL_ENV && str[i + 1])
+					return (true);
+				i++;
+			}
+		}
+	}
+	return (false);
+}
 char **clean_prompt(char **buff, int len)
 {
 	char **result;
@@ -102,6 +135,8 @@ char **clean_prompt(char **buff, int len)
 	
 	while (buff[i])
 	{
+		if (is_buff_valid_doll(buff[i]))
+			
 		j = 0;
 		real_len = 0;
 		// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
