@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/04 15:36:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 08:32:03 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ char **clean_prompt(char **buff, int len)
 				u->j++;
 			}
 		}
-		u->i++;
+		u->i++; // ! changing buffer
 	}
 	return (u->result);
 }
