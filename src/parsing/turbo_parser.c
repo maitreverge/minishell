@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/05 14:45:35 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 17:14:56 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,12 @@ bool	is_buff_valid_doll(char *str)
 	return (false);
 }
 
-void	parsing_doll_var(t_utils **utl)
+void	parsing_doll_var(t_utils **utl, char *str, t_env_list **s_env)
 {
-	
+	char
 }
 
-char **clean_prompt(char **buff, int len)
+char **clean_prompt(char **buff, int len, t_env_list **s_env)
 {
 	t_utils *u;
 
@@ -131,7 +131,7 @@ char **clean_prompt(char **buff, int len)
 		u->real_len = 0;
 		while (is_buff_valid_doll(buff[u->i]))
 		{
-			parsing_doll_var(&u); // sub function for special parsing the doll (envie de crever maximale, plaisir absent)
+			parsing_doll_var(&u, buff[u->i], s_env); // sub function for special parsing the doll (envie de crever maximale, plaisir absent)
 			u->i++;
 		}
 		
@@ -191,7 +191,7 @@ char **clean_prompt(char **buff, int len)
 	return (u->result);
 }
 
-void	turbo_parser(char *prompt, t_pars **pars, char **envp)
+void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 {
 	// ! brancher la strcuture all de G pour brancher 
 	int	len_splited_prompt;
@@ -205,11 +205,11 @@ void	turbo_parser(char *prompt, t_pars **pars, char **envp)
 
 	// check la presence d'unclosed quotes.
 	if (unclosed_quotes(prompt))
-		exit (1); // ? need freeing 
+		exit (1); // ? need freeing, return value ??
 		
 	// ! STEP 1 : Take the whole prompt and split it
 	splited_prompt = parsing_split(prompt);
-	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt);
+	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt, s_env);
 	
 	// ! printing the whole shit
 	// for (int i = 0; i <= len_splited_prompt; i++)
