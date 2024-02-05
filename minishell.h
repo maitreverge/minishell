@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/02 17:48:57 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/05 17:36:14 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int		ft_exit(t_all *all, char *readline_return, int fd);
 int		signals(t_all *all);
 
 /*Pipes, redirections*/
-void	pipes(char **cmds);
+void	pipes(char **cmds, char **envp);
 
 /*Utils.c*/
 void	free_arr(void **array, int size);
