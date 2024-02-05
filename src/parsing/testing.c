@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-t_env_list	*env_lstnew(char *s_key, char *s_value)
+t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
 {
 	t_env_list	*new_node;
 
@@ -9,6 +9,8 @@ t_env_list	*env_lstnew(char *s_key, char *s_value)
 		return (NULL);
 	new_node->key = s_key;
 	new_node->value = s_value;
+	new_node->original_envp = envp;
+	new_node->next = NULL; // add 
 	return (new_node);
 }
 
@@ -37,7 +39,7 @@ void	env_lstadd_back(t_env_list **lst, t_env_list *new)
 	// new->prev = tail;
 }
 
-void	copy_env_into_list(t_env_list **env, char **envp)
+void	my_copy_env_into_list(t_env_list **env, char **envp)
 {
 	t_env_list	*current;
 	char		*s_key;
@@ -53,34 +55,36 @@ void	copy_env_into_list(t_env_list **env, char **envp)
 		s_key = splitted_value[0];
 		s_value = splitted_value[1];
 		if (!current)
-			current = env_lstnew(s_key, s_value);
+		{
+			current = env_lstnew(s_key, s_value, envp[i]);
+			// current->original_envp = envp[i];
+		}
 		else
-			env_lstadd_back(current, env_lstnew(s_key, s_value));
+		{
+			env_lstadd_back(&current, env_lstnew(s_key, s_value, envp[i]));
+			// current->next->original_envp = envp[i];
+		}
 		i++;
 	}
-	free(splitted_value);
+	// free(splitted_value);
 }
 
-int main(char **envp)
+int main(int ac, char **av, char **envp)
 {
 	t_env_list *env;
-	t_env_list *current;
+	// t_env_list *current;
 
 	env = NULL;
+	my_copy_env_into_list(&env, envp);
+	// current = env;
 
-
-	copy_env_into_list(&env, envp);
-	current = env;
-
-	for(int i = 0; current; i++)
+	do
 	{
-		printf("Current node key = %s\n", current->key);
-		printf("Current node value = %s\n", current->value);
-		printf("Current node value = %s\n", current->value);
-		current = current->next;
+		printf("Current node Original Key = %s\n", env->original_envp);
+		printf("Current node key = %s\n", env->key);
+		printf("Current node value = %s\n", env->value);
+		env = env->next;
 
-	}
-
-
+	} while (env);
 
 }

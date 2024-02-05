@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 08:47:02 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 12:19:09 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ typedef struct s_exit_status_list
 
 typedef struct s_env_list
 {
+	char *original_envp; // ! add original value
 	char *key;
 	char *value;
 	struct s_env_list *next;
