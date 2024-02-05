@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/02 20:01:32 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/05 10:57:58 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,47 +139,43 @@ int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	(void)envp;////
-	// t_all		all;
+	t_all		all;
 
-	// all.env_lst = copy_env_into_list(envp);
-	// all.last_exit_status = EMPTY_EXIT_LIST;
-	// all.readline_line = NULL;
-	char *s = "env|grep 'a'|wc -l";
-	char **cmds = ft_split(s, '|');
-	pipes(cmds);
-	return 0;/////
-	/////
-	// while (1)
-	// {
-	// 	signals(&all);
-	// 	all.readline_line = readline("minishell$ ");
-	// 	if (all.readline_line == NULL)	//checks for ctrl+d
-	// 	{
-	// 		printf("exit\r");
-	// 		free_list(all.env_lst);
-	// 		if (all.readline_line != NULL)
-	// 			free(all.readline_line);
-	// 		return (exit(0), 1);
-	// 	}
-	// 	if (ft_strncmp(all.readline_line, "echo", 4) == 0)
-	// 		ft_echo(all.readline_line, &all, 1);	//replace 1 with fd
-	// 	else if (ft_strncmp(all.readline_line, "cd", 2) == 0)
-	// 		ft_cd(all.readline_line, all.env_lst);
-	// 	else if (ft_strncmp(all.readline_line, "pwd", 3) == 0)
-	// 		ft_pwd(all.env_lst, 1, true);	//replace 1 with fd
-	// 	else if (ft_strncmp(all.readline_line, "env", 3) == 0)
-	// 		ft_env(&all, 1);
-	// 	else if (ft_strncmp(all.readline_line, "export", 6) == 0)
-	// 		ft_export(&all.env_lst, all.readline_line);
-	// 	else if (ft_strncmp(all.readline_line, "unset", 5) == 0)
-	// 		ft_unset(&all.env_lst, all.readline_line);
-	// 	else if (ft_strncmp(all.readline_line, "exit", 4) == 0)
-	// 		ft_exit(&all, all.readline_line, 1);
-	// 	add_history(all.readline_line);
-	// 	free(all.readline_line);
-	// }
-	// free_list(all.env_lst);
-	// free(all.readline_line);
-	// return 0;
+	all.env_lst = copy_env_into_list(envp);
+	all.last_exit_status = EMPTY_EXIT_LIST;
+	all.readline_line = NULL;
+	while (1)
+	{
+		signals(&all);
+		all.readline_line = readline("minishell$ ");
+		if (all.readline_line == NULL)	//checks for ctrl+d
+		{
+			printf("exit\r");
+			free_list(all.env_lst);
+			if (all.readline_line != NULL)
+				free(all.readline_line);
+			return (exit(0), 1);
+		}
+		if (ft_strchr(all.readline_line, '|'))
+			pipes(ft_split(all.readline_line, '|'), envp);
+		if (ft_strncmp(all.readline_line, "echo", 4) == 0)
+			ft_echo(all.readline_line, &all, 1);	//replace 1 with fd
+		else if (ft_strncmp(all.readline_line, "cd", 2) == 0)
+			ft_cd(all.readline_line, all.env_lst);
+		else if (ft_strncmp(all.readline_line, "pwd", 3) == 0)
+			ft_pwd(all.env_lst, 1, true);	//replace 1 with fd
+		else if (ft_strncmp(all.readline_line, "env", 3) == 0)
+			ft_env(&all, 1);
+		else if (ft_strncmp(all.readline_line, "export", 6) == 0)
+			ft_export(&all.env_lst, all.readline_line);
+		else if (ft_strncmp(all.readline_line, "unset", 5) == 0)
+			ft_unset(&all.env_lst, all.readline_line);
+		else if (ft_strncmp(all.readline_line, "exit", 4) == 0)
+			ft_exit(&all, all.readline_line, 1);
+		add_history(all.readline_line);
+		free(all.readline_line);
+	}
+	free_list(all.env_lst);
+	free(all.readline_line);
+	return 0;
 }

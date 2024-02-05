@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/31 16:24:48 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:33:39 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	signals(t_all *all)
 
 	g_sig_received = 0;
 	signal(SIGQUIT, SIG_IGN);
+	//signal(SIGPIPE, SIG_IGN);//////
 	sigemptyset(&sa.sa_mask);
 	sigaddset(&sa.sa_mask, SIGSTOP);
 	sa.sa_flags = 0;

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/03 00:28:57 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/05 12:37:29 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,36 +62,32 @@
 // }
 
 /*Executes the command, and sends its output to fd[1]*/
-void	child(int *fds, char *cmd)
+void	child(int *fds, char *cmd, char **envp, bool is_last_cmd)
 {
 	char 	**av;
-	char 	*envp[1];
 	char	*join;
-	int		len;
 
-	printf("IN CHILD\n");/////
 	av = ft_split(cmd, ' ');
-	envp[0] = NULL;
-	if (dup2(fds[1], STDOUT_FILENO) == -1)
+	if (is_last_cmd == false)
 	{
-		perror("dup2");
-		free(av);
-		exit(1);
+		if (dup2(fds[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			free(av);
+			exit(EXIT_FAILURE);
+		}
+		close(fds[1]);
 	}
-	printf("ONE\n");/////
-	close(fds[1]);
-	close(fds[0]);///
-		printf("TWO\n");/////
-	join = ft_strjoin("/bin/", cmd);
-	printf("join=%s\n", join);///////////////
-	if (execve(join, av, envp) < 0)
+	//close(fds[0]);///
+	join = ft_strjoin("/bin/", av[0]);
+	av[0] = join;
+	if (execve(av[0], av, envp) < 0)
 	{
-		len = 0;
-		while (&fds[len])
-			len++;
-		free_arr((void **)&fds, len);
-		free(join);
+		ft_putstr_fd("failed, file=", 2);
+		ft_putendl_fd(join, 2);
 		perror("execve");
+		free(fds);
+		free(join);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -99,9 +95,9 @@ void	child(int *fds, char *cmd)
 /*
 	cmds: A null terminated array of commands that are to be piped
 */
-void	pipes(char **cmds)
+void	pipes(char **cmds, char **envp)
 {
-	int	len;
+	int	len; // The numbers of commands that we get
 	int	i;
 	int	*ch_pid;
 	int	**fds;
@@ -114,17 +110,6 @@ void	pipes(char **cmds)
 	i = 0;
 	while(i < len)
 		fds[i++] = ft_calloc(2 + 1, sizeof(int));
-	// i = 0;
-	// while (i < len)
-	// {
-	// 	if (pipe(fds[i]) < 0)	//Creating the connection between to two fds
-	// 	{
-	// 		free_arr((void **)fds, len);
-	// 		perror("pipe");
-	// 		exit(EXIT_FAILURE);
-	// 	}
-	// 	i++;
-	// }
 	i = 0;
 	while (i < len)
 	{
@@ -143,7 +128,12 @@ void	pipes(char **cmds)
 				perror("pipe");
 				exit(EXIT_FAILURE);
 			}
-			child(fds[i], cmds[i]);
+			if (i == len - 1)
+				child(fds[i], cmds[i], envp, true);
+			else
+				child(fds[i], cmds[i], envp, false);
+			close(fds[i][0]);	//Close fds for parent process,
+			close(fds[i][1]);	//but not for child
 		}
 		i++;
 	}
@@ -153,13 +143,6 @@ void	pipes(char **cmds)
 		wait(NULL);
 		// waitpid(ch_pid[i], NULL, 0);
 		i++;		
-	}
-	i = 0;
-	while (i < len)
-	{
-		close(fds[i][0]);
-		close(fds[i][1]);
-		i++;
 	}
 	free(ch_pid);
 	free_arr((void **)fds, len);

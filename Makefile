@@ -6,7 +6,7 @@
 #    By: glambrig <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/02/02 17:36:10 by glambrig         ###   ########.fr        #
+#    Updated: 2024/02/05 12:40:19 by glambrig         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ SRC = builtins.c \
 		copy_envp_into_list.c \
 		signals.c \
 		pipes.c \
-		utils.c
+		utils.c \
+		exec.c
 
 # Object files
 OBJ = $(SRC:.c=.o)
