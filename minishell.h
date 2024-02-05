@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 12:19:09 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 14:38:32 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ size_t	parsing_countwords(char *str);
 void	init_pars_struct(t_pars **pars);
 void	utils_init_struct(t_utils **utils, int len);
 
-
-
+// split_2
+char	**ft_2_split(char const *s, char c);
 
 
 
@@ -141,9 +141,10 @@ typedef struct s_env_list
 	struct s_env_list *next;
 }	t_env_list;
 
-void		free_list(t_env_list *lst);
-t_env_list	*copy_env_into_list(char **envp);
-t_env_list	*insert_node(char *s);
+// copy_env_into_list
+
+void	copy_env_into_list(t_env_list **env, char **envp);
+
 
 /*Builtins*/
 void	free_tokens(char **t);
