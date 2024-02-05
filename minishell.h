@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 14:38:32 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 17:28:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,12 @@
 // ! Master Struct for parsing
 typedef	struct	s_pars
 {
-	char test; // to delete once the init is okay
-	bool command;
+	bool isCommand;
 	struct s_command *cmd;
-	bool file;
+	bool isFile;
 	struct s_file *fl;
-	bool pipe;
-	bool red_in;
-	bool red_in_delim;
-	bool red_out;
-	bool red_out_app;
+	bool isPipe;
+	int	which_redir;
 	struct s_pars *prev;
 	struct s_pars *next;
 }	t_pars;
