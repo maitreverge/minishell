@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/05 17:14:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 18:16:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,59 @@ bool	is_buff_valid_doll(char *str)
 	return (false);
 }
 
-void	parsing_doll_var(t_utils **utl, char *str, t_env_list **s_env)
+void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 {
-	char
+	t_utils *u;
+	char *result;
+	char *temp_doll;
+	bool expansion;
+
+	u = *utils;
+	expansion = true;
+
+	
+	// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
+	while (buff[u->j])
+		{
+			while (!is_any_quote(buff[u->j]) && buff[u->j])
+			{
+				expansion = true;
+				// ! STEP 1.1 : stop at the first encoutered dollar sign 
+				if (buff[u->j] == DOLL_ENV && expansion)
+				{
+					u->real_len = len
+				}
+				u->j++;
+				u->real_len++;
+			}
+			if(is_any_quote(buff[u->j]))
+			{
+				u->starting_quote = buff[u->j];
+				u->j++; // skips the quote
+				while (buff[u->j] && buff[u->j] != u->starting_quote)
+				{
+					u->j++;
+					u->real_len++;
+				}
+				u->j++;
+			}
+		}
+	
+
+	// ? Does the current dollar sign meet the expension criterias ?
+	// ! NO ==> Skip the whole $block until the next $ sign, quote or space if not inside a quote
+	// * YES 
+	// ? Does the key exists in s_env ?
+	// * NO
+	// ! NO ==> Skip the whole $block until the next $ sign, quote or space if not inside a quote
+	// * YES ==> assign the `value` into a temp char*, count the whole value strlen, add it to real_len, skip i  
+
+	// ! STEP 2 : allocating the buffer result with calloc
+
+	// ! STEP 3 : copying the "cleaned" version of each input
+
+
+
 }
 
 char **clean_prompt(char **buff, int len, t_env_list **s_env)
@@ -131,7 +181,7 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 		u->real_len = 0;
 		while (is_buff_valid_doll(buff[u->i]))
 		{
-			parsing_doll_var(&u, buff[u->i], s_env); // sub function for special parsing the doll (envie de crever maximale, plaisir absent)
+			parsing_doll_var(&u, buff[u->i], s_env); // ! sub function for special parsing the doll (envie de crever MAXIMALE, plaisir ABSENT uWu)
 			u->i++;
 		}
 		
