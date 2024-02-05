@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 17:32:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 18:18:33 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ typedef	struct	s_pars
 
 typedef	struct	s_command
 {
-	char *command;
+	bool isBuiltin;
+	char *command_name;
+	char *command_path;
 	char *options;
 	char *arguments;
-	// check execve for how to parse commands, split from pipex ??
 }	t_command;
 
 typedef	struct	s_file
