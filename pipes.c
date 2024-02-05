@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 17:36:47 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/05 17:48:31 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,10 @@
 
 //ex. command arg arg operator command arg
 
-typedef struct s_flo
-{
-	bool isCommand;
-	bool isArg;
-	bool isOperator;
-	char	*s;
-	struct s_flo *next;
-}	t_flo;
-
-int	lstlen_flo(t_flo *lst)
+int	lstlen(t_pars *lst)
 {
 	int		res;
-	t_flo 	*temp;
+	t_pars 	*temp;
 
 	temp = lst;
 	res = 0;
@@ -39,10 +30,12 @@ int	lstlen_flo(t_flo *lst)
 	return (res);
 }
 
-void	pipes(t_flo *lst)
+void	pipes(t_pars *lst)
 {
 	int	*ch_pid;
+	int	**fds;
 
 	ch_pid = ft_calloc(sizeof(int), lstlen_flo(lst));
-	if (lst->isCommand == 1)
+	fds = ft_calloc(sizeof(int *), lstlen(lst));
+	
 }
