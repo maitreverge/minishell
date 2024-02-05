@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/05 08:32:03 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/05 14:45:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,11 @@ bool	is_buff_valid_doll(char *str)
 	return (false);
 }
 
+void	parsing_doll_var(t_utils **utl)
+{
+	
+}
+
 char **clean_prompt(char **buff, int len)
 {
 	t_utils *u;
@@ -126,7 +131,7 @@ char **clean_prompt(char **buff, int len)
 		u->real_len = 0;
 		while (is_buff_valid_doll(buff[u->i]))
 		{
-			// custom_parsing;
+			parsing_doll_var(&u); // sub function for special parsing the doll (envie de crever maximale, plaisir absent)
 			u->i++;
 		}
 		
