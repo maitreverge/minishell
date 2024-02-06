@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 17:09:03 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 18:36:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ bool	is_buff_valid_doll(char *str)
 	starting_quote = 0;
 	end_quote = 0;
 
+	if (!str)
+		return false;
+
 	while (str[i])
 	{
 		while (!is_any_quote(str[i]) && str[i])
@@ -130,7 +133,7 @@ void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
 
 	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV && !is_whitespace(buff[i]) && buff[i])
 		i++;
-	temp_str = (char *)ft_calloc(sizeof(char), (i + 2));
+	temp_str = (char *)ft_calloc(sizeof(char), (i + 1));
 	if (!temp_str)
 		exit(-1); // failed malloc
 	ft_strncpy(temp_str, &buff[start], i);
@@ -164,7 +167,7 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env)
 
 	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV && !is_whitespace(buff[i]) && buff[i])
 		i++;
-	temp_str = (char *)ft_calloc(sizeof(char), i + 2); // !! fix calloc multiple arguments
+	temp_str = (char *)ft_calloc(sizeof(char), i + 1); // !! fix calloc multiple arguments
 	if (!temp_str)
 		exit(-1); // failed malloc
 	ft_strncpy(temp_str, &buff[start], i);
@@ -208,7 +211,10 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			expansion = true;
 			// ! STEP 1.1 : stop at the first encoutered dollar sign 
 			if (buff[u->j] == DOLL_ENV && expansion)
+			{
+				u->j++;
 				calculate_len_doll(&buff[u->j], &u, s_env);
+			}
 			else
 			{
 				u->j++;
@@ -224,7 +230,10 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			while (buff[u->j] && buff[u->j] != u->starting_quote)
 			{
 				if (buff[u->j] == DOLL_ENV && expansion)
+				{
+					u->j++;
 					calculate_len_doll(&buff[u->j], &u, s_env);
+				}
 				else
 				{
 					u->j++;
@@ -259,7 +268,10 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 		{
 			expansion = true;
 			if (buff[u->j] == DOLL_ENV && expansion)
+			{
+				u->j++;
 				copying_doll(&buff[u->j], &u, s_env);
+			}
 			else
 			{
 				u->result[u->i][u->k] = buff[u->j];
@@ -277,7 +289,10 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			while (buff[u->j] && buff[u->j] != u->starting_quote)
 			{
 				if (buff[u->j] == DOLL_ENV && expansion)
+				{
+					u->j++;
 					copying_doll(&buff[u->j], &u, s_env);
+				}
 				else
 				{
 					u->result[u->i][u->k] = buff[u->j];
@@ -309,7 +324,8 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 		
 			
 		// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
-		while (buff[u->i][u->j])
+		// while (buff[u->i][u->j])
+		while (buff[u->i])
 		{
 			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
 			{
@@ -337,7 +353,8 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 			exit -1; // la maxi security tavu
 		
 		// ! STEP 3 : copying the "cleaned" version of each input
-		while (buff[u->i][u->j])
+		// while (buff[u->i][u->j])
+		while (buff[u->i])
 		{
 			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
 			{
@@ -382,6 +399,14 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 		
 	// ! STEP 1 : Take the whole prompt and split it
 	splited_prompt = parsing_split(prompt);
+
+	for (int i = 0; splited_prompt[i]; i++)
+	{
+		printf("Splitted Buffer #%i = %s\n", i+1, splited_prompt[i]);
+	}
+	printf("\n\n");
+
+	
 	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt, s_env);
 	
 	// ! printing the whole shit

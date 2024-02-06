@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 08:22:54 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 17:11:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 18:01:38 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,13 @@
 	
 // }
 
-t_utils *utils_init_struct(int len)
+t_utils *utils_init_struct(int len) // ! free this single node
 {
 	t_utils *current;
+
+	current = malloc(sizeof(t_utils));
+	if (!current)
+		exit(-1);
 
 	// current = *utils;
 	// current->result = NULL;
@@ -39,7 +43,7 @@ t_utils *utils_init_struct(int len)
 	if (!current->result)
 		exit(-1); // ! maybe freeing shit right here
 
-	// current->result[len] = 0;
+	current->result[len] = 0;
 	current->to_allocate = NULL;
 	current->i = 0;
 	current->j = 0;
