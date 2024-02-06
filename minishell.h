@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 18:47:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 11:57:55 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef	struct	s_file
 
 typedef	struct	s_utils
 {
-	char	**result;
+	char	**result; // final parsing
 	char	*to_allocate;
 	int		i;
 	int		j;

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 11:13:49 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 12:11:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,45 @@ void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
 	
 }
 
+void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env)
+{
+	t_env_list *current_env;
+	t_utils *u;
+	int i;
+	char *temp_str;
+
+	current_env = *s_env;
+	u = *utils;
+	i = 0;
+	int start = 0;
+
+	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV && !is_whitespace(buff[i]) && buff[i])
+		i++;
+	temp_str = (char *)ft_calloc(sizeof(char), i + 2); // !! fix calloc multiple arguments
+	if (!temp_str)
+		exit(-1); // failed malloc
+	ft_strncpy(temp_str, &buff[start], i);
+	
+	while (current_env)
+	{
+		if (!ft_strcmp(temp_str, current_env->key))
+		{
+			while (current_env->value[start])
+			{
+				u->result[u->i][u->k] = current_env->value[start];
+				u->k++;
+				start++;
+			}
+			break ;
+		}
+		current_env = current_env->next;
+	}
+	
+	u->j += i; // move the curser
+	free(temp_str);
+	
+}
+
 void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 {
 	t_utils *u;
@@ -195,8 +234,6 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			u->j++;
 		}
 	}
-	
-
 	// ? Does the current dollar sign meet the expension criterias ?
 	// ! NO ==> Skip the whole $block until the next $ sign, quote or space if not inside a quote
 	// * YES 
@@ -207,10 +244,50 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 
 	// ! STEP 2 : allocating the buffer result with calloc
 
+
+	u->j = 0;
+	u->k = 0;
+	u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
+	if (!u->result[u->i])
+		exit -1; // la maxi security tavu
+
 	// ! STEP 3 : copying the "cleaned" version of each input
 
+	while (buff[u->j])
+	{
+		while (!is_any_quote(buff[u->j]) && buff[u->j])
+		{
+			expansion = true;
+			if (buff[u->j] == DOLL_ENV && expansion)
+				copying_doll(&buff[u->j], u, s_env);
+			else
+			{
+				u->result[u->i][u->k] = buff[u->j];
+				u->j++;
+				u->k++;
+			}
 
-
+		}
+		if(is_any_quote(buff[u->j]))
+		{
+			u->starting_quote = buff[u->j];
+			u->j++; // skips the quote
+			if (u->starting_quote == S_QUOTE)
+				expansion = false;
+			while (buff[u->j] && buff[u->j] != u->starting_quote)
+			{
+				if (buff[u->j] == DOLL_ENV && expansion)
+					copying_doll(&buff[u->j], u, s_env);
+				else
+				{
+					u->result[u->i][u->k] = buff[u->j];
+					u->j++;
+					u->k++;
+				}
+			}
+			u->j++;
+		}
+	}
 }
 
 char **clean_prompt(char **buff, int len, t_env_list **s_env)
@@ -282,7 +359,7 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 		}
 		u->i++; // ! changing buffer
 	}
-	return (u->result);
+	return (u->result); // return value of structure
 }
 
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
