@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 17:41:23 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:41:57 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,30 @@
 
 
 // ! Master Struct for parsing
-typedef	struct	s_pars
-{
-	char test; // to delete once the init is okay
-	bool command;
-	//struct s_command;
-	bool file;
-	//struct s_file;
-	bool pipe;
-	bool red_in;
-	bool red_in_delim;
-	bool red_out;
-	bool red_out_app;
-	struct s_pars *prev;
-	struct s_pars *next;
-}	t_pars;
+// typedef	struct	s_pars
+// {
+// 	char test; // to delete once the init is okay
+// 	bool command;
+// 	//struct s_command;
+// 	bool file;
+// 	//struct s_file;
+// 	bool pipe;
+// 	bool red_in;
+// 	bool red_in_delim;
+// 	bool red_out;
+// 	bool red_out_app;
+// 	struct s_pars *prev;
+// 	struct s_pars *next;
+// }	t_pars;
 
 // ! Parsing Substructures
 
 typedef	struct	s_command
 {
-	char *command;
-	char *options;
-	char *arguments;
+	bool isBuiltin;
+	char *command_name;
+	char *command_path;
+	char **name_options_args; //Split ' '
 	// check execve for how to parse commands, split from pipex ??
 }	t_command;
 
@@ -89,6 +90,18 @@ typedef	struct	s_file
 	bool auth_x;
 }	t_file;
 
+typedef    struct    s_pars
+{
+    bool isCommand;
+    struct s_command *cmd;
+    bool isFile;
+    struct s_file *fl;
+    bool isPipe;
+	bool isRedir;
+    int    which_redir;
+    struct s_pars *prev;
+    struct s_pars *next;
+}    t_pars;
 
 // ! Functions prototypes
 void	turbo_parser(char *prompt, t_pars **pars, char **envp);
