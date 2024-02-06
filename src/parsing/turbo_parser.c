@@ -6,23 +6,27 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/05 18:16:00 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 11:13:49 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// char *realloc(char *old, char *new)
-// {
-// 	char *new_str;
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
 
-// 	new_str = ft_strjoin(old, new);
-	
-// 	free(old);
-// 	free(new);
-	
-// 	return (new_str);
-// }
+	i = 0;
+	if (!s1 || !s2)
+		return -1; 
+	while (s1[i] != '\0' || s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
+}
 
 // This function needs to check 
 bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a valid argument
@@ -114,6 +118,38 @@ bool	is_buff_valid_doll(char *str)
 	return (false);
 }
 
+void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
+{
+	t_env_list *current_env;
+	int i;
+	char *temp_str;
+
+	current_env = *s_env;
+	i = 0;
+	int start = 0;
+
+	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV && !is_whitespace(buff[i]) && buff[i])
+		i++;
+	temp_str = (char *)ft_calloc(sizeof(char) * i + 2);
+	if (!temp_str)
+		exit(-1); // failed malloc
+	ft_strncpy(temp_str, &buff[start], i);
+	
+	while (current_env)
+	{
+		if (!ft_strcmp(temp_str, current_env->key))
+		{
+			(*u)->real_len += ft_strlen(current_env->value); // ! add to real len the len of s_env->value
+			break ;
+		}
+		current_env = current_env->next;
+	}
+	
+	(*u)->j += i; // move the curser
+	free(temp_str);
+	
+}
+
 void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 {
 	t_utils *u;
@@ -127,30 +163,38 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 	
 	// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
 	while (buff[u->j])
+	{
+		while (!is_any_quote(buff[u->j]) && buff[u->j])
 		{
-			while (!is_any_quote(buff[u->j]) && buff[u->j])
+			expansion = true;
+			// ! STEP 1.1 : stop at the first encoutered dollar sign 
+			if (buff[u->j] == DOLL_ENV && expansion)
+				calculate_len_doll(&buff[u->j], u, s_env);
+			else
 			{
-				expansion = true;
-				// ! STEP 1.1 : stop at the first encoutered dollar sign 
-				if (buff[u->j] == DOLL_ENV && expansion)
-				{
-					u->real_len = len
-				}
 				u->j++;
 				u->real_len++;
 			}
-			if(is_any_quote(buff[u->j]))
+		}
+		if(is_any_quote(buff[u->j]))
+		{
+			u->starting_quote = buff[u->j];
+			u->j++; // skips the quote
+			if (u->starting_quote == S_QUOTE)
+				expansion = false;
+			while (buff[u->j] && buff[u->j] != u->starting_quote)
 			{
-				u->starting_quote = buff[u->j];
-				u->j++; // skips the quote
-				while (buff[u->j] && buff[u->j] != u->starting_quote)
+				if (buff[u->j] == DOLL_ENV && expansion)
+					calculate_len_doll(&buff[u->j], u, s_env);
+				else
 				{
 					u->j++;
 					u->real_len++;
 				}
-				u->j++;
 			}
+			u->j++;
 		}
+	}
 	
 
 	// ? Does the current dollar sign meet the expension criterias ?
