@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 18:36:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 18:52:20 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,13 +321,17 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 			parsing_doll_var(&u, buff[u->i], s_env); // ! sub function for special parsing the doll (envie de crever MAXIMALE, plaisir ABSENT uWu)
 			u->i++;
 		}
+		if (!buff[u->i])
+			break ;
+		u->j = 0;
+		u->real_len = 0;
 		
 			
 		// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
-		// while (buff[u->i][u->j])
-		while (buff[u->i])
+		// while (buff[u->i])
+		while (buff[u->i][u->j] != 0)
 		{
-			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
+			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j] != 0)
 			{
 				u->j++;
 				u->real_len++;
@@ -354,7 +358,8 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 		
 		// ! STEP 3 : copying the "cleaned" version of each input
 		// while (buff[u->i][u->j])
-		while (buff[u->i])
+		// while (buff[u->i]) ///////////////
+		while (buff[u->i][u->j] != 0)
 		{
 			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
 			{
