@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 12:21:26 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:09:03 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,7 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 {
 	t_utils *u;
 
-	utils_init_struct(&u, len);
+	u = utils_init_struct(len);
 
 	while (buff[u->i])
 	{
@@ -374,6 +374,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 	// init_pars_struct(pars);
 
 	len_splited_prompt = parsing_countwords(prompt);
+	// printf("Len_splited_prompt = %i\n", len_splited_prompt);
 
 	// check la presence d'unclosed quotes.
 	if (unclosed_quotes(prompt))

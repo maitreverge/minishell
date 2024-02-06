@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 08:22:54 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 12:23:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:11:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,18 @@
 	
 // }
 
-void	utils_init_struct(t_utils **utils, int len)
+t_utils *utils_init_struct(int len)
 {
 	t_utils *current;
 
-	current = *utils;
+	// current = *utils;
+	// current->result = NULL;
 
-	current->result = (char **)ft_calloc(sizeof(char *), len + 1);
+	current->result = ft_calloc((len + 1), sizeof(char *));
 	if (!current->result)
 		exit(-1); // ! maybe freeing shit right here
+
+	// current->result[len] = 0;
 	current->to_allocate = NULL;
 	current->i = 0;
 	current->j = 0;
@@ -44,4 +47,7 @@ void	utils_init_struct(t_utils **utils, int len)
 	current->starting_quote = 0;
 	current->end_quote = 0;
 	current->real_len = 0;
+	
+	
+	return (current);
 }

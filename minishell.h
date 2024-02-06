@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/06 12:18:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:10:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ size_t	parsing_countwords(char *str);
 
 //pars_struct_fts
 void	init_pars_struct(t_pars **pars);
-void	utils_init_struct(t_utils **utils, int len);
+t_utils *utils_init_struct(int len);
 
 // split_2
 char	**ft_2_split(char const *s, char c);
