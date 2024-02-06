@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/06 11:57:55 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 12:18:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef	struct	s_command
 	bool isBuiltin;
 	char *command_name;
 	char *command_path; // full valid path
-	char **name_options_args //Split ' '
+	char **name_options_args; //Split ' '
 }	t_command;
 
 typedef	struct	s_file
@@ -94,10 +94,19 @@ typedef	struct	s_utils
 	
 }	t_utils;
 
+typedef struct s_env_list
+{
+	char *original_envp; // ! add original value
+	char *key;
+	char *value;
+	struct s_env_list *next;
+}	t_env_list;
+
 // ! Functions prototypes
 
 // turbo_parser
-void	turbo_parser(char *prompt, t_pars **pars, char **envp);
+void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env);
+
 
 // utils_parsing
 bool	is_whitespace(char c);
@@ -130,13 +139,13 @@ typedef struct s_exit_status_list
 	struct s_exit_status_list	*next;
 }	t_exit_status_list;
 
-typedef struct s_env_list
-{
-	char *original_envp; // ! add original value
-	char *key;
-	char *value;
-	struct s_env_list *next;
-}	t_env_list;
+// typedef struct s_env_list
+// {
+// 	char *original_envp; // ! add original value
+// 	char *key;
+// 	char *value;
+// 	struct s_env_list *next;
+// }	t_env_list;
 
 // copy_env_into_list
 

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 12:11:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/06 12:21:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
 
 	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV && !is_whitespace(buff[i]) && buff[i])
 		i++;
-	temp_str = (char *)ft_calloc(sizeof(char) * i + 2);
+	temp_str = (char *)ft_calloc(sizeof(char), (i + 2));
 	if (!temp_str)
 		exit(-1); // failed malloc
 	ft_strncpy(temp_str, &buff[start], i);
@@ -208,7 +208,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			expansion = true;
 			// ! STEP 1.1 : stop at the first encoutered dollar sign 
 			if (buff[u->j] == DOLL_ENV && expansion)
-				calculate_len_doll(&buff[u->j], u, s_env);
+				calculate_len_doll(&buff[u->j], &u, s_env);
 			else
 			{
 				u->j++;
@@ -224,7 +224,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			while (buff[u->j] && buff[u->j] != u->starting_quote)
 			{
 				if (buff[u->j] == DOLL_ENV && expansion)
-					calculate_len_doll(&buff[u->j], u, s_env);
+					calculate_len_doll(&buff[u->j], &u, s_env);
 				else
 				{
 					u->j++;
@@ -259,7 +259,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 		{
 			expansion = true;
 			if (buff[u->j] == DOLL_ENV && expansion)
-				copying_doll(&buff[u->j], u, s_env);
+				copying_doll(&buff[u->j], &u, s_env);
 			else
 			{
 				u->result[u->i][u->k] = buff[u->j];
@@ -277,7 +277,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			while (buff[u->j] && buff[u->j] != u->starting_quote)
 			{
 				if (buff[u->j] == DOLL_ENV && expansion)
-					copying_doll(&buff[u->j], u, s_env);
+					copying_doll(&buff[u->j], &u, s_env);
 				else
 				{
 					u->result[u->i][u->k] = buff[u->j];
@@ -300,6 +300,7 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 	{
 		u->j = 0;
 		u->real_len = 0;
+		// special parsing for doll env
 		while (is_buff_valid_doll(buff[u->i]))
 		{
 			parsing_doll_var(&u, buff[u->i], s_env); // ! sub function for special parsing the doll (envie de crever MAXIMALE, plaisir ABSENT uWu)
@@ -383,10 +384,10 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt, s_env);
 	
 	// ! printing the whole shit
-	// for (int i = 0; i <= len_splited_prompt; i++)
-	// {
-	// 	printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
-	// }
+	for (int i = 0; cleaned_prompt[i]; i++)
+	{
+		printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
+	}
 
 	free_split(splited_prompt);
 	
