@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/29 16:02:07 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/07 17:07:17 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	check_if_env_var(char *s, t_all *all)
 /*	TODO:
 		-echo $? prints exit status of last command
 */
-int	ft_echo(char *s, t_all *all, int fd)
+int	ft_echo(char *s, t_all *all, t_pars *pars, int fd)
 {
 	char	**tokens;
 	char 	*trimmed;
@@ -179,6 +179,7 @@ int	ft_echo(char *s, t_all *all, int fd)
 	}
 	free_tokens(tokens);
 	all->last_exit_status = 0;
+	waitpid(child_pid, pars->last_exit_status, 0);/////for $?
 	return (0);
 }
 

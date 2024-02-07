@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 11:01:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 18:13:58 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,22 @@ void	free_s_env(t_env_list **env)
 		free(temp);
 	}
 	// free(env);
+}
+
+void	free_t_pars(t_pars **lst)
+{
+	int		i;
+	t_pars 	*temp;
+
+	i = 0;
+	while ((*lst)->next)
+	{
+		temp = (*lst)->next;
+		free_t_cmd((*lst)->cmd);
+		free_t_file((*lst)->fl);
+		free((*lst));
+		(*lst) = temp;
+	}
 }
 
 void	free_s_utils(t_utils **utils)

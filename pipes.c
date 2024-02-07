@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/06 17:42:03 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/07 19:23:23 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,8 +179,8 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
     int		i;
     int 	**fds;
 
-	*ch_pid = ft_calloc(sizeof(pid_t), lstlen(lst));
 	len = lstlen(lst);
+	*ch_pid = ft_calloc(sizeof(pid_t), len);
 	fds = ft_calloc(sizeof(int *), len);
 	i = 0;
     while (i < len)
@@ -189,6 +189,8 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
         if (pipe(fds[i]) == -1)
         {
             perror("pipe");
+			free_t_pars(&lst);
+			free_arr((void **)fds, sizeof(fds) / sizeof(fds[0]));
             exit(EXIT_FAILURE);
         }
 		i++;
@@ -196,11 +198,59 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
     return (fds);
 }
 
-void	redirect_output(t_pars *lst)
+/*
+	Handles '>' and '>>' operators.
+*/
+int	redirect_output(t_pars *lst, int input_fd)
 {
-	
+	int		i;
+	int		fd[2];
+	int		open_fd;
+	pid_t	ch_pid;
+	char	*buff;
+
+	if (pipe(fd) < 0)
+    {
+		perror("pipe");
+		free_t_pars(&lst);
+		exit(EXIT_FAILURE);
+	}
+	if (dup2(input_fd, fd[0]) < 0)
+	{
+		perror("dup2");
+		free_t_pars(&lst);
+		exit(EXIT_FAILURE);
+	}
+	close(fd[0]);
+	ch_pid = fork();
+	if (ch_pid == 0)
+	{
+		if (lst->next->fl->file_exist && lst->next->fl->auth_w == true && lst->next->which_redir == '>')
+			open_fd = open(lst->next->fl->file_name, O_WRONLY | O_CREAT);
+		else if (lst->next->fl->file_exist && lst->next->fl->auth_w == true && lst->next->which_redir == '>>')
+			open_fd = open(lst->next->fl->file_name, O_WRONLY | O_APPEND | O_CREAT);
+		else
+			return (ft_putendl_fd("Error, insufficient permissions.", 2), 1);
+		while (i == 1)
+			i = read(input_fd, &buff, 1); //buff uninitalized here, fix
+		if (i == -1)
+			return (ft_putendl_fd("Error, read() call failed.", 2), 1);
+		ft_putstr_fd(buff, open_fd);	
+	}
+	else if (ch_pid < 0)
+	{
+		perror("fork");
+		free_t_pars(&lst);
+		exit(EXIT_FAILURE);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	wait(NULL);
 }
 
+/*
+	Handles the pipe '|' operator.
+*/
 void	pipes(t_pars *lst, int input_fd)
 {
     int i;
@@ -216,7 +266,7 @@ void	pipes(t_pars *lst, int input_fd)
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
         {
-            if (input_fd != -1)	//If it's not the first time pipes() is called
+            if (input_fd != -1)	//If it's not the first time pipes() is called, we redirect STDIN
             {
                 dup2(input_fd, STDIN_FILENO);
                 close(input_fd);
@@ -243,10 +293,11 @@ void	pipes(t_pars *lst, int input_fd)
         lst = lst->next;
     }
 	i = 0;
+    close(fds[0][0]);
     while (i < lstlen(temp))
     {
         wait(NULL);
-        close(fds[i][0]);
+        // close(fds[i][0]);
         i++;
     }
     // Free allocated memory
@@ -259,7 +310,7 @@ int main(void) {
 	t_pars *command1 = ft_calloc(sizeof(t_pars), 1);
 	t_pars *command2 = ft_calloc(sizeof(t_pars), 1);
 	t_pars *command3 = ft_calloc(sizeof(t_pars), 1);
-	t_pars *command4 = ft_calloc(sizeof(t_pars), 1);
+	// t_pars *command4 = ft_calloc(sizeof(t_pars), 1);
 
 	// Set the necessary fields for each command
 	command1->isCommand = true;
@@ -288,17 +339,16 @@ int main(void) {
 	command3->cmd->name_options_args[0] = "rev";
 	command3->cmd->name_options_args[1] = NULL;
 	command3->prev = command2;
-	command3->next = command4;
+	command3->next = NULL;//command4
 
-	command4->isCommand = true;
-	command4->cmd = malloc(sizeof(t_command));
-	command4->cmd->command_path = "/bin/wc";
-	command4->cmd->name_options_args = malloc(sizeof(char*) * 3);
-	command4->cmd->name_options_args[0] = "wc";
-	command4->cmd->name_options_args[1] = "-l";
-	command4->cmd->name_options_args[2] = NULL;
-	command4->prev = command3;
-	command4->next = NULL;
+	// command4->isCommand = true;
+	// command4->cmd = malloc(sizeof(t_command));
+	// command4->cmd->command_path = "/bin/rev";
+	// command4->cmd->name_options_args = malloc(sizeof(char*) * 3);
+	// command4->cmd->name_options_args[0] = "wc";
+	// command4->cmd->name_options_args[1] = NULL;
+	// command4->prev = command3;
+	// command4->next = NULL;
 
 	// Call the pipes function
 	pipes(command1, -1);
@@ -313,8 +363,8 @@ int main(void) {
 	free(command3->cmd->name_options_args);
 	free(command3->cmd);
 	free(command3);
-	free(command4->cmd->name_options_args);
-	free(command4->cmd);
-	free(command4);
+	// free(command4->cmd->name_options_args);
+	// free(command4->cmd);
+	// free(command4);
 	return 0;
 }

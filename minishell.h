@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 12:57:37 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/07 18:14:08 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef	struct	s_pars
 	bool isPipe;
 	bool isRedir;
 	int	which_redir; // let's say something like 1 for >, 2 for <, 3 for >>, 4 for <<
+	int last_exit_status;
 	struct s_pars *prev;
 	struct s_pars *next;
 }	t_pars;
@@ -161,7 +162,7 @@ void	copy_env_into_list(t_env_list **env, char **envp);
 
 /*Builtins*/
 void	free_tokens(char **t);
-int		ft_echo(char *s, t_all *all, int fd);
+int		ft_echo(char *s, t_all *all, t_pars *pars, int fd);
 int		ft_cd(char *path, t_env_list *envp);
 int		ft_pwd(t_env_list *envp, int fd, bool print);
 void	ft_export(t_env_list **envp, char *line);
@@ -176,5 +177,6 @@ void	pipes(t_pars *lst, int fd_stdin);
 
 /*Utils.c*/
 void	free_arr(void **array, int size);
+void	free_t_pars(t_pars **lst);
 
 #endif
