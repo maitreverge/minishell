@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 09:50:42 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 10:55:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,12 +290,12 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 	}
 }
 
-char **clean_prompt(char **buff, int len, t_env_list **s_env)
+char **clean_prompt(char **buff, t_utils **utils, t_env_list **s_env)
 {
 	t_utils *u;
 
-	u = utils_init_struct(len);
-
+	u = *utils;
+	
 	while (buff[u->i])
 	{
 		u->j = 0;
@@ -372,20 +372,19 @@ char **clean_prompt(char **buff, int len, t_env_list **s_env)
 
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 {
-	// ! brancher la strcuture all de G pour brancher 
+	t_utils *u;
+
 	int	len_splited_prompt;
 	char **splited_prompt;
 	char **cleaned_prompt;
 	
-	// ? 🤔 Does this function needs to be called during the nodes init 
-	// init_pars_struct(pars);
 
 	len_splited_prompt = parsing_countwords(prompt);
-	// printf("Len_splited_prompt = %i\n", len_splited_prompt);
 
-	// check la presence d'unclosed quotes.
 	if (unclosed_quotes(prompt))
 		exit (1); // ? need freeing, return value ??
+
+	u = utils_init_struct(len_splited_prompt);
 		
 	// ! STEP 1 : Take the whole prompt and split it
 	splited_prompt = parsing_split(prompt);
@@ -397,7 +396,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 	printf("\n\n");
 
 	
-	cleaned_prompt = clean_prompt(splited_prompt, len_splited_prompt, s_env);
+	cleaned_prompt = clean_prompt(splited_prompt, &u, s_env);
 	
 	// ! printing the whole shit
 	for (int i = 0; cleaned_prompt[i]; i++)
@@ -405,12 +404,14 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 		printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
 	}
 
-	
-
-	free_split(splited_prompt);
-	
-	
 	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else
 	
 	// ! STEP 3 : Allocate substrings into substructures for commands and files
+
+	
+	free_s_utils(&u);
+	free_split(splited_prompt);
+	
+	
+	
 }

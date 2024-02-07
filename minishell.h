@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/06 17:10:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 10:59:45 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,9 @@ bool	is_whitespace(char c);
 bool	is_any_quote(char c);
 void	free_split(char **to_free);
 char	*ft_strncpy(char *dest, char const *src, size_t n);
+void	free_s_env(t_env_list **env);
+void	free_s_utils(t_utils **utils);
+
 
 // split_parser
 char	**parsing_split(char *s);

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 14:37:23 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 10:43:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	copy_env_into_list(t_env_list **env, char **envp)
 		else
 			env_lstadd_back(&current, env_lstnew(s_key, s_value, envp[i]));
 		i++;
+		free(splitted_value);
 	}
-	free(splitted_value);
 }
 
 
