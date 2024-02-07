@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 12:57:37 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/07 18:42:03 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,10 @@
 // ! Master Struct for parsing
 typedef	struct	s_pars
 {
-	bool isCommand;
-	struct s_command *cmd;
+	bool isExitStatus;
+	int		last_exit_status; // variable of $?
+	bool	isCommand;
+	struct s_command	*cmd;
 	bool isFile;
 	struct s_file *fl;
 	bool isPipe;
@@ -112,7 +114,7 @@ typedef struct s_env_list
 // ! Functions prototypes
 
 // turbo_parser
-void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env);
+void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
 
 
 // utils_parsing
@@ -122,6 +124,8 @@ void	free_split(char **to_free);
 char	*ft_strncpy(char *dest, char const *src, size_t n);
 void	free_s_env(t_env_list **env);
 void	free_s_utils(t_utils **utils);
+int		int_len(int n);
+
 
 
 // split_parser
@@ -134,6 +138,14 @@ t_utils *utils_init_struct(int len);
 
 // split_2
 char	**ft_2_split(char const *s, char c);
+
+// linked_list_functions
+t_pars	*lstnew(int number);
+t_pars	*lstlast(t_pars *lst);
+void	lstadd_back(t_pars **lst, t_pars *new);
+void	lstadd_front(t_pars **lst, t_pars *new);
+int		lstsize(t_pars *lst);
+
 
 
 

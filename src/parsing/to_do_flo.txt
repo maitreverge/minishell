@@ -33,3 +33,11 @@ a bit of ✨norm✨
 🧹 DELETE FILE :
 
 🔄 REORG FILES : 
+
+
+Gestion du $?
+
+init master struct avant le parsing
+
+faire un edge case dans mon parsing
+

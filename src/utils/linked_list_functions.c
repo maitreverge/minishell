@@ -6,21 +6,21 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 04:25:36 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/28 07:23:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 18:20:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_pars	*lstnew(int number, int index)
+t_pars	*lstnew(int exit_status)
 {
 	t_pars	*new_node;
 
 	new_node = (t_pars *)malloc(sizeof(t_pars));
 	if (!new_node)
 		return (NULL);
-	// new_node->nb = number;
-	// new_node->master_index = index;
+	new_node->isExitStatus = true;
+	new_node->last_exit_status = exit_status;
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	return (new_node);

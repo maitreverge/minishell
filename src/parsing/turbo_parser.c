@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 10:55:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 19:21:18 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ bool	is_buff_valid_doll(char *str)
 	return (false);
 }
 
-void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
+void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env, t_pars **pars)
 {
 	t_env_list *current_env;
 	int i;
@@ -125,7 +125,12 @@ void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
 	
 	while (current_env)
 	{
-		if (!ft_strcmp(temp_str, current_env->key))
+		if (!ft_strcmp(temp_str, "?")) // ! edge case for $? 
+		{
+			(*u)->real_len += int_len((*pars)->last_exit_status); // ! add to real len the len of s_env->value
+			break ;
+		}
+		else if (!ft_strcmp(temp_str, current_env->key))
 		{
 			(*u)->real_len += ft_strlen(current_env->value); // ! add to real len the len of s_env->value
 			break ;
@@ -138,12 +143,13 @@ void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
 	
 }
 
-void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env)
+void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars)
 {
 	t_env_list *current_env;
 	t_utils *u;
 	int i;
 	char *temp_str;
+	char *nbr;
 
 	current_env = *s_env;
 	u = *utils;
@@ -159,7 +165,18 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env)
 	
 	while (current_env)
 	{
-		if (!ft_strcmp(temp_str, current_env->key))
+		if (!ft_strcmp(temp_str, "?")) // ! edge case for $? 
+		{
+			nbr = ft_itoa((*pars)->last_exit_status);
+			while (nbr[start])
+			{
+				u->result[u->i][u->k] = nbr[start];
+				u->k++;
+				start++;
+			}
+			break;
+		}
+		else if (!ft_strcmp(temp_str, current_env->key))
 		{
 			while (current_env->value[start])
 			{
@@ -171,13 +188,12 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env)
 		}
 		current_env = current_env->next;
 	}
-	
 	u->j += i; // move the curser
 	free(temp_str);
 	
 }
 
-void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
+void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **pars)
 {
 	t_utils *u;
 	char *result;
@@ -198,7 +214,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			if (buff[u->j] == DOLL_ENV && expansion)
 			{
 				u->j++;
-				calculate_len_doll(&buff[u->j], &u, s_env);
+				calculate_len_doll(&buff[u->j], &u, s_env, pars);
 			}
 			else
 			{
@@ -217,7 +233,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 				if (buff[u->j] == DOLL_ENV && expansion)
 				{
 					u->j++;
-					calculate_len_doll(&buff[u->j], &u, s_env);
+					calculate_len_doll(&buff[u->j], &u, s_env, pars);
 				}
 				else
 				{
@@ -255,7 +271,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 			if (buff[u->j] == DOLL_ENV && expansion)
 			{
 				u->j++;
-				copying_doll(&buff[u->j], &u, s_env);
+				copying_doll(&buff[u->j], &u, s_env, pars);
 			}
 			else
 			{
@@ -276,7 +292,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 				if (buff[u->j] == DOLL_ENV && expansion)
 				{
 					u->j++;
-					copying_doll(&buff[u->j], &u, s_env);
+					copying_doll(&buff[u->j], &u, s_env, pars);
 				}
 				else
 				{
@@ -290,7 +306,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
 	}
 }
 
-char **clean_prompt(char **buff, t_utils **utils, t_env_list **s_env)
+char **clean_prompt(char **buff, t_utils **utils, t_env_list **s_env, t_pars **pars)
 {
 	t_utils *u;
 
@@ -303,7 +319,7 @@ char **clean_prompt(char **buff, t_utils **utils, t_env_list **s_env)
 		// special parsing for doll env
 		while (is_buff_valid_doll(buff[u->i]))
 		{
-			parsing_doll_var(&u, buff[u->i], s_env); // ! sub function for special parsing the doll (envie de crever MAXIMALE, plaisir ABSENT uWu)
+			parsing_doll_var(&u, buff[u->i], s_env, pars); // ! sub function for special parsing the doll (envie de crever MAXIMALE, plaisir ABSENT uWu)
 			u->i++;
 		}
 		if (!buff[u->i])
@@ -370,19 +386,25 @@ char **clean_prompt(char **buff, t_utils **utils, t_env_list **s_env)
 	return (u->result); // return value of structure
 }
 
-void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
+void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils)
 {
 	t_utils *u;
-
 	int	len_splited_prompt;
 	char **splited_prompt;
 	char **cleaned_prompt;
+
+
 	
+	u = *s_utils;
 
 	len_splited_prompt = parsing_countwords(prompt);
 
 	if (unclosed_quotes(prompt))
-		exit (1); // ? need freeing, return value ??
+	{
+		ft_putendl_fd("Error : Unclosed quote detected", 2);
+		ft_putendl_fd("Please enter a valid prompt", 2);
+		// CTRL - C SIGNAL
+	}
 
 	u = utils_init_struct(len_splited_prompt);
 		
@@ -396,7 +418,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 	printf("\n\n");
 
 	
-	cleaned_prompt = clean_prompt(splited_prompt, &u, s_env);
+	cleaned_prompt = clean_prompt(splited_prompt, &u, s_env, pars);
 	
 	// ! printing the whole shit
 	for (int i = 0; cleaned_prompt[i]; i++)
@@ -405,6 +427,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 	}
 
 	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else
+	
 	
 	// ! STEP 3 : Allocate substrings into substructures for commands and files
 

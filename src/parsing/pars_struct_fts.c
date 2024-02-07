@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 08:22:54 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 18:01:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 18:22:36 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ t_utils *utils_init_struct(int len) // ! free this single node
 	current->starting_quote = 0;
 	current->end_quote = 0;
 	current->real_len = 0;
-	
 	
 	return (current);
 }

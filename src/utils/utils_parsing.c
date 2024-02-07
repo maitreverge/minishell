@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 11:01:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 18:41:10 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,24 @@ void	free_s_utils(t_utils **utils)
 		
 		// current = current->next;
 		// free(temp);
+}
+
+int int_len(int n)
+{
+	int i;
+
+	if (n == 0)
+		return 1;
+	i = 0;
+	if (n < 0)
+	{
+		i++;
+		n *= -1;
+	}
+	while (n != 0)
+	{
+		n = n / 10;
+		i++;
+	}
+	return i;
 }
