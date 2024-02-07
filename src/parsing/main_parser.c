@@ -6,12 +6,12 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 07:26:07 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/28 17:37:20 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 10:36:27 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-// #include "../../include/minishell.h"
+
 
 /**
  * @brief My main function for parsing checking only
@@ -24,17 +24,19 @@
 int main(int ac, char **av, char **envp)//, char **env
 {
 	t_pars *pars; // mains struct which will contains the parsing output
-	
+	t_env_list *s_env;
 	char *line;
-	char *post_pars; // temp checker
 
-	pars = NULL; // init struct to NULL as safety
-	post_pars = NULL;
-
-	line = readline("minishell$ "); // This mf leaks, can't do anything
-	printf("Line = %s\n", line);
-	turbo_parser(line, &pars, envp);
+	pars = NULL;
+	s_env = NULL;
 	
+	copy_env_into_list(&s_env, envp);
+
+	line = readline("minishell$ ");
+
+	turbo_parser(line, &pars, &s_env);
+	
+	free_s_env(&s_env);
 	// add_history(line);
 	free(line);
 

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/06 13:41:44 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/07 12:57:37 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINISHELL_H
 # define _GNU_SOURCE //NO idea why this needs to be here or wtf it does, but sigaction doesn't work otherwise
 
-# include <signal.h>
-# include "lft/libft.h"
+# include "lft/libft.h" // libft george
+# include <unistd.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -54,21 +54,18 @@
 
 
 // ! Master Struct for parsing
-// typedef	struct	s_pars
-// {
-// 	char test; // to delete once the init is okay
-// 	bool command;
-// 	//struct s_command;
-// 	bool file;
-// 	//struct s_file;
-// 	bool pipe;
-// 	bool red_in;
-// 	bool red_in_delim;
-// 	bool red_out;
-// 	bool red_out_app;
-// 	struct s_pars *prev;
-// 	struct s_pars *next;
-// }	t_pars;
+typedef	struct	s_pars
+{
+	bool isCommand;
+	struct s_command *cmd;
+	bool isFile;
+	struct s_file *fl;
+	bool isPipe;
+	bool isRedir;
+	int	which_redir; // let's say something like 1 for >, 2 for <, 3 for >>, 4 for <<
+	struct s_pars *prev;
+	struct s_pars *next;
+}	t_pars;
 
 // ! Parsing Substructures
 
@@ -76,9 +73,8 @@ typedef	struct	s_command
 {
 	bool isBuiltin;
 	char *command_name;
-	char *command_path;
+	char *command_path; // full valid path
 	char **name_options_args; //Split ' '
-	// check execve for how to parse commands, split from pipex ??
 }	t_command;
 
 typedef	struct	s_file
@@ -90,34 +86,61 @@ typedef	struct	s_file
 	bool auth_x;
 }	t_file;
 
-typedef    struct    s_pars
+// ! Utils structures
+
+typedef	struct	s_utils
 {
-    bool isCommand;
-    struct s_command *cmd;
-    bool isFile;
-    struct s_file *fl;
-    bool isPipe;
-	bool isRedir;
-    int    which_redir;
-    struct s_pars *prev;
-    struct s_pars *next;
-}    t_pars;
+	char	**result; // final parsing
+	char	*to_allocate;
+	int		i;
+	int		j;
+	int		k;
+	char	starting_quote;
+	char	end_quote;
+	int		real_len;
+	
+}	t_utils;
+
+typedef struct s_env_list
+{
+	char *original_envp; // ! add original value
+	char *key;
+	char *value;
+	struct s_env_list *next;
+}	t_env_list;
 
 // ! Functions prototypes
-void	turbo_parser(char *prompt, t_pars **pars, char **envp);
+
+// turbo_parser
+void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env);
+
+
+// utils_parsing
+bool	is_whitespace(char c);
+bool	is_any_quote(char c);
+void	free_split(char **to_free);
+char	*ft_strncpy(char *dest, char const *src, size_t n);
+void	free_s_env(t_env_list **env);
+void	free_s_utils(t_utils **utils);
+
+
+// split_parser
+char	**parsing_split(char *s);
+size_t	parsing_countwords(char *str);
+
+//pars_struct_fts
+void	init_pars_struct(t_pars **pars);
+t_utils *utils_init_struct(int len);
+
+// split_2
+char	**ft_2_split(char const *s, char c);
+
 
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // * .h George
-
-
-typedef struct s_env_list
-{
-	char *env_line;
-	struct s_env_list *next;
-}	t_env_list;
 
 typedef struct s_all
 {
@@ -126,10 +149,15 @@ typedef struct s_all
 	int			last_exit_status;
 }	t_all;
 
+
+typedef struct s_exit_status_list
+{
+	int							status;
+	struct s_exit_status_list	*next;
+}	t_exit_status_list;
+
 /*Env*/
-void				free_list(t_env_list *lst);
-t_env_list			*copy_env_into_list(char **envp);
-t_env_list			*insert_node_env(char *s);
+void	copy_env_into_list(t_env_list **env, char **envp);
 
 /*Builtins*/
 void	free_tokens(char **t);

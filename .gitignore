@@ -67,3 +67,4 @@ Makefile.gen
 .DS_Store
 
 # My Files
+src/parsing/test

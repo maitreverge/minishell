@@ -1,132 +1,100 @@
-# define S_QUOTE '\'' // backslack for making it a char
-# define D_QUOTE '\"'
-# define PIPE '|'
-# define RED_IN '<'
-# define RED_IN_DELIM "<<"
-# define RED_OUT '>'
-# define RED_OUT_APP ">>"
-# define DOLL_ENV '$'
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+// #include "../../minishell.h"
 
+// /* ************************************************************************** */
+// /*                                                                            */
+// /*                                                        :::      ::::::::   */
+// /*   ft_split.c                                         :+:      :+:    :+:   */
+// /*                                                    +:+ +:+         +:+     */
+// /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+// /*                                                +#+#+#+#+#+   +#+           */
+// /*   Created: 2023/10/02 15:21:44 by flverge           #+#    #+#             */
+// /*   Updated: 2023/10/06 16:10:26 by flverge          ###   ########.fr       */
+// /*                                                                            */
+// /* ************************************************************************** */
 
-#include "../../minishell.h"
+// #include "../../minishell.h"
 
-static char	*ft_strncpy(char *dest, char const *src, size_t n)
-{
-	size_t	i;
+// t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
+// {
+// 	t_env_list	*new_node;
 
-	i = 0;
-	while (i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	while (i < n)
-	{
-		dest[i] = '\0';
-		i++;
-	}
-	return (dest);
-}
+// 	new_node = (t_env_list *)malloc(sizeof(t_env_list));
+// 	if (!new_node)
+// 		return (NULL);
+// 	new_node->original_envp = envp;
+// 	new_node->key = s_key;
+// 	new_node->value = s_value;
+// 	new_node->next = NULL; // add 
+// 	return (new_node);
+// }
 
-static void	sub_check(char const *s, char c, size_t *i, size_t *start)
-{
-	while (s[*i] == c)
-		(*i)++;
-	if (s[*i] != c && s[*i])
-	{
-		*start = *i;
-		while (s[*i] != c && s[*i])
-			(*i)++;
-	}
-}
+// t_env_list	*env_lstlast(t_env_list *lst)
+// {
+// 	t_env_list	*current;
 
-static void	allocation(char **buffer, char const *s, char c, size_t len_s)
-{
-	size_t	i;
-	size_t	j;
-	size_t	start;
+// 	current = lst;
+// 	if (!current)
+// 		return (0);
+// 	if (!current->next)
+// 		return (current);
+// 	while (current->next != NULL)
+// 	{
+// 		current = current->next;
+// 	}
+// 	return (current);
+// }
 
-	i = 0;
-	j = 0;
-	start = 0;
-	if (!s)
-		return ;
-	while (s[i])
-	{
-		sub_check(s, c, &i, &start);
-		if (j < len_s)
-		{
-			buffer[j] = ft_calloc(sizeof(char), (i - start + 1));
-			if (!buffer[j])
-				return ;
-			ft_strncpy(buffer[j], &s[start], i - start);
-			j++;
-		}
-		while (s[i] == c && s[i])
-			i++;
-	}
-}
+// void	env_lstadd_back(t_env_list **lst, t_env_list *new)
+// {
+// 	t_env_list	*tail;
 
-// split the words, join them later
-static size_t	parsing_countwords(char const *str, char c)
-{
-	size_t	result;
-	int		i;
-	char starting_quote;
-	char closing_quote;
+// 	tail = env_lstlast(*lst);
+// 	tail->next = new;
+// }
 
-	i = 0;
-	while (str[i])
-	{
-		starting_quote = 0;
-		closing_quote = 0;
+// void	my_copy_env_into_list(t_env_list **env, char **envp)
+// {
+// 	t_env_list	*current;
+// 	char		*s_key;
+// 	char		*s_value;
+// 	char		**splitted_value;
+// 	int			i;
 
-		// skip whitespaces
-		
+// 	current = *env;
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		splitted_value = ft_2_split(envp[i], '=');
+// 		s_key = splitted_value[0];
+// 		s_value = splitted_value[1];
+// 		if (!current)
+// 		{
+// 			current = env_lstnew(s_key, s_value, envp[i]);
+// 			*env = current;
+// 		}
+// 		else
+// 			env_lstadd_back(&current, env_lstnew(s_key, s_value, envp[i]));
+// 		i++;
+// 	}
+// 	free(splitted_value);
+// }
 
-		while (str[i] != D_QUOTE && str[i] != S_QUOTE && str[i])
-			i++;
-		
-		if (str[i] == D_QUOTE || str[i] == S_QUOTE) // if the current char is a double quote
-		{
-			starting_quote = str[i];
-			i++;
-			result++;
-			while (str[i] && starting_quote != closing_quote)
-			{
-				if (str[i] == starting_quote)
-				{
-					closing_quote = starting_quote;
-					break ;
-				}
-				i++;
-			}
-		}
-		i++;
-	}
-	return (result);
-}
+// int main(int ac, char **av, char **envp)
+// {
+// 	t_env_list *env;
+// 	// t_env_list *current;
 
-char	**parsing_split(char const *s, char c)
-{
-	char	**buffer;
-	size_t	len_s;
+// 	env = NULL;
+// 	my_copy_env_into_list(&env, envp);
+// 	// current = env;
 
-	len_s = parsing_countwords(s, c);
-	buffer = (char **)ft_calloc(sizeof(char *), (len_s + 1));
-	if (!buffer)
-		return (NULL);
-	allocation(buffer, s, c, len_s);
-	return (buffer);
-}
+// 	do
+// 	{
+// 		printf("Current node Original Key = %s\n", env->original_envp);
+// 		printf("Current node key = %s\n", env->key);
+// 		printf("Current node value = %s\n", env->value);
+// 		env = env->next;
 
-int main()
-{
-	
+// 	} while (env);
 
-}
+// }

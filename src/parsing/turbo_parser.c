@@ -6,22 +6,26 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/01/30 11:50:51 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 10:55:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char *realloc(char *old, char *new)
+int	ft_strcmp(char *s1, char *s2)
 {
-	char *new_str;
+	int	i;
 
-	new_str = ft_strjoin(old, new);
-	
-	free(old);
-	free(new);
-	
-	return (new_str);
+	i = 0;
+	if (!s1 || !s2)
+		return -1; 
+	while (s1[i] != '\0' || s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
 }
 
 // This function needs to check 
@@ -32,7 +36,9 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 	char closing_quote;
 
 	i = 0;
-	while (str[i])
+	if (!str)
+		return true;
+	while (str[i]) // invalid read size 
 	{
 		starting_quote = 0;
 		closing_quote = 0;
@@ -55,7 +61,8 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 				i++;
 			}
 		}
-		i++;
+		if (str[i])
+			i++;
 	}
 	if (starting_quote != closing_quote)
 		return (true);
@@ -63,39 +70,348 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 }
 
 
-
-char **prompt_cleaning(char *prompt)
+bool	is_buff_valid_doll(char *str)
 {
-	char *result;
 	int i;
-	
-	i = 0;
-	while (prompt[i])
-	{
-		
-		i++;
-	}
-	
+	char starting_quote;
+	char end_quote;
 
-	return (result);
+	i = 0;
+	starting_quote = 0;
+	end_quote = 0;
+
+	if (!str)
+		return false;
+
+	while (str[i])
+	{
+		while (!is_any_quote(str[i]) && str[i])
+		{
+			if (str[i] == DOLL_ENV && !is_any_quote(str[i + 1]) && str[i + 1])
+				return (true);
+			i++;
+		}
+		if (is_any_quote(str[i]) && str[i])
+		{
+			starting_quote = str[i];
+			i++;
+			while (str[i] != starting_quote && str[i])
+			{
+				if (starting_quote == D_QUOTE && str[i] == DOLL_ENV && str[i + 1] != starting_quote)
+					return (true);
+				i++;
+			}
+		}
+	}
+	return (false);
 }
 
-void	turbo_parser(char *prompt, t_pars **pars, char **envp)
+void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env)
 {
-	char **cleaned_prompt;
-	// ? 🤔 Does this function needs to be called during the nodes init 
-	init_pars_struct(pars);
+	t_env_list *current_env;
+	int i;
+	char *temp_str;
 
-	// check la presence d'unclosed quotes.
-	if (unclosed_quotes(prompt))
-		exit (1);
+	current_env = *s_env;
+	i = 0;
+	int start = 0;
+
+	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV && !is_whitespace(buff[i]) && buff[i])
+		i++;
+	temp_str = (char *)ft_calloc(sizeof(char), (i + 1));
+	if (!temp_str)
+		exit(-1); // failed malloc
+	ft_strncpy(temp_str, &buff[start], i);
+	
+	while (current_env)
+	{
+		if (!ft_strcmp(temp_str, current_env->key))
+		{
+			(*u)->real_len += ft_strlen(current_env->value); // ! add to real len the len of s_env->value
+			break ;
+		}
+		current_env = current_env->next;
+	}
+	
+	(*u)->j += i; // move the curser
+	free(temp_str);
+	
+}
+
+void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env)
+{
+	t_env_list *current_env;
+	t_utils *u;
+	int i;
+	char *temp_str;
+
+	current_env = *s_env;
+	u = *utils;
+	i = 0;
+	int start = 0;
+
+	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV && !is_whitespace(buff[i]) && buff[i])
+		i++;
+	temp_str = (char *)ft_calloc(sizeof(char), i + 1); // !! fix calloc multiple arguments
+	if (!temp_str)
+		exit(-1); // failed malloc
+	ft_strncpy(temp_str, &buff[start], i);
+	
+	while (current_env)
+	{
+		if (!ft_strcmp(temp_str, current_env->key))
+		{
+			while (current_env->value[start])
+			{
+				u->result[u->i][u->k] = current_env->value[start];
+				u->k++;
+				start++;
+			}
+			break ;
+		}
+		current_env = current_env->next;
+	}
+	
+	u->j += i; // move the curser
+	free(temp_str);
+	
+}
+
+void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env)
+{
+	t_utils *u;
+	char *result;
+	char *temp_doll;
+	bool expansion;
+
+	u = *utils;
+	expansion = true;
+
+	
+	// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
+	while (buff[u->j])
+	{
+		while (!is_any_quote(buff[u->j]) && buff[u->j])
+		{
+			expansion = true;
+			// ! STEP 1.1 : stop at the first encoutered dollar sign 
+			if (buff[u->j] == DOLL_ENV && expansion)
+			{
+				u->j++;
+				calculate_len_doll(&buff[u->j], &u, s_env);
+			}
+			else
+			{
+				u->j++;
+				u->real_len++;
+			}
+		}
+		if(is_any_quote(buff[u->j]))
+		{
+			u->starting_quote = buff[u->j];
+			u->j++; // skips the quote
+			if (u->starting_quote == S_QUOTE)
+				expansion = false;
+			while (buff[u->j] && buff[u->j] != u->starting_quote)
+			{
+				if (buff[u->j] == DOLL_ENV && expansion)
+				{
+					u->j++;
+					calculate_len_doll(&buff[u->j], &u, s_env);
+				}
+				else
+				{
+					u->j++;
+					u->real_len++;
+				}
+			}
+			u->j++;
+		}
+	}
+	// ? Does the current dollar sign meet the expension criterias ?
+	// ! NO ==> Skip the whole $block until the next $ sign, quote or space if not inside a quote
+	// * YES 
+	// ? Does the key exists in s_env ?
+	// * NO
+	// ! NO ==> Skip the whole $block until the next $ sign, quote or space if not inside a quote
+	// * YES ==> assign the `value` into a temp char*, count the whole value strlen, add it to real_len, skip i  
+
+	// ! STEP 2 : allocating the buffer result with calloc
+
+
+	u->j = 0;
+	u->k = 0;
+	u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
+	if (!u->result[u->i])
+		exit -1; // la maxi security tavu
+
+	// ! STEP 3 : copying the "cleaned" version of each input
+
+	while (buff[u->j])
+	{
+		while (!is_any_quote(buff[u->j]) && buff[u->j])
+		{
+			expansion = true;
+			if (buff[u->j] == DOLL_ENV && expansion)
+			{
+				u->j++;
+				copying_doll(&buff[u->j], &u, s_env);
+			}
+			else
+			{
+				u->result[u->i][u->k] = buff[u->j];
+				u->j++;
+				u->k++;
+			}
+
+		}
+		if(is_any_quote(buff[u->j]))
+		{
+			u->starting_quote = buff[u->j];
+			u->j++; // skips the quote
+			if (u->starting_quote == S_QUOTE)
+				expansion = false;
+			while (buff[u->j] && buff[u->j] != u->starting_quote)
+			{
+				if (buff[u->j] == DOLL_ENV && expansion)
+				{
+					u->j++;
+					copying_doll(&buff[u->j], &u, s_env);
+				}
+				else
+				{
+					u->result[u->i][u->k] = buff[u->j];
+					u->j++;
+					u->k++;
+				}
+			}
+			u->j++;
+		}
+	}
+}
+
+char **clean_prompt(char **buff, t_utils **utils, t_env_list **s_env)
+{
+	t_utils *u;
+
+	u = *utils;
+	
+	while (buff[u->i])
+	{
+		u->j = 0;
+		u->real_len = 0;
+		// special parsing for doll env
+		while (is_buff_valid_doll(buff[u->i]))
+		{
+			parsing_doll_var(&u, buff[u->i], s_env); // ! sub function for special parsing the doll (envie de crever MAXIMALE, plaisir ABSENT uWu)
+			u->i++;
+		}
+		if (!buff[u->i])
+			break ;
+		u->j = 0;
+		u->real_len = 0;
 		
+			
+		// ! STEP 1 : enterring in each buffer, calculatting the correct amount of letter to allocate
+		// while (buff[u->i])
+		while (buff[u->i][u->j] != 0)
+		{
+			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j] != 0)
+			{
+				u->j++;
+				u->real_len++;
+			}
+			if(is_any_quote(buff[u->i][u->j]))
+			{
+				u->starting_quote = buff[u->i][u->j];
+				u->j++; // skips the quote
+				while (buff[u->i][u->j] && buff[u->i][u->j] != u->starting_quote)
+				{
+					u->j++;
+					u->real_len++;
+				}
+				u->j++;
+			}
+		}
+		u->j = 0;
+		u->k = 0;
+		// ! STEP 2 : allocating the buffer result with calloc
+		
+		u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
+		if (!u->result[u->i])
+			exit -1; // la maxi security tavu
+		
+		// ! STEP 3 : copying the "cleaned" version of each input
+		// while (buff[u->i][u->j])
+		// while (buff[u->i]) ///////////////
+		while (buff[u->i][u->j] != 0)
+		{
+			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
+			{
+				u->result[u->i][u->k] = buff[u->i][u->j];
+				u->j++;
+				u->k++;
+			}
+			if(is_any_quote(buff[u->i][u->j]))
+			{
+				u->starting_quote = buff[u->i][u->j];
+				u->j++; // skips the quote
+				while (buff[u->i][u->j] && buff[u->i][u->j] != u->starting_quote)
+				{
+					u->result[u->i][u->k] = buff[u->i][u->j];
+					u->j++;
+					u->k++;
+				}
+				u->j++;
+			}
+		}
+		u->i++; // ! changing buffer
+	}
+	return (u->result); // return value of structure
+}
+
+void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
+{
+	t_utils *u;
+
+	int	len_splited_prompt;
+	char **splited_prompt;
+	char **cleaned_prompt;
 	
-	// ! STEP 1 : Take the whole string and "clean it"
-	// ? maybe cleaning the prompt implies constantly reallocating a substring with the cleaned prompt 
+
+	len_splited_prompt = parsing_countwords(prompt);
+
+	if (unclosed_quotes(prompt))
+		exit (1); // ? need freeing, return value ??
+
+	u = utils_init_struct(len_splited_prompt);
+		
+	// ! STEP 1 : Take the whole prompt and split it
+	splited_prompt = parsing_split(prompt);
+
+	for (int i = 0; splited_prompt[i]; i++)
+	{
+		printf("Splitted Buffer #%i = %s\n", i+1, splited_prompt[i]);
+	}
+	printf("\n\n");
+
 	
-	cleaned_prompt = prompt_cleaning(prompt); // custom split ?
+	cleaned_prompt = clean_prompt(splited_prompt, &u, s_env);
 	
+	// ! printing the whole shit
+	for (int i = 0; cleaned_prompt[i]; i++)
+	{
+		printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
+	}
+
 	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else
+	
 	// ! STEP 3 : Allocate substrings into substructures for commands and files
+
+	
+	free_s_utils(&u);
+	free_split(splited_prompt);
+	
+	
+	
 }
