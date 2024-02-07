@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/06 15:30:58 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/06 17:42:03 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,12 +169,21 @@ bool	another_pipe_next(t_pars *lst)
 // 	free_arr((void **)fds, lstlen(lst));
 // }
 
-int	**create_pipes(t_pars *lst)
+/*
+	Allocates space for fds and child pid array,
+		and creates the pipe links in fds
+*/
+int	**create_pipes(t_pars *lst, pid_t **ch_pid)
 {
-    int len = lstlen(lst);
-    int **fds = ft_calloc(sizeof(int *), len);
+    int		len;
+    int		i;
+    int 	**fds;
 
-    for (int i = 0; i < len; i++)
+	*ch_pid = ft_calloc(sizeof(pid_t), lstlen(lst));
+	len = lstlen(lst);
+	fds = ft_calloc(sizeof(int *), len);
+	i = 0;
+    while (i < len)
     {
         fds[i] = ft_calloc(sizeof(int), 2);
         if (pipe(fds[i]) == -1)
@@ -182,11 +191,17 @@ int	**create_pipes(t_pars *lst)
             perror("pipe");
             exit(EXIT_FAILURE);
         }
+		i++;
     }
     return (fds);
 }
 
-void pipes(t_pars *lst, int input_fd)
+void	redirect_output(t_pars *lst)
+{
+	
+}
+
+void	pipes(t_pars *lst, int input_fd)
 {
     int i;
     int **fds;
@@ -194,28 +209,26 @@ void pipes(t_pars *lst, int input_fd)
     t_pars *temp;
 
 	i = 0;
-	fds = create_pipes(lst);
-	ch_pid = malloc(sizeof(pid_t) * lstlen(lst));
+	fds = create_pipes(lst, &ch_pid);
 	temp = lst;
     while (lst != NULL)
     {
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
         {
-            if (input_fd != -1)
+            if (input_fd != -1)	//If it's not the first time pipes() is called
             {
                 dup2(input_fd, STDIN_FILENO);
                 close(input_fd);
             }
-            if (lst->next != NULL)
+            if (lst->next != NULL && lst->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
                 dup2(fds[i][1], STDOUT_FILENO);
-            close(fds[i][0]);
-            if (i != 0)
+            close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
+            if (i != 0)	//Closes the Write end of the previous pipe, if it exists
                 close(fds[i - 1][1]);
             execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
-            exit(EXIT_FAILURE);
         }
-        else if (ch_pid[i] < 0)
+        else if (ch_pid[i] < 0)	//Error
         {
             perror("fork");
 			free_arr((void **)fds, sizeof(fds) / sizeof(fds[0]));
