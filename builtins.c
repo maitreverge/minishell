@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 10:57:58 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:23:20 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int	ft_exit(t_all *all, char *readline_return, int fd)
 	free_list((all)->env_lst);
 	exit((all)->last_exit_status);
 }
-
+//a
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
