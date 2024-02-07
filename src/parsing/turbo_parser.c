@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 19:21:18 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 19:27:52 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars
 				u->k++;
 				start++;
 			}
+			free(nbr);
 			break;
 		}
 		else if (!ft_strcmp(temp_str, current_env->key))
