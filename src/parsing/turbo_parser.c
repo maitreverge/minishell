@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/06 18:52:20 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/07 09:50:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 	char closing_quote;
 
 	i = 0;
-	while (str[i])
+	if (!str)
+		return true;
+	while (str[i]) // invalid read size 
 	{
 		starting_quote = 0;
 		closing_quote = 0;
@@ -59,31 +61,14 @@ bool unclosed_quotes(char *str) // e"c'h"o ==> ec'ho, is then technically a vali
 				i++;
 			}
 		}
-		i++;
+		if (str[i])
+			i++;
 	}
 	if (starting_quote != closing_quote)
 		return (true);
 	return (false);
 }
 
-/*
-
-structure de George pour env
-
-typedef struct s_env_list
-{
-	char *env_line;
-	struct s_env_list *next;
-}	t_env_list;
-
-typedef struct s_all
-{
-	t_env_list	*env_lst;
-	char		*readline_line;
-	int			last_exit_status;
-}	t_all;
-
-*/
 
 bool	is_buff_valid_doll(char *str)
 {
@@ -419,6 +404,8 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env)
 	{
 		printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
 	}
+
+	
 
 	free_split(splited_prompt);
 	
