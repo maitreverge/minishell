@@ -6,11 +6,16 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 07:26:07 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 18:22:09 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/08 11:42:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	free_firstnode_pars(t_pars **pars)
+{
+	free(*pars);
+}
 
 t_pars *init_1st_node_pars(void)
 {
@@ -46,6 +51,9 @@ int main(int ac, char **av, char **envp)//, char **env
 	// execution(&pars, &s_env, s)
 	
 	free_s_env(&s_env);
+
+	// ! need to differienciate freeing the first node from the whole list 
+	free_firstnode_pars(&pars);
 	
 	
 	free(line);
