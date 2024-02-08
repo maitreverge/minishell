@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 18:14:08 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/08 13:01:59 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,26 @@
 
 
 // ! Master Struct for parsing
+// ! Master Struct for parsing
 typedef	struct	s_pars
 {
-	bool isCommand;
-	struct s_command *cmd;
+	// only the first node
+	bool MasterKill;
+	int		last_exit_status; // variable of $?
+
+	// real parsing	
+	bool	isCommand;
+	struct s_command	*cmd;
+	
 	bool isFile;
 	struct s_file *fl;
-	bool isPipe;
-	bool isRedir;
-	int	which_redir; // let's say something like 1 for >, 2 for <, 3 for >>, 4 for <<
-	int last_exit_status;
+	
+	bool isOperator;
+	struct s_operator *operator;
+	// bool isPipe;
+	// bool isRedir;
+	// int	which_redir; // let's say something like 1 for >, 2 for <, 3 for >>, 4 for <<
+	
 	struct s_pars *prev;
 	struct s_pars *next;
 }	t_pars;
@@ -87,6 +97,16 @@ typedef	struct	s_file
 	bool auth_x;
 }	t_file;
 
+typedef	struct	s_operator
+{
+	bool pipe;
+	
+	bool redir_in;
+	bool redir_in_delim;
+	
+	bool redir_out;
+	bool redir_out_app;
+} 	t_operator;
 // ! Utils structures
 
 typedef	struct	s_utils
