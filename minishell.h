@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 18:42:03 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/08 11:51:47 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef	struct	s_file
 typedef	struct	s_utils
 {
 	char	**result; // final parsing
-	char	*to_allocate;
+	char	*to_allocate; // ! useful ??
 	int		i;
 	int		j;
 	int		k;
@@ -115,6 +115,9 @@ typedef struct s_env_list
 
 // turbo_parser
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
+
+// turbo_parser_2
+void	pars_alloc(t_pars **pars, char *splited, char *cleaned);
 
 
 // utils_parsing

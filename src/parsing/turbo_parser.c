@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 19:27:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/08 11:51:32 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **
 	}
 }
 
-char **clean_prompt(char **buff, t_utils **utils, t_env_list **s_env, t_pars **pars)
+char **ft_clean_prompt(char **buff, t_utils **utils, t_env_list **s_env, t_pars **pars)
 {
 	t_utils *u;
 
@@ -405,11 +405,11 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 		ft_putendl_fd("Error : Unclosed quote detected", 2);
 		ft_putendl_fd("Please enter a valid prompt", 2);
 		// CTRL - C SIGNAL
+		// ! free struff ?
 	}
 
 	u = utils_init_struct(len_splited_prompt);
 		
-	// ! STEP 1 : Take the whole prompt and split it
 	splited_prompt = parsing_split(prompt);
 
 	for (int i = 0; splited_prompt[i]; i++)
@@ -419,9 +419,8 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 	printf("\n\n");
 
 	
-	cleaned_prompt = clean_prompt(splited_prompt, &u, s_env, pars);
+	cleaned_prompt = ft_clean_prompt(splited_prompt, &u, s_env, pars);
 	
-	// ! printing the whole shit
 	for (int i = 0; cleaned_prompt[i]; i++)
 	{
 		printf("Cleaned Buffer #%i = %s\n", i+1, cleaned_prompt[i]);
@@ -429,7 +428,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 
 	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else
 	
-	
+	pars_alloc(pars, splited_prompt, cleaned_prompt);
 	// ! STEP 3 : Allocate substrings into substructures for commands and files
 
 	
