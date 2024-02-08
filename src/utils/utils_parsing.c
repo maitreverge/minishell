@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/07 18:13:58 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:23:07 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,18 @@ void	free_s_env(t_env_list **env)
 		free(temp);
 	}
 	// free(env);
+}
+
+void free_t_cmd(t_command *cmd)
+{
+	free(cmd->command_name);
+	free(cmd->command_path);
+	free_arr((void **)cmd->name_options_args, sizeof(cmd->name_options_args) / sizeof(cmd->name_options_args[0]));
+}
+
+void free_t_file(t_file *file)
+{
+	free(file->file_name);
 }
 
 void	free_t_pars(t_pars **lst)

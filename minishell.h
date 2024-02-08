@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/08 13:01:59 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:08:41 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,7 @@
 // * .h Florian
 
 
-// ! Master Struct for parsing
-// ! Master Struct for parsing
-typedef	struct	s_pars
-{
-	// only the first node
-	bool MasterKill;
-	int		last_exit_status; // variable of $?
 
-	// real parsing	
-	bool	isCommand;
-	struct s_command	*cmd;
-	
-	bool isFile;
-	struct s_file *fl;
-	
-	bool isOperator;
-	struct s_operator *operator;
-	// bool isPipe;
-	// bool isRedir;
-	// int	which_redir; // let's say something like 1 for >, 2 for <, 3 for >>, 4 for <<
-	
-	struct s_pars *prev;
-	struct s_pars *next;
-}	t_pars;
 
 // ! Parsing Substructures
 
@@ -108,6 +85,27 @@ typedef	struct	s_operator
 	bool redir_out_app;
 } 	t_operator;
 // ! Utils structures
+
+
+// ! Master Struct for parsing
+typedef	struct	s_pars
+{
+	// only the first node
+	bool MasterKill;
+	int		last_exit_status; // variable of $?
+
+	bool	isCommand;
+	struct s_command	*cmd;
+	
+	bool isFile;
+	struct s_file *fl;
+	
+	bool isOperator;
+	struct s_operator *operator;
+	
+	struct s_pars *prev;
+	struct s_pars *next;
+}	t_pars;
 
 typedef	struct	s_utils
 {
