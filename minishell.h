@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/08 12:56:50 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:34:31 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@
 
 # define S_QUOTE '\'' // backslack for making it a char
 # define D_QUOTE '\"'
-# define PIPE '|'
-# define RED_IN '<'
+# define PIPE "|"
+# define RED_IN "<"
 # define RED_IN_DELIM "<<"
-# define RED_OUT '>'
+# define RED_OUT ">"
 # define RED_OUT_APP ">>"
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999	//Glambrig
@@ -58,6 +58,7 @@ typedef	struct	s_pars
 {
 	// only the first node
 	bool MasterKill;
+	bool isRedirIn;
 	int		last_exit_status; // variable of $?
 
 	// real parsing	
@@ -136,7 +137,7 @@ typedef struct s_env_list
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
 
 // turbo_parser_2
-void	pars_alloc(t_pars **pars, char *splited, char *cleaned);
+void	pars_alloc(t_pars **pars, char **splited, char **cleaned);
 
 
 // utils_parsing
@@ -147,6 +148,8 @@ char	*ft_strncpy(char *dest, char const *src, size_t n);
 void	free_s_env(t_env_list **env);
 void	free_s_utils(t_utils **utils);
 int		int_len(int n);
+int		ft_strcmp(char *s1, char *s2);
+
 
 
 
