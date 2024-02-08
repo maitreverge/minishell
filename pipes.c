@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/08 15:50:34 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:29:51 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,32 +199,57 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
 }
 /*
 	Handles '<' operator.
+	lst->next is the '>'/'>>' operator, and lst->next->next is the file to redirect from.
 */
-// int	redirect_input(t_pars *lst, int input_fd)
-// {
-// 	int		fd[2];
-// 	int		i;
-// 	int		open_fd;
-// 	pid_t	ch_pid;
-// 	char	*buff;
+int	redirect_input(t_pars *lst)
+{
+	int		fd[2];
+	int		i;
+	int		open_fd;
+	pid_t	ch_pid;
+	char	*buff = ft_calloc(sizeof(char), 1024);
 
-// 	if (pipe(fd) < 0)
-// 	{
-// 		perror("pipe");
-// 		free_t_pars(&lst);
-// 		exit(EXIT_FAILURE);	
-// 	}
-// 	i = 0;
-// 	open_fd = open();
-// 	while (read())
-// }
+	// if (pipe(fd) < 0)
+	// {
+	// 	perror("pipe");
+	// 	free_t_pars(&lst);
+	// 	exit(EXIT_FAILURE);	
+	// }
+	if (lst->next->next->fl->file_exist == false)
+		return (ft_putendl_fd("Error: redirect input: nonexistant file.", 2), 1);
+	open_fd = open(lst->next->next->fl->file_name, O_RDONLY, S_IRUSR);
+	i = 0;
+	while (read(open_fd, buff, 1) != 0)
+		i++;
+	buff = ft_calloc(sizeof(char), i + 1);
+	close(open_fd);
+	open_fd = open(lst->next->next->fl->file_name, O_RDONLY);
+	dup2(open_fd, STDIN_FILENO);
+	i = read(open_fd, buff, 1);
+	while (i > 1)
+	{
+		i = read(open_fd, buff, 1);
+		i++;
+	}
+	if (i == -1)
+		return (perror("read"), free(buff), close(open_fd), 1);
+	close(open_fd);
+	ch_pid = fork();
+	if (ch_pid == 0)
+		execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+	else if (ch_pid < 0)
+	{
+		perror("fork");
+		free_t_pars(&lst);
+		exit(EXIT_FAILURE);
+	}
+}
 
 /*
 	Handles '>' and '>>' operators.
-	lst->next is the '>' operator, and lst->next->next is the file to redirect to.
+	lst->next is the '>'/'>>' operator, and lst->next->next is the file to redirect to.
 */
-// lst->next->next->fl->file_exist && 
-// lst->next->next->fl->file_exist && 
+//REMEMBER TO IMPLEMENT A BETTER PERMISSION CHECK: USE AUTH SWITCHES IN t_file
 int	redirect_output(t_pars *lst, int input_fd)
 {
 	int		i;
@@ -352,17 +377,17 @@ int main(void) {
 	// Set the necessary fields for each command
 	command1->isCommand = true;
 	command1->cmd = malloc(sizeof(t_command));
-	command1->cmd->command_path = "/bin/echo";
+	command1->cmd->command_path = "/bin/grep";
 	command1->cmd->name_options_args = malloc(sizeof(char*) * 2);
-	command1->cmd->name_options_args[0] = "echo";
-	command1->cmd->name_options_args[1] = "aaaaaaaaaaaaaaaa";
+	command1->cmd->name_options_args[0] = "grep";
+	command1->cmd->name_options_args[1] = "a";
 	command1->cmd->name_options_args[2] = NULL;
 	command1->prev = NULL;
 	command1->next = command2;
 
 	command2->isCommand = false;
 	command2->operator = malloc(sizeof(t_operator));
-	command2->operator->redir_out_app = true;
+	command2->operator->redir_in = true;
 	command2->cmd = malloc(sizeof(t_command));
 	command2->cmd->command_path = NULL;
 	command2->cmd->name_options_args = malloc(sizeof(char*) * 1);
@@ -373,7 +398,7 @@ int main(void) {
 	command3->isFile = true;
 	command3->fl = malloc(sizeof(t_file));
 	command3->fl->auth_w = true;
-	command3->fl->file_exist = false;
+	command3->fl->file_exist = true;
 	command3->fl->file_name = "REDIR_TEST.txt";
 	command3->cmd = malloc(sizeof(t_command));
 	command3->cmd->command_path = NULL;
@@ -404,7 +429,8 @@ int main(void) {
 
 
 	//pipes(command1, -1);
-	redirect_output(command1, -1);
+	// redirect_output(command1, -1);
+	redirect_input(command1);
 
 	// Free the allocated memory
 	free(command1->cmd->name_options_args);
