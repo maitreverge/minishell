@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 19:23:23 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:41:20 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,12 @@ void	pipes(t_pars *lst, int input_fd)
     pid_t *ch_pid;
     t_pars *temp;
 
+	if (lst->prev->killswitch == true)
+	{
+		free_t_pars(&lst);
+		ft_putendl_fd("Pipes: Error: invalid input.", 2);
+		return ;
+	}
 	i = 0;
 	fds = create_pipes(lst, &ch_pid);
 	temp = lst;
@@ -271,7 +277,7 @@ void	pipes(t_pars *lst, int input_fd)
                 dup2(input_fd, STDIN_FILENO);
                 close(input_fd);
             }
-            if (lst->next != NULL && lst->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
+            if (lst->next != NULL && lst->next->next != NULL && lst->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
                 dup2(fds[i][1], STDOUT_FILENO);
             close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
             if (i != 0)	//Closes the Write end of the previous pipe, if it exists
@@ -310,7 +316,7 @@ int main(void) {
 	t_pars *command1 = ft_calloc(sizeof(t_pars), 1);
 	t_pars *command2 = ft_calloc(sizeof(t_pars), 1);
 	t_pars *command3 = ft_calloc(sizeof(t_pars), 1);
-	// t_pars *command4 = ft_calloc(sizeof(t_pars), 1);
+	t_pars *command4 = ft_calloc(sizeof(t_pars), 1);
 
 	// Set the necessary fields for each command
 	command1->isCommand = true;
@@ -339,18 +345,28 @@ int main(void) {
 	command3->cmd->name_options_args[0] = "rev";
 	command3->cmd->name_options_args[1] = NULL;
 	command3->prev = command2;
-	command3->next = NULL;//command4
+	command3->next = command4;//
 
-	// command4->isCommand = true;
-	// command4->cmd = malloc(sizeof(t_command));
-	// command4->cmd->command_path = "/bin/rev";
-	// command4->cmd->name_options_args = malloc(sizeof(char*) * 3);
-	// command4->cmd->name_options_args[0] = "wc";
-	// command4->cmd->name_options_args[1] = NULL;
-	// command4->prev = command3;
-	// command4->next = NULL;
+	command4->isCommand = true;
+	command4->cmd = malloc(sizeof(t_command));
+	command4->cmd->command_path = "/bin/rev";
+	command4->cmd->name_options_args = malloc(sizeof(char*) * 3);
+	command4->cmd->name_options_args[0] = "rev";
+	command4->cmd->name_options_args[1] = NULL;
+	command4->prev = command3;
+	command4->next = NULL;
 
-	// Call the pipes function
+	int i = 0;
+	t_pars *lst = command1;
+	t_pars *temp = lst;
+	while (lst->next)
+	{
+		if (lst->next->isPipe == true)
+			i++;
+		lst = lst->next;
+	}
+	lst = temp;
+
 	pipes(command1, -1);
 
 	// Free the allocated memory
