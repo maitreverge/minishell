@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/08 16:16:39 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:22:25 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	new_node_file(t_pars **pars, char *splited, char *cleaned)
 bool	is_token_operator(char *splited, char *cleaned)
 {
 	
+	
 }
 
 void	new_node_operator(t_pars **pars, char *splited, char *cleaned)
@@ -68,7 +69,7 @@ void	pars_alloc(t_pars **pars, char **splited, char **cleaned)
 	i = 0;
 	// ! step 1 : chase redir in operator, matching splited and cleaned
 	search_redir_in(pars, splited, cleaned);
-
+	// ! allocate the struct whatsoever
 	while (cleaned[i]) // iterate over all tokens	
 	{
 		if (is_token_command(splited[i], cleaned[i]))
