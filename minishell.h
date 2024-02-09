@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 09:31:13 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 09:42:10 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ typedef enum e_built_in
 	BT_UNSET,
 	BT_ENV,
 	BT_EXIT,
-}
+} t_built_in;
 
 // ! Functions prototypes
 

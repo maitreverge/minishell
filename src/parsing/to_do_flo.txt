@@ -1,36 +1,37 @@
-😌 MINOR UPDATE :
+📈 ON THE WAY : 
 
-😎 MAJOR UPDATE :
+😌 MINOR UPDATE : 
 
-🔥 HOTFIX :
+😎 MAJOR UPDATE : 
 
-🔧 SMALL FIX :
+🛠️ WORKING ON : 
 
 
-🚀 FAST SAVE
+
+🚀 FAST SAVE 🚀
+
+
+
+🔥 HOTFIX : 
+
+🔧 SMALL FIX : 
 
 
 🐛 BUG : 
+ 
 
-
-🛠️ WORKING ON :
-
-
-
-📖 UPDATE README
-
-
+📖 UPDATE README 📖
 
 a bit of ✨norm✨
 
 🤔 QUESTION : 
 
-🪢 LINKING :
+🪢 LINKING : 
 
 
-📬 ADD FILE :
+📬 ADD FILE : 
 
-🧹 DELETE FILE :
+🧹 DELETE FILE : 
 
 🔄 REORG FILES : 
 

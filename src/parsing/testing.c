@@ -12,47 +12,47 @@
 // /*                                                                            */
 // /* ************************************************************************** */
 
-#include "../../minishell.h"
+// #include "../../minishell.h"
 
-void	p_alloc(char *splited, char *cleaned)
-{
-	int i; // index of both split and cleaned
+// void	p_alloc(char *splited, char *cleaned)
+// {
+// 	int i; // index of both split and cleaned
 
-	i = 0;
-	// ! step 1 : chase redir in operator, matching splited and cleaned
+// 	i = 0;
+// 	// ! step 1 : chase redir in operator, matching splited and cleaned
 	
-	if (!ft_strncmp(cleaned, RED_IN, 2) && !ft_strncmp(cleaned, splited, 2))
-	{
-		// (*pars)->isRedirIn = true;
-		printf("OUI");
-		return ;
-		// break ;	
-	} 
-	else if (!ft_strncmp(cleaned, RED_IN_DELIM, 3) && !ft_strncmp(cleaned, splited, 3))
-	{
-		// (*pars)->isRedirIn = true;
-		printf("OUI");
-		return ;
-		// break ;
-	}
-		// i++;
+// 	if (!ft_strncmp(cleaned, RED_IN, 2) && !ft_strncmp(cleaned, splited, 2))
+// 	{
+// 		// (*pars)->isRedirIn = true;
+// 		printf("OUI");
+// 		return ;
+// 		// break ;	
+// 	} 
+// 	else if (!ft_strncmp(cleaned, RED_IN_DELIM, 3) && !ft_strncmp(cleaned, splited, 3))
+// 	{
+// 		// (*pars)->isRedirIn = true;
+// 		printf("OUI");
+// 		return ;
+// 		// break ;
+// 	}
+// 		// i++;
 
-	printf("mdr nope");
-	// * YES ==> Turn off the operator in the first node
+// 	printf("mdr nope");
+// 	// * YES ==> Turn off the operator in the first node
 	
-}
+// }
 
-// int main(int ac, char **av)
-int main()
-{
-	// char *split = av[0];
-	// char *clean = av[1];
+// // int main(int ac, char **av)
+// int main()
+// {
+// 	// char *split = av[0];
+// 	// char *clean = av[1];
 
-	char split[] = "<<";
-	char clean[] = "<";
+// 	char split[] = "<<";
+// 	char clean[] = "<";
 
-	printf("Split = %s\n", split);
-	printf("Clean = %s\n", clean);
+// 	printf("Split = %s\n", split);
+// 	printf("Clean = %s\n", clean);
 
-	p_alloc(split, clean);
-}
+// 	p_alloc(split, clean);
+// }
