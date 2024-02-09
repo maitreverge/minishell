@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 11:14:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 14:36:12 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,17 +129,12 @@ typedef struct s_env_list
 	struct s_env_list *next;
 }	t_env_list;
 
-typedef enum e_built_in
+typedef struct s_alloc
 {
-	BT_NONE = 0,
-	BT_ECHO,
-	BT_CD,
-	BT_PWD,
-	BT_EXPORT,
-	BT_UNSET,
-	BT_ENV,
-	BT_EXIT,
-} t_built_in;
+	char **splitted_prompt;
+	char **cleaned_prompt;
+	char **paths;
+}	t_alloc;
 
 // ! Functions prototypes
 
@@ -147,7 +142,7 @@ typedef enum e_built_in
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
 
 // turbo_parser_2
-void	pars_alloc(t_pars **pars, char **splited, char **cleaned, char **paths);
+void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
 
 //extract_paths
 char **extract_paths(t_env_list **s_env);

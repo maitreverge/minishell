@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 11:33:44 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 14:44:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,18 +84,23 @@ bool	is_token_command(char *splited, char *cleaned, char **paths)
 	return false;
 }
 
-void	new_node_command(t_pars **pars, char **splited, char **cleaned, int *i)
+void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 {
 	// ! Allocate a new node;
 	t_pars	*new_node;
 	t_command *new_node_command;
+	t_alloc *u;
 
-	new_node = (t_pars *)malloc(sizeof(t_pars));
+	u = *utils;
+	// char **comb_execve;
+	int start;
+
+	new_node = malloc(sizeof(t_pars));
 	if (!new_node)
-		return (NULL);
-	new_node_command = (t_command *)malloc(sizeof(t_command));
+		return ;
+	new_node_command = malloc(sizeof(t_command));
 	if (!new_node_command)
-		return (NULL);
+		return ;
 	
 	// -------------------global init node--------------------
 
@@ -120,20 +125,49 @@ void	new_node_command(t_pars **pars, char **splited, char **cleaned, int *i)
 	// -------------------init substructure--------------------
 	
 	// ! STEP 1 :  init name of command
-	new_node->cmd->command_name = cleaned[*i];
+	new_node->cmd->command_name = u->cleaned_prompt[*i];
 	
 	// ! STEP 2 : is command builtin ??
-	if (testing_builtin(cleaned[*i]))
+	if (testing_builtin(u->cleaned_prompt[*i]))
 	{
 		new_node->cmd->isBuiltin = true;
-		new_node->cmd->command_path = NULL;
+		new_node->cmd->command_path = u->cleaned_prompt[*i]; // ! keeping coherence betweem builtins and not builtins
 	}
 	else
 		new_node->cmd->isBuiltin = false;
-
-	
 	// -------------------init substructure--------------------
 	
+	/*
+	builtin
+	char *argv[] = {"echo", "-l", NULL};
+
+	cmd normalle
+	char *argv[] = {"/bin/ls", "-l", NULL};
+
+	
+	if (execve("/bin/ls", argv, envp) == -1) {
+	*/
+	
+	// ! calculatting the lenght of split, then allocating the buffer within the cleaned split
+	start = *i;
+	while (u->cleaned_prompt[*i])
+	{
+		if (is_token_operator(u->splitted_prompt[*i], u->cleaned_prompt[*i]))
+			break ;
+		(*i)++;
+	}
+	
+	// malloc de cette horreur char *argv[] = {"/bin/ls", "-l", NULL};
+	new_node->cmd->name_options_args = (char **)ft_calloc(((*i) - start + 1), sizeof(char *));
+	if (!new_node->cmd->name_options_args)
+		exit (-1); // ! failed malloc
+	
+	// ! assigning commands
+	
+	
+	
+	
+	// ! last step : lstaddback
 	
 }
 
@@ -149,8 +183,21 @@ void	new_node_file(t_pars **pars, char *splited, char *cleaned)
 
 bool	is_token_operator(char *splited, char *cleaned)
 {
-	
-	
+	// ! checks if there is a operator intead of an operator within quotes
+	if (ft_strcmp(splited, cleaned))
+	{
+		if (!ft_strcmp(cleaned, RED_IN))
+			return (true);
+		else if (!ft_strcmp(cleaned, RED_IN_DELIM))
+			return (true);
+		else if (!ft_strcmp(cleaned, RED_OUT))
+			return (true);
+		else if (!ft_strcmp(cleaned, RED_OUT_APP))
+			return (true);
+		else if (!ft_strcmp(cleaned, PIPE))
+			return (true);
+	}
+	return (false);
 }
 
 void	new_node_operator(t_pars **pars, char *splited, char *cleaned)
@@ -158,25 +205,28 @@ void	new_node_operator(t_pars **pars, char *splited, char *cleaned)
 	
 }
 
-void	pars_alloc(t_pars **pars, char **splited, char **cleaned, char **paths)
+void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 {
+	t_alloc *cur;
+
+	cur = *u_alloc;
 	int i; // index of both split and cleaned
 
 	i = 0;
 	
 	// ! step 1 : detect redir in operator, matching splited and cleaned
-	search_redir_in(pars, splited, cleaned);
+	search_redir_in(pars, cur->splitted_prompt, cur->cleaned_prompt);
 
 
 	// ! allocate the struct whatsoever
 	while (cleaned[i]) // iterate over all tokens	
 	{
-		if (is_token_command(splited[i], cleaned[i], paths))
-			new_node_command(pars, splited, cleaned, &i);
-		else if (is_token_file(splited[i], cleaned[i]))
-			new_node_file(pars, splited[i], cleaned[i]);
-		else if (is_token_operator(splited[i], cleaned[i]))
-			new_node_operator(pars, splited[i], cleaned[i]);
+		if (is_token_command(cur->splitted_prompt[i], cur->cleaned_prompt[i], cur->paths))
+			new_node_command(pars, cur, &i); // prompts + paths
+		else if (is_token_file(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			new_node_file(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
+		else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			new_node_operator(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
 		// ! maybe another edge case ???
 		i++;
 	}
