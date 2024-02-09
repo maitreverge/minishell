@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 11:02:59 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 11:33:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,57 @@ bool	is_token_command(char *splited, char *cleaned, char **paths)
 	}
 	return false;
 }
-void	new_node_command(t_pars **pars, char *splited, char *cleaned)
+
+void	new_node_command(t_pars **pars, char **splited, char **cleaned, int *i)
 {
+	// ! Allocate a new node;
+	t_pars	*new_node;
+	t_command *new_node_command;
+
+	new_node = (t_pars *)malloc(sizeof(t_pars));
+	if (!new_node)
+		return (NULL);
+	new_node_command = (t_command *)malloc(sizeof(t_command));
+	if (!new_node_command)
+		return (NULL);
+	
+	// -------------------global init node--------------------
+
+	// ! STEP 1 : init bools switches
+	new_node->isCommand = true;
+	new_node->isFile = false;
+	new_node->isOperator = false;
+
+	// ! STEP 2 :connecting the t_command node
+	new_node->cmd = new_node_command;
+	
+	// ! STEP 3 : NULL init other substructures nodes
+	new_node->fl = NULL;
+	new_node->operator = NULL;
+
+	// ! STEP 4 : init prev and next both to NULL
+	new_node->prev = NULL;
+	new_node->next = NULL;
+	// -------------------global init node--------------------
+	
+	
+	// -------------------init substructure--------------------
+	
+	// ! STEP 1 :  init name of command
+	new_node->cmd->command_name = cleaned[*i];
+	
+	// ! STEP 2 : is command builtin ??
+	if (testing_builtin(cleaned[*i]))
+	{
+		new_node->cmd->isBuiltin = true;
+		new_node->cmd->command_path = NULL;
+	}
+	else
+		new_node->cmd->isBuiltin = false;
+
+	
+	// -------------------init substructure--------------------
+	
 	
 }
 
@@ -114,13 +163,16 @@ void	pars_alloc(t_pars **pars, char **splited, char **cleaned, char **paths)
 	int i; // index of both split and cleaned
 
 	i = 0;
-	// ! step 1 : chase redir in operator, matching splited and cleaned
+	
+	// ! step 1 : detect redir in operator, matching splited and cleaned
 	search_redir_in(pars, splited, cleaned);
+
+
 	// ! allocate the struct whatsoever
 	while (cleaned[i]) // iterate over all tokens	
 	{
 		if (is_token_command(splited[i], cleaned[i], paths))
-			new_node_command(pars, splited[i], cleaned[i]);
+			new_node_command(pars, splited, cleaned, &i);
 		else if (is_token_file(splited[i], cleaned[i]))
 			new_node_file(pars, splited[i], cleaned[i]);
 		else if (is_token_operator(splited[i], cleaned[i]))

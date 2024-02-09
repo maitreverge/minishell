@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 10:26:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 11:14:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,8 @@ typedef	struct	s_pars
 	
 	bool isOperator;
 	struct s_operator *operator;
-	// bool isPipe;
-	// bool isRedir;
-	// int	which_redir; // let's say something like 1 for >, 2 for <, 3 for >>, 4 for <<
 	
+	// adresses
 	struct s_pars *prev;
 	struct s_pars *next;
 }	t_pars;
