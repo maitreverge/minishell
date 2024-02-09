@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 09:29:53 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 09:37:54 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 09:55:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ char **extract_paths(t_env_list **s_env)
 		}
 		current = current->next;
 	}
-	result = ft_split(paths_value, ':');
+	result = path_split(paths_value, ':');
 	return (result);
 }

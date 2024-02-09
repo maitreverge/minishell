@@ -6,29 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 09:51:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 09:52:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 09:56:13 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-static char	*pipex_ft_strncpy(char *dest, char const *src, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	while (i < n)
-	{
-		dest[i] = '\0';
-		i++;
-	}
-	return (dest);
-}
 
 static void	p_sub_check(char const *s, char c, size_t *i, size_t *start)
 {
@@ -61,7 +43,7 @@ static void	p_alloc(char **buffer, char const *s, char c, size_t len_s)
 			buffer[j] = ft_calloc(sizeof(char), (i - start + 2));
 			if (!buffer[j])
 				return ;
-			pipex_ft_strncpy(buffer[j], &s[start], i - start);
+			ft_strncpy(buffer[j], &s[start], i - start);
 			ft_strlcat(buffer[j], "/", ft_strlen(buffer[j]) + 2);
 			j++;
 		}
@@ -93,7 +75,7 @@ static size_t	ft_pipex_countwords(char const *str, char c)
 	return (result);
 }
 
-char	**ft_pipex_split(char const *s, char c)
+char	**path_split(char const *s, char c)
 {
 	char	**buffer;
 	size_t	len_s;

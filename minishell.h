@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 09:42:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 09:55:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,9 @@ void	pars_alloc(t_pars **pars, char **splited, char **cleaned);
 
 //extract_paths
 char **extract_paths(t_env_list **s_env);
+
+// path_splitting
+char	**path_split(char const *s, char c);
 
 
 // utils_parsing
