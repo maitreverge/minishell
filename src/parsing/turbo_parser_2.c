@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/08 16:22:25 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 08:58:57 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	search_redir_in(t_pars **pars, char **splited, char **cleaned)
 }
 bool	is_token_command(char *splited, char *cleaned)
 {
+	
 	
 }
 void	new_node_command(t_pars **pars, char *splited, char *cleaned)
@@ -81,4 +82,6 @@ void	pars_alloc(t_pars **pars, char **splited, char **cleaned)
 		// ! maybe another edge case ???
 		i++;
 	}
+	
+	// ! print the whole struct
 }

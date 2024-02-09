@@ -1,6 +1,7 @@
 {
 	"cmake.configureOnOpen": false,
 	"files.associations": {
-		"wait.h": "c"
+		"wait.h": "c",
+		"minishell.h": "c"
 	}
 }

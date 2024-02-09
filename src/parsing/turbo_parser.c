@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/08 15:21:50 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 09:29:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,6 +378,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 	int	len_splited_prompt;
 	char **splited_prompt;
 	char **cleaned_prompt;
+	char **paths;
 
 
 	
@@ -413,12 +414,14 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 
 	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else
 	
+	paths = extract_paths(s_env);
 	pars_alloc(pars, splited_prompt, cleaned_prompt);
 	// ! STEP 3 : Allocate substrings into substructures for commands and files
 
 	
 	free_s_utils(&u);
 	free_split(splited_prompt);
+	free_split(paths);
 	
 	
 	
