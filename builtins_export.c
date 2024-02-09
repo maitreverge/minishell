@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/29 15:50:38 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:20:46 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 // 	while (envp != NULL)
 // 	{
-// 		printf("%s\n", envp->env_line);
+// 		printf("%s\n", envp->original_envp);
 // 		envp = envp->next;
 // 	}
 // 	envp = temp;
@@ -34,11 +34,11 @@ void	ft_unset(t_env_list **envp, char *line)
 	prev = temp;////
 	if (line == NULL)
 	{
-		free_list(*envp);
+		free_s_env(envp);
 		perror("ft_unset error: line == NULL");
 		exit(EXIT_FAILURE);
 	}
-	while (temp->next != NULL && ft_strncmp(temp->env_line, line, ft_strlen(line)) != 0)
+	while (temp->next != NULL && ft_strncmp(temp->original_envp, line, ft_strlen(line)) != 0)
 	{
 		prev = temp;
 		temp = temp->next;
@@ -46,7 +46,7 @@ void	ft_unset(t_env_list **envp, char *line)
 	if (temp != NULL)
 	{
 		prev->next = temp->next;
-		free(temp->env_line);
+		free(temp->original_envp);
 		free(temp);
 	}	
 }

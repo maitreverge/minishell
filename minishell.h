@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/08 14:08:41 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/09 17:04:57 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,9 @@ typedef	struct	s_pars
 	// only the first node
 	bool MasterKill;
 	int		last_exit_status; // variable of $?
+
+	bool isDelim;//For '<<' operator
+	char *DELIM;//same
 
 	bool	isCommand;
 	struct s_command	*cmd;
@@ -192,9 +195,13 @@ int		signals(t_all *all);
 
 /*Pipes, redirections*/
 void	pipes(t_pars *lst, int fd_stdin);
+int		redirect_input_delimitor(t_pars *lst);
+int		redirect_input(t_pars *lst);
+int		redirect_output(t_pars *lst, int input_fd);
 
 /*Utils.c*/
 void	free_arr(void **array, int size);
 void	free_t_pars(t_pars **lst);
+unsigned int	lstlen(t_pars *lst);
 
 #endif

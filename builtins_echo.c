@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 17:07:17 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:19:53 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ char	*compare_env_var_with_envp(char *str, t_all *all)
 	temp = all;
 	while (all->env_lst)
 	{
-		if (strncmp(s, all->env_lst->env_line, ft_strlen(s)) == 0)
+		if (strncmp(s, all->env_lst->original_envp, ft_strlen(s)) == 0)
 		{
-			env_split = ft_split(all->env_lst->env_line, '=');
+			env_split = ft_split(all->env_lst->original_envp, '=');
 			res = ft_strdup(env_split[1]);
 			free_tokens(env_split);
 			free(s);
@@ -83,6 +83,7 @@ int	check_if_env_var(char *s, t_all *all)
 */
 int	ft_echo(char *s, t_all *all, t_pars *pars, int fd)
 {
+	(void)pars; //pars will be used, voiding it for now so that it compiles
 	char	**tokens;
 	char 	*trimmed;
 	char	*result;
@@ -179,7 +180,7 @@ int	ft_echo(char *s, t_all *all, t_pars *pars, int fd)
 	}
 	free_tokens(tokens);
 	all->last_exit_status = 0;
-	waitpid(child_pid, pars->last_exit_status, 0);/////for $?
+	//waitpid(child_pid, pars->last_exit_status, 0);/////for $?
 	return (0);
 }
 

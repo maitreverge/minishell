@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:34:17 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/05 17:35:48 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:35:01 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,20 @@ void	free_arr(void **array, int size)
 		i++;
 	}
 	free(array);
+}
+
+unsigned int	lstlen(t_pars *lst)
+{
+	unsigned int	res;
+	t_pars 			*temp;
+
+	temp = lst;
+	res = 0;
+	while (lst)
+	{
+		res++;
+		lst = lst->next;
+	}
+	lst = temp;
+	return (res);
 }

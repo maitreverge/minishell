@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 13:32:34 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/09 13:43:08 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	ft_pwd(t_env_list *envp, int fd, bool print)
 	cwd = NULL;
 	cwd = getcwd(cwd, 0);
 	if (fd < 0)
-		return (free_list(envp), exit(EXIT_FAILURE), 1);
+		return (free_s_env(&envp), exit(EXIT_FAILURE), 1);
 	if (print == true)
 	{
 		ft_putstr_fd(cwd, fd);
@@ -79,12 +79,12 @@ int	ft_pwd(t_env_list *envp, int fd, bool print)
 	}
 	new_pwd_env = ft_strjoin("PWD=", cwd);
 	temp = envp;
-	while (ft_strncmp(envp->env_line, "PWD", 3) != 0)
+	while (ft_strncmp(envp->original_envp, "PWD", 3) != 0)
 		envp = envp->next;
 	if (envp != NULL)
 	{
-		free(envp->env_line);
-		envp->env_line = new_pwd_env;
+		free(envp->original_envp);
+		envp->original_envp = new_pwd_env;
 	}
 	if (cwd != NULL)
 		free(cwd);
@@ -101,13 +101,13 @@ int	ft_env(t_all *all, int fd)
 	temp = all->env_lst;
 	if (fd < 0)
 	{
-		free_list(all->env_lst);
+		free_s_env(&all->env_lst);
 		perror("ft_env: fd < 0");
 		return (exit(EXIT_FAILURE), 1);
 	}
 	while (all->env_lst != NULL)
 	{
-		ft_putstr_fd(all->env_lst->env_line, fd);
+		ft_putstr_fd(all->env_lst->original_envp, fd);
 		ft_putchar_fd('\n', fd);
 		all->env_lst = all->env_lst->next;
 	}
@@ -131,8 +131,8 @@ int	ft_exit(t_all *all, char *readline_return, int fd)
 	}
 	if (readline_return != NULL)
 		free(readline_return);
-	free_list((all)->env_lst);
-	exit((all)->last_exit_status);
+	free_s_env(&all->env_lst);
+	exit(all->last_exit_status);
 }
 
 int main(int ac, char **av, char **envp)
@@ -140,8 +140,9 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	t_all		all;
+	t_pars		pars;
 
-	all.env_lst = copy_env_into_list(envp);
+	copy_env_into_list(&all.env_lst, envp);
 	all.last_exit_status = EMPTY_EXIT_LIST;
 	all.readline_line = NULL;
 	while (1)
@@ -151,15 +152,15 @@ int main(int ac, char **av, char **envp)
 		if (all.readline_line == NULL)	//checks for ctrl+d
 		{
 			printf("exit\r");
-			free_list(all.env_lst);
+			free_s_env(&all.env_lst);
 			if (all.readline_line != NULL)
 				free(all.readline_line);
 			return (exit(0), 1);
 		}
-		if (ft_strchr(all.readline_line, '|'))
-			pipes(ft_split(all.readline_line, '|'), envp);
+		// if (ft_strchr(all.readline_line, '|'))
+		// 	pipes(ft_split(all.readline_line, '|'), envp);
 		if (ft_strncmp(all.readline_line, "echo", 4) == 0)
-			ft_echo(all.readline_line, &all, 1);	//replace 1 with fd
+			ft_echo(all.readline_line, &all, &pars, 1);	//replace 1 with fd
 		else if (ft_strncmp(all.readline_line, "cd", 2) == 0)
 			ft_cd(all.readline_line, all.env_lst);
 		else if (ft_strncmp(all.readline_line, "pwd", 3) == 0)
@@ -175,7 +176,7 @@ int main(int ac, char **av, char **envp)
 		add_history(all.readline_line);
 		free(all.readline_line);
 	}
-	free_list(all.env_lst);
+	free_s_env(&all.env_lst);
 	free(all.readline_line);
 	return 0;
 }
