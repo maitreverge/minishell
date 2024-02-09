@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 09:55:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 10:26:56 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ typedef enum e_built_in
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
 
 // turbo_parser_2
-void	pars_alloc(t_pars **pars, char **splited, char **cleaned);
+void	pars_alloc(t_pars **pars, char **splited, char **cleaned, char **paths);
 
 //extract_paths
 char **extract_paths(t_env_list **s_env);
