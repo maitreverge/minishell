@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 14:36:12 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 15:36:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 
 // turbo_parser_2
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
+bool	is_token_operator(char *splited, char *cleaned);
+
 
 //extract_paths
 char **extract_paths(t_env_list **s_env);

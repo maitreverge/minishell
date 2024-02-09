@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 14:44:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 15:47:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,11 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	t_command *new_node_command;
 	t_alloc *u;
 
+	// index for new_node->cmd->name_options_args
+	
+	int j;
+	j = 0;
+
 	u = *utils;
 	// char **comb_execve;
 	int start;
@@ -162,13 +167,21 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	if (!new_node->cmd->name_options_args)
 		exit (-1); // ! failed malloc
 	
-	// ! assigning commands
 	
-	
-	
+	// -------------------assigning char** substructure--------------------
+	// ! assigning path = first node
+	new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
+	j++;
+	while (j < (*i) - start)
+	{
+		new_node->cmd->name_options_args[j] = u->cleaned_prompt[start + 1];
+		j++;
+		start++;
+	}
+	// -------------------assigning char** substructure--------------------
 	
 	// ! last step : lstaddback
-	
+	lstadd_back(pars, new_node);
 }
 
 bool	is_token_file(char *splited, char *cleaned)
@@ -184,7 +197,7 @@ void	new_node_file(t_pars **pars, char *splited, char *cleaned)
 bool	is_token_operator(char *splited, char *cleaned)
 {
 	// ! checks if there is a operator intead of an operator within quotes
-	if (ft_strcmp(splited, cleaned))
+	if (!ft_strcmp(splited, cleaned))
 	{
 		if (!ft_strcmp(cleaned, RED_IN))
 			return (true);
@@ -205,6 +218,25 @@ void	new_node_operator(t_pars **pars, char *splited, char *cleaned)
 	
 }
 
+void	print_final_struct(t_pars **pars)
+{
+	t_pars *cur = *pars;
+
+	while (cur)
+	{
+		if (cur->isCommand) // print substruct of command
+		{
+			// ! segfaulting here 
+			printf(cur->cmd->isBuiltin ? "Command is a Builtin\n" : "Command is a regular command\n");
+			
+			printf("Command Name = %s\n", cur->cmd->command_name);			
+			for (int i = 0; cur->cmd->command_path; i++)
+				printf("Command Path #%i = %s\n", i + 1, cur->cmd->command_path);			
+		}
+		cur = cur->next;
+	}
+}
+
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 {
 	t_alloc *cur;
@@ -219,17 +251,18 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 
 
 	// ! allocate the struct whatsoever
-	while (cleaned[i]) // iterate over all tokens	
+	while (cur->cleaned_prompt[i]) // iterate over all tokens	
 	{
 		if (is_token_command(cur->splitted_prompt[i], cur->cleaned_prompt[i], cur->paths))
-			new_node_command(pars, cur, &i); // prompts + paths
-		else if (is_token_file(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-			new_node_file(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
-		else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-			new_node_operator(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
+			new_node_command(pars, u_alloc, &i); // prompts + paths
+		// else if (is_token_file(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+		// 	new_node_file(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
+		// else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+		// 	new_node_operator(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
 		// ! maybe another edge case ???
 		i++;
 	}
 	
 	// ! print the whole struct
+	print_final_struct(pars);
 }
