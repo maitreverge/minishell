@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 15:47:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 18:32:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,28 @@ bool	testing_builtin(char *cleaned)
 	else if (!ft_strcmp(cleaned, "exit"))
 		return (true);
 	return (false);
+}
+
+char *join_path_command(char *splited, char *cleaned, char **paths)
+{
+	int j; // paths index
+
+	j = 0;
+	char *real_path;
+	
+	real_path = NULL;
+	
+	while (paths[j])
+	{
+		real_path = ft_strjoin(paths[j], cleaned);
+		if (!access(real_path, F_OK))
+		{
+			break ;
+		}
+		j++;
+		free(real_path);
+	}
+	return (real_path);
 }
 
 bool	is_token_command(char *splited, char *cleaned, char **paths)
@@ -139,7 +161,10 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 		new_node->cmd->command_path = u->cleaned_prompt[*i]; // ! keeping coherence betweem builtins and not builtins
 	}
 	else
+	{
+		new_node->cmd->command_path = join_path_command(u->splitted_prompt[*i], u->cleaned_prompt[*i], u->paths);
 		new_node->cmd->isBuiltin = false;
+	}
 	// -------------------init substructure--------------------
 	
 	/*
@@ -171,10 +196,12 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	// -------------------assigning char** substructure--------------------
 	// ! assigning path = first node
 	new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
+	// printf("new_node->cmd->name_options_args[%i] = %s\n",j, new_node->cmd->name_options_args[j]);
 	j++;
-	while (j < (*i) - start)
+	while (j < ((*i) - start + 2))
 	{
 		new_node->cmd->name_options_args[j] = u->cleaned_prompt[start + 1];
+		// printf("new_node->cmd->name_options_args[%i] = %s\n",j, new_node->cmd->name_options_args[j]);
 		j++;
 		start++;
 	}
@@ -222,6 +249,7 @@ void	print_final_struct(t_pars **pars)
 {
 	t_pars *cur = *pars;
 
+	cur = cur->next;
 	while (cur)
 	{
 		if (cur->isCommand) // print substruct of command
@@ -230,8 +258,12 @@ void	print_final_struct(t_pars **pars)
 			printf(cur->cmd->isBuiltin ? "Command is a Builtin\n" : "Command is a regular command\n");
 			
 			printf("Command Name = %s\n", cur->cmd->command_name);			
-			for (int i = 0; cur->cmd->command_path; i++)
-				printf("Command Path #%i = %s\n", i + 1, cur->cmd->command_path);			
+			printf("Command Path = %s\n", cur->cmd->command_path);			
+			for (int i = 0; cur->cmd->name_options_args[i]; i++)
+			{
+				printf("Command name_options_args #%i = %s\n", i + 1, cur->cmd->name_options_args[i]);			
+				// cur = cur->next;
+			}
 		}
 		cur = cur->next;
 	}
@@ -260,7 +292,8 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		// else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 		// 	new_node_operator(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
 		// ! maybe another edge case ???
-		i++;
+		if (cur->cleaned_prompt[i])
+			i++;
 	}
 	
 	// ! print the whole struct
