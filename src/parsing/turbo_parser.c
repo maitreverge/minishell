@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/10 14:09:43 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/10 14:19:55 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,11 +302,11 @@ char **ft_clean_prompt(char **buff, t_utils **utils, t_env_list **s_env, t_pars 
 	
 	while (buff[u->i])
 	{
-		u->j = 0;
-		u->real_len = 0;
 		// special parsing for doll env
 		while (is_buff_valid_doll(buff[u->i]))
 		{
+			u->j = 0;
+			u->real_len = 0;
 			parsing_doll_var(&u, buff[u->i], s_env, pars); // ! sub function for special parsing the doll (envie de crever MAXIMALE, plaisir ABSENT uWu)
 			u->i++;
 		}
