@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 22:03:23 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/10 14:36:22 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,18 @@ bool	is_token_command(char *splited, char *cleaned, char **paths)
 	// ! IMPORTANT : builtin needs to be tested first
 	// ! because access will trow a false positive on builtin commands anyway
 	// testing builtin presence first, for avoiding access 
-	if (!cleaned)
-		return (false);
+	// if (cleaned[0] = '\000') // gnnnnnnnnnnnnnnn false positive
+	// 	return (false);
 	if (testing_builtin(cleaned))
 	{
-		printf("Command is a builtin\n");
+		// printf("Command is a builtin\n");
 		return true;
 	}
 	// testing paths for regular commands with access
 	while (paths[j])
 	{
 		supposed_command = ft_strjoin(paths[j], cleaned);
-		if (!access(supposed_command, F_OK))
+		if (!access(supposed_command, F_OK) && paths[j] != supposed_command)
 		{
 			free(supposed_command);
 			return true;
@@ -250,10 +250,10 @@ void	print_final_struct(t_pars **pars)
 {
 	t_pars *cur = *pars;
 
-	cur = cur->next;
+	// cur = cur->next;
 	while (cur)
 	{
-		if (cur->isCommand) // print substruct of command
+		if (cur->isCommand && cur->cmd) // print substruct of command
 		{
 			// ! segfaulting here 
 			printf(cur->cmd->isBuiltin ? "Command is a Builtin\n" : "Command is a regular command\n");
@@ -284,9 +284,10 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 
 
 	// ! allocate the struct whatsoever
-	while (cur->cleaned_prompt[i]) // iterate over all tokens	
+	while (!*cur->cleaned_prompt[i]) // iterate over all tokens	
 	{
-		// while (cur->cleaned_prompt[i] )
+		// while (!cur->cleaned_prompt[i])
+			// i++;
 		if (is_token_command(cur->splitted_prompt[i], cur->cleaned_prompt[i], cur->paths))
 			new_node_command(pars, u_alloc, &i); // prompts + paths
 		else
