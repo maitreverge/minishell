@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 18:13:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/10 14:09:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ bool	is_buff_valid_doll(char *str)
 	{
 		while (!is_any_quote(str[i]) && str[i])
 		{
-			if (str[i] == DOLL_ENV && !is_any_quote(str[i + 1]) && str[i + 1])
+			if (str[i] == DOLL_ENV && str[i + 1] && !is_any_quote(str[i + 1]))
 				return (true);
 			i++;
 		}
@@ -80,13 +80,15 @@ bool	is_buff_valid_doll(char *str)
 		{
 			starting_quote = str[i];
 			i++;
-			while (str[i] != starting_quote && str[i])
+			while (str[i] && str[i] != starting_quote)
 			{
-				if (starting_quote == D_QUOTE && str[i] == DOLL_ENV && str[i + 1] != starting_quote)
+				if (starting_quote == D_QUOTE && str[i] == DOLL_ENV && str[i + 1] && str[i + 1] != starting_quote)
 					return (true);
 				i++;
 			}
 		}
+		if (str[i]) // Check if we've reached the end of the string before incrementing i
+			i++;
 	}
 	return (false);
 }
@@ -175,7 +177,7 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars
 		current_env = current_env->next;
 	}
 	u->j += i; // move the curser
-	free(temp_str);
+	free(temp_str); // ! SEGFAULT HERE
 	
 }
 
@@ -401,19 +403,19 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 		
 	utils_alloc->splitted_prompt = parsing_split(prompt);
 
-	// for (int i = 0; utils_alloc->splitted_prompt[i]; i++)
-	// {
-	// 	printf("Splitted Buffer #%i = %s\n", i+1, utils_alloc->splitted_prompt[i]);
-	// }
-	// printf("\n\n");
+	for (int i = 0; utils_alloc->splitted_prompt[i]; i++)
+	{
+		printf("Splitted Buffer #%i = %s\n", i+1, utils_alloc->splitted_prompt[i]);
+	}
+	printf("\n\n");
 
 	
 	utils_alloc->cleaned_prompt = ft_clean_prompt(utils_alloc->splitted_prompt, &u, s_env, pars);
 	
-	// for (int i = 0; utils_alloc->cleaned_prompt[i]; i++)
-	// {
-	// 	printf("Cleaned Buffer #%i = %s\n", i+1, utils_alloc->cleaned_prompt[i]);
-	// }
+	for (int i = 0; utils_alloc->cleaned_prompt[i]; i++)
+	{
+		printf("Cleaned Buffer #%i = %s\n", i+1, utils_alloc->cleaned_prompt[i]);
+	}
 
 	// ! STEP 2 : Create a new node each and everytime I met a Pipe, redirection, or something else
 	

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 18:32:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/09 22:03:23 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,13 @@ bool	is_token_command(char *splited, char *cleaned, char **paths)
 	// ! IMPORTANT : builtin needs to be tested first
 	// ! because access will trow a false positive on builtin commands anyway
 	// testing builtin presence first, for avoiding access 
+	if (!cleaned)
+		return (false);
 	if (testing_builtin(cleaned))
 	{
 		printf("Command is a builtin\n");
 		return true;
 	}
-		
 	// testing paths for regular commands with access
 	while (paths[j])
 	{
@@ -285,8 +286,13 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 	// ! allocate the struct whatsoever
 	while (cur->cleaned_prompt[i]) // iterate over all tokens	
 	{
+		// while (cur->cleaned_prompt[i] )
 		if (is_token_command(cur->splitted_prompt[i], cur->cleaned_prompt[i], cur->paths))
 			new_node_command(pars, u_alloc, &i); // prompts + paths
+		else
+		{
+			printf("not a token_cmd\n\n");
+		}
 		// else if (is_token_file(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 		// 	new_node_file(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
 		// else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
