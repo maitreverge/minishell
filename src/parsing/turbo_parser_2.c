@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/10 14:36:22 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/11 11:57:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ bool	is_token_command(char *splited, char *cleaned, char **paths)
 	while (paths[j])
 	{
 		supposed_command = ft_strjoin(paths[j], cleaned);
-		if (!access(supposed_command, F_OK) && paths[j] != supposed_command)
+		// if (!access(supposed_command, F_OK) && paths[j] != supposed_command)
+		if (!access(supposed_command, F_OK) && ft_strcmp(paths[j], supposed_command))
 		{
 			free(supposed_command);
 			return true;
@@ -284,16 +285,12 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 
 
 	// ! allocate the struct whatsoever
-	while (!*cur->cleaned_prompt[i]) // iterate over all tokens	
+	while (cur->cleaned_prompt[i]) // iterate over all tokens	
 	{
 		// while (!cur->cleaned_prompt[i])
 			// i++;
 		if (is_token_command(cur->splitted_prompt[i], cur->cleaned_prompt[i], cur->paths))
 			new_node_command(pars, u_alloc, &i); // prompts + paths
-		else
-		{
-			printf("not a token_cmd\n\n");
-		}
 		// else if (is_token_file(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 		// 	new_node_file(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
 		// else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
