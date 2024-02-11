@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 17:04:57 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:42:52 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ void	ft_unset(t_env_list **envp, char *line);
 int		ft_exit(t_all *all, char *readline_return, int fd);
 
 /*Signal handler*/
-int		signals(t_all *all);
+int		signals(t_pars *all);
 
 /*Pipes, redirections*/
 void	pipes(t_pars *lst, int fd_stdin);

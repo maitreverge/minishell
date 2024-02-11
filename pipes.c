@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 17:21:39 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/10 14:05:55 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,28 @@ int	redirect_input_delimitor(t_pars *lst)
 	//check killswitch instead of doing this
 	if (!(lst->next) || !(lst->next->next))
 		return (1);
+	//
 	if (access("/tmp/a0987654321aaa.tmp", F_OK) == 0)	//If temp file of that name already exists
 		unlink("/tmp/a0987654321aaa.tmp");	//Just delete it lmfao HORRIBLY TERRIBLE AND BAD
-	open_fd = open("/tmp/a0987654321aaa.tmp", O_RDWR | O_CREAT);
-	rl_buff = ft_strdup("");
-	while(ft_strncmp(rl_buff, lst->next->next->DELIM, ft_strlen(lst->next->next->DELIM)) != 0)//rl_buff != lst->next->next->DELIM 
+	ch_pid = fork();
+	if (ch_pid == 0)
 	{
+		signal(SIGINT, (sighandler_t)SIGINT);
+		open_fd = open("/tmp/a0987654321aaa.tmp", O_RDWR | O_CREAT);
+		rl_buff = ft_strdup("");
+		while(ft_strncmp(rl_buff, lst->next->next->DELIM, ft_strlen(lst->next->next->DELIM)) != 0)//rl_buff != lst->next->next->DELIM 
+		{
+			free(rl_buff);
+			rl_buff = readline("> ");
+			if (rl_buff == NULL)	//CTRL + D was pressed, execute command with what input we already have
+				break ;
+			if (ft_strncmp(rl_buff, lst->next->next->DELIM, ft_strlen(lst->next->next->DELIM)) != 0)
+				ft_putstr_fd(rl_buff, open_fd);
+		}
 		free(rl_buff);
-		rl_buff = readline("> ");
-		if (rl_buff == NULL)	//CTRL + D was pressed, execute command with what input we already have
-			break ;
-		if (ft_strncmp(rl_buff, lst->next->next->DELIM, ft_strlen(lst->next->next->DELIM)) != 0)
-			ft_putstr_fd(rl_buff, open_fd);
+		close(open_fd);
 	}
-	free(rl_buff);
-	close(open_fd);
+	wait(NULL);
 	lst->next->next->isFile = true;
 	lst->next->next->fl->file_exist = true;
 	lst->next->next->fl->file_name = "/tmp/a0987654321aaa.tmp";
@@ -262,7 +269,6 @@ int main(void) {
 	command3->isFile = true;
 	command3->fl = malloc(sizeof(t_file));
 	command3->isDelim = true;
-	command3->DELIM = ft_calloc(1, 4);
 	command3->DELIM = "EOF";
 	command3->cmd = malloc(sizeof(t_command));
 	command3->cmd->command_path = NULL;
