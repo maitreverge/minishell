@@ -1,0 +1,42 @@
+echo
+
+echo bonjour
+
+echo    "bonjour"
+
+echo              'bonjour'
+
+echo 'b''o'nj'o''''u''r'
+
+echo 'b'"o""n j"'o'""'u  ''r __' hey "bonjour" 'bonjour' 'b'"o""nj"'o'""'u''r'
+
+
+echo -n 'b'"o""nj"'o'""'u''r'
+
+
+'e'"ch"o -n 'b'"o""nj"'o'""'u''r'
+
+
+e"ch"o      -dp         'b'"o""nj"'o'""'u''r'
+
+
+'e'"ch"'o'                                   $PWD
+
+echoo $PWD
+
+"ec"'ho' $PWD
+
+"ec"'ho' "$PWD"
+
+"ec"'ho' '$PWD'
+
+''""''"e"'c'"h"''"o"   '$PWD'
+
+
+
+
+
+
+
+
+
