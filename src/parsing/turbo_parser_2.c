@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/11 12:47:01 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/11 15:26:54 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,9 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	new_node->isCommand = true;
 	new_node->isFile = false;
 	new_node->isOperator = false;
+	new_node->isDelim = false;
+	new_node->DELIM = NULL;
+
 
 	// ! STEP 2 :connecting the t_command node
 	new_node->cmd = new_node_command;
@@ -220,9 +223,76 @@ bool	is_token_file(char *splited, char *cleaned)
 	
 }
 
-void	new_node_file(t_pars **pars, char *splited, char *cleaned)
+void	new_node_file(t_pars **pars, char *cleaned)
 {
+	// ! Allocate a new node;
+	t_pars	*new_node;
+	t_file *node_file;
 	
+
+	// -------------------malloc t_pars node + sub_node--------------------
+	new_node = malloc(sizeof(t_pars));
+	if (!new_node)
+		return ;
+	node_file = malloc(sizeof(t_file));
+	if (!node_file)
+		return ;
+	// -------------------malloc t_pars node + sub_node--------------------
+
+
+
+
+	// -------------------global init node--------------------
+
+	// ! STEP 1 : init bools switches
+	new_node->isCommand = false;
+	new_node->isFile = true;
+	new_node->isOperator = false;
+	new_node->isDelim = false;
+	new_node->DELIM = NULL;
+
+	// ! STEP 2 :connecting the t_operator node
+	new_node->fl = node_file;
+	
+	// ! STEP 3 : NULL init other substructures nodes
+	new_node->operator = NULL;
+	new_node->cmd = NULL;
+
+	// ! STEP 4 : init prev and next both to NULL
+	new_node->prev = NULL;
+	new_node->next = NULL;
+	// -------------------global init node--------------------
+
+
+
+	// -------------------init substructure--------------------
+	
+	// ! STEP 1 : init file name
+	new_node->fl->file_name = cleaned;
+	
+	// ! STEP 2 : false init everything
+	new_node->fl->file_exist = false;
+	new_node->fl->auth_r = false;
+	new_node->fl->auth_w = false;
+	new_node->fl->auth_x = false;
+	
+	
+	// ! STEP 3 : access functions
+	if (access(cleaned, F_OK) == 0)
+	{
+		new_node->fl->file_exist = true;
+		if (access(cleaned, R_OK) == 0)
+			new_node->fl->auth_r = true;
+		if (access(cleaned, W_OK) == 0)
+			new_node->fl->auth_w = true;
+		if (access(cleaned, X_OK) == 0) // really usefull ?
+			new_node->fl->auth_x = true;
+	}
+
+	// -------------------init substructure--------------------
+
+	// ! last step : lstaddback
+	lstadd_back(pars, new_node);
 }
 
 bool	is_token_operator(char *splited, char *cleaned)
@@ -269,6 +339,8 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 	new_node->isCommand = false;
 	new_node->isFile = false;
 	new_node->isOperator = true;
+	new_node->isDelim = false;
+	new_node->DELIM = NULL;
 
 	// ! STEP 2 :connecting the t_operator node
 	new_node->operator = node_operator;
@@ -311,35 +383,133 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 	lstadd_back(pars, new_node);
 }
 
-void	print_final_struct(t_pars **pars)
+bool is_last_node_operator(t_pars **pars)
 {
-	t_pars *cur = *pars;
+	t_pars *last;
 
-	// cur = cur->next;
-	while (cur)
-	{
-		if (cur->isCommand && cur->cmd) // print substruct of command
-		{
-			// ! segfaulting here 
-			printf(cur->cmd->isBuiltin ? "Command is a Builtin\n" : "Command is a regular command\n");
-			
-			printf("Command Name = %s\n", cur->cmd->command_name);			
-			printf("Command Path = %s\n", cur->cmd->command_path);			
-			for (int i = 0; cur->cmd->name_options_args[i]; i++)
-			{
-				printf("Command name_options_args #%i = %s\n", i + 1, cur->cmd->name_options_args[i]);			
-				// cur = cur->next;
-			}
-		}
-		cur = cur->next;
-	}
+	last = lstlast(*pars);
+
+	if (last->isOperator)
+		return (true);
+	return (false);
 }
 
+bool is_last_node_pipe(t_pars **pars)
+{
+	t_pars *last;
+
+	last = lstlast(*pars);
+
+	if (last->operator->pipe)
+		return (true);
+	return (false);
+}
+
+bool is_last_node_redir(t_pars **pars)
+{
+	t_pars *last;
+
+	last = lstlast(*pars);
+
+	if (last->operator->redir_in || last->operator->redir_out || last->operator->redir_out_app)
+		return (true);
+	return (false);
+}
+
+bool is_last_node_redir_delim(t_pars **pars)
+{
+	t_pars *last;
+
+	last = lstlast(*pars);
+
+	if (last->operator->redir_in_delim)
+		return (true);
+	return (false);
+}
+
+bool is_last_node_cmd(t_pars **pars)
+{
+	t_pars *last;
+
+	last = lstlast(*pars);
+
+	if (last->isCommand)
+		return (true);
+	return (false);
+}
+
+bool is_last_node_file(t_pars **pars)
+{
+	t_pars *last;
+
+	last = lstlast(*pars);
+
+	if (last->isFile)
+		return (true);
+	return (false);
+}
+
+void	new_node_delim(t_pars **pars, char *cleaned)
+{
+	// ! Allocate a new node;
+	t_pars	*new_node;
+
+	// -------------------malloc t_pars node + sub_node--------------------
+	new_node = malloc(sizeof(t_pars));
+	if (!new_node)
+		return ;
+	// -------------------malloc t_pars node + sub_node--------------------
+
+
+
+
+	// -------------------global init node--------------------
+
+	// ! STEP 1 : init bools switches
+	new_node->isDelim = true;
+	new_node->isCommand = false;
+	new_node->isFile = false;
+	new_node->isOperator = true;
+
+	// ! STEP 2 : NULL init other substructures nodes
+	new_node->operator = NULL;
+	new_node->fl = NULL;
+	new_node->cmd = NULL;
+
+	// ! STEP 3 : init prev and next both to NULL
+	new_node->prev = NULL;
+	new_node->next = NULL;
+	// -------------------global init node--------------------
+
+
+
+	// -------------------init substructure--------------------
+
+	new_node->DELIM = cleaned;
+	
+	// -------------------init substructure--------------------
+
+	// ! last step : lstaddback
+	lstadd_back(pars, new_node);
+
+}
+
+bool is_token_pipe(char *splited, char *cleaned)
+{
+	if (!ft_strcmp(splited, cleaned))
+	{
+		if (!ft_strcmp(cleaned, PIPE))
+			return (true);
+	}
+	return (false);
+}
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 {
+	t_pars *p_node;
 	t_alloc *cur;
 
 	cur = *u_alloc;
+	p_node = *pars;
 	int i; // index of both split and cleaned
 
 	i = 0;
@@ -348,23 +518,47 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 	search_redir_in(pars, cur->splitted_prompt, cur->cleaned_prompt);
 
 
-	// ! allocate the struct whatsoever
+	// ! allocate the struct + checks
 	while (cur->cleaned_prompt[i]) // iterate over all tokens	
 	{
-		// while (!cur->cleaned_prompt[i])
+		p_node = *pars;
+		if (!p_node->prev) // first node == cmd
+		{
+			new_node_command(pars, u_alloc, &i);
 			// i++;
-		if (is_token_command(cur->splitted_prompt[i], cur->cleaned_prompt[i], cur->paths))
-			new_node_command(pars, u_alloc, &i); // prompts + paths
-		else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-			new_node_operator(pars, cur->cleaned_prompt[i]);
-		// else if (is_token_file(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-		// 	new_node_file(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
+		}
 		
-		// ! maybe another edge case ???
-		
+		else if (is_last_node_operator(pars))
+		{
+			if (is_last_node_pipe(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_command(pars, u_alloc, &i);
+			else if (is_last_node_redir(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_file(pars, cur->cleaned_prompt[i]);
+			else if (is_last_node_redir_delim(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_delim(pars, cur->cleaned_prompt[i]);
+			else // last case : consecutive two operator_tokens
+			{
+				p_node->MasterKill = true;
+				break ;
+			}
+		}
+
+		else if ((is_last_node_cmd(pars) || is_last_node_file(pars)) || is_last_node_redir_delim(pars))
+		{
+			if(is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_command(pars, u_alloc, &i);
+			else // current token 
+			{
+				p_node->MasterKill = true;
+				break ;
+			}
+			
+		}
 		
 		if (cur->cleaned_prompt[i])
 			i++;
+		
+		// ! maybe another edge case ???
 	}
 	
 	// ! print the whole struct

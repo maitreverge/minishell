@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 15:36:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/11 15:33:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ typedef	struct	s_pars
 	
 	bool isOperator;
 	struct s_operator *operator;
+
+	bool isDelim;
+	char *DELIM;
 	
 	// adresses
 	struct s_pars *prev;
@@ -185,6 +188,7 @@ void	lstadd_front(t_pars **lst, t_pars *new);
 int		lstsize(t_pars *lst);
 
 
+void	print_final_struct(t_pars **pars);
 
 
 

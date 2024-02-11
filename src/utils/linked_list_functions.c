@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 04:25:36 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 09:43:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/11 13:10:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_pars	*lstnew(int exit_status)
+t_pars	*lstnew(int exit_status) // ! maybe useless
 {
 	t_pars	*new_node;
 
