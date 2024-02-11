@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/11 11:57:26 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/11 12:47:01 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ bool	is_token_command(char *splited, char *cleaned, char **paths)
 	{
 		supposed_command = ft_strjoin(paths[j], cleaned);
 		// if (!access(supposed_command, F_OK) && paths[j] != supposed_command)
-		if (!access(supposed_command, F_OK) && ft_strcmp(paths[j], supposed_command))
+		if (!access(supposed_command, F_OK) && ft_strcmp(paths[j], supposed_command)) // ! add extra condition for excluding empty cleaned buffer
 		{
 			free(supposed_command);
 			return true;
@@ -215,6 +215,8 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 
 bool	is_token_file(char *splited, char *cleaned)
 {
+	// if (is_token_operator(splited, cleaned))
+	// 	return (false);
 	
 }
 
@@ -242,9 +244,71 @@ bool	is_token_operator(char *splited, char *cleaned)
 	return (false);
 }
 
-void	new_node_operator(t_pars **pars, char *splited, char *cleaned)
+void	new_node_operator(t_pars **pars, char *cleaned)
 {
+	// ! Allocate a new node;
+	t_pars	*new_node;
+	t_operator *node_operator;
 	
+
+	// -------------------malloc t_pars node + sub_node--------------------
+	new_node = malloc(sizeof(t_pars));
+	if (!new_node)
+		return ;
+	node_operator = malloc(sizeof(t_operator));
+	if (!node_operator)
+		return ;
+	// -------------------malloc t_pars node + sub_node--------------------
+
+
+
+
+	// -------------------global init node--------------------
+
+	// ! STEP 1 : init bools switches
+	new_node->isCommand = false;
+	new_node->isFile = false;
+	new_node->isOperator = true;
+
+	// ! STEP 2 :connecting the t_operator node
+	new_node->operator = node_operator;
+	
+	// ! STEP 3 : NULL init other substructures nodes
+	new_node->fl = NULL;
+	new_node->cmd = NULL;
+
+	// ! STEP 4 : init prev and next both to NULL
+	new_node->prev = NULL;
+	new_node->next = NULL;
+	// -------------------global init node--------------------
+
+
+
+	// -------------------init substructure--------------------
+	
+	// ! STEP 1 : Init everything at false;
+	new_node->operator->pipe = false;
+	new_node->operator->redir_in = false;
+	new_node->operator->redir_in_delim = false;
+	new_node->operator->redir_out = false;
+	new_node->operator->redir_out_app = false;
+	
+	// ! STEP 2 : Init the right switch
+	if (!ft_strcmp(cleaned, PIPE))
+		new_node->operator->pipe = true;
+	else if (!ft_strcmp(cleaned, RED_IN))
+		new_node->operator->redir_in = true;
+	else if (!ft_strcmp(cleaned, RED_IN_DELIM))
+		new_node->operator->redir_in_delim = true;
+	else if (!ft_strcmp(cleaned, RED_OUT))
+		new_node->operator->redir_out = true;
+	else if (!ft_strcmp(cleaned, RED_OUT_APP))
+		new_node->operator->redir_out_app = true;
+
+	// -------------------init substructure--------------------
+
+	// ! last step : lstaddback
+	lstadd_back(pars, new_node);
 }
 
 void	print_final_struct(t_pars **pars)
@@ -291,11 +355,14 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			// i++;
 		if (is_token_command(cur->splitted_prompt[i], cur->cleaned_prompt[i], cur->paths))
 			new_node_command(pars, u_alloc, &i); // prompts + paths
+		else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			new_node_operator(pars, cur->cleaned_prompt[i]);
 		// else if (is_token_file(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 		// 	new_node_file(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
-		// else if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-		// 	new_node_operator(pars, cur->splitted_prompt[i], cur->cleaned_prompt[i]);
+		
 		// ! maybe another edge case ???
+		
+		
 		if (cur->cleaned_prompt[i])
 			i++;
 	}
