@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/11 15:26:54 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/11 20:29:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,13 +187,13 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	start = *i;
 	while (u->cleaned_prompt[*i])
 	{
-		if (is_token_operator(u->splitted_prompt[*i], u->cleaned_prompt[*i]))
+		if (is_token_operator(u->splitted_prompt[*i + 1], u->cleaned_prompt[*i + 1]))
 			break ;
 		(*i)++;
 	}
 	
 	// malloc de cette horreur char *argv[] = {"/bin/ls", "-l", NULL};
-	new_node->cmd->name_options_args = (char **)ft_calloc(((*i) - start + 1), sizeof(char *));
+	new_node->cmd->name_options_args = (char **)ft_calloc(((*i) - start + 2), sizeof(char *));
 	if (!new_node->cmd->name_options_args)
 		exit (-1); // ! failed malloc
 	
@@ -505,11 +505,11 @@ bool is_token_pipe(char *splited, char *cleaned)
 }
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 {
-	t_pars *p_node;
+	t_pars *last_p_node;
 	t_alloc *cur;
 
 	cur = *u_alloc;
-	p_node = *pars;
+	// last_p_node = lstlast(*pars);
 	int i; // index of both split and cleaned
 
 	i = 0;
@@ -521,11 +521,17 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 	// ! allocate the struct + checks
 	while (cur->cleaned_prompt[i]) // iterate over all tokens	
 	{
-		p_node = *pars;
-		if (!p_node->prev) // first node == cmd
+		last_p_node = lstlast(*pars);
+		if (!last_p_node->prev) // first node == cmd
 		{
 			new_node_command(pars, u_alloc, &i);
 			// i++;
+		}
+		
+		else if ((is_last_node_cmd(pars) ))
+		{
+			if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_operator(pars, cur->cleaned_prompt[i]);
 		}
 		
 		else if (is_last_node_operator(pars))
@@ -538,18 +544,20 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				new_node_delim(pars, cur->cleaned_prompt[i]);
 			else // last case : consecutive two operator_tokens
 			{
-				p_node->MasterKill = true;
+				(*pars)->MasterKill = true;
+				printf("TWO CONSECUTIVE OPERATORS\n\n");
 				break ;
 			}
 		}
 
-		else if ((is_last_node_cmd(pars) || is_last_node_file(pars)) || is_last_node_redir_delim(pars))
+
+		else if ((is_last_node_file(pars)) || is_last_node_redir_delim(pars))
 		{
 			if(is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_command(pars, u_alloc, &i);
 			else // current token 
 			{
-				p_node->MasterKill = true;
+				(*pars)->MasterKill = true;
 				break ;
 			}
 			

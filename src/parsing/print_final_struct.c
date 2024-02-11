@@ -4,13 +4,12 @@ void	print_final_struct(t_pars **pars)
 {
 	t_pars *cur = *pars;
 
-	if ((*pars)->MasterKill)
-	{
-		printf("Input is invalid, MasterKill bool is ON\n");
-		return;
-	}
+	printf("\nFIRST NODE OF STRUCT :\n");
+	printf((*pars)->MasterKill ? "MASTERKILL SWITCH ON ✅\n" : "MASTERKILL SWITCH OFF ❌\n");
+
 	printf("Last exit status = %i\n", (*pars)->last_exit_status);
-	// cur = cur->next;
+	printf("\n------------------------\n");
+	cur = cur->next;
 	while (cur)
 	{
 		if (cur->isCommand)
@@ -53,6 +52,7 @@ void	print_final_struct(t_pars **pars)
 			if (cur->operator->redir_out_app)
 				printf("Operator = >> \n");
 		}
+		printf("\n------------------------\n");
 		cur = cur->next;
 	}
 }
