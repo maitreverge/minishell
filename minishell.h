@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 17:18:24 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 17:25:25 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,24 @@ typedef	struct	s_pars
 {
 	// only the first node
 	bool MasterKill;
-	bool isRedirIn;
+	bool isRedirIn; // does the whole input contains at least one redir_in > OR >>
 	int		last_exit_status; // variable of $?
 
-	// real parsing	
+	// Node Command
 	bool	isCommand;
 	struct s_command	*cmd;
 	
+	// Node File
 	bool isFile;
 	struct s_file *fl;
 	
+	// Node Operator
 	bool isOperator;
 	struct s_operator *operator;
 
-	bool isDelim;
-	char *DELIM;
+	// Node here_doc
+	bool isHereDoc;
+	char *here_doc;
 	
 	// adresses
 	struct s_pars *prev;
