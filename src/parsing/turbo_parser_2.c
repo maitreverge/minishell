@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/11 20:29:26 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:22:06 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,19 @@ char *join_path_command(char *splited, char *cleaned, char **paths)
 	char *real_path;
 	
 	real_path = NULL;
+
+	// ! edge case : handle absolute and relative paths
 	
 	while (paths[j])
 	{
 		real_path = ft_strjoin(paths[j], cleaned);
 		if (!access(real_path, F_OK))
-		{
-			break ;
-		}
+			return (real_path);
 		j++;
 		free(real_path);
 	}
+
+	real_path = cleaned;
 	return (real_path);
 }
 
@@ -214,13 +216,6 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	
 	// ! last step : lstaddback
 	lstadd_back(pars, new_node);
-}
-
-bool	is_token_file(char *splited, char *cleaned)
-{
-	// if (is_token_operator(splited, cleaned))
-	// 	return (false);
-	
 }
 
 void	new_node_file(t_pars **pars, char *cleaned)
@@ -503,6 +498,7 @@ bool is_token_pipe(char *splited, char *cleaned)
 	}
 	return (false);
 }
+
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 {
 	t_pars *last_p_node;
