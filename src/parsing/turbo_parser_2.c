@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 10:22:06 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 12:05:04 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,8 +194,10 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 		(*i)++;
 	}
 	
+	int len = (*i) - start + 2;
+	printf("Len = %i\n", len);
 	// malloc de cette horreur char *argv[] = {"/bin/ls", "-l", NULL};
-	new_node->cmd->name_options_args = (char **)ft_calloc(((*i) - start + 2), sizeof(char *));
+	new_node->cmd->name_options_args = (char **)ft_calloc(len, sizeof(char *));
 	if (!new_node->cmd->name_options_args)
 		exit (-1); // ! failed malloc
 	
@@ -205,9 +207,11 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
 	// printf("new_node->cmd->name_options_args[%i] = %s\n",j, new_node->cmd->name_options_args[j]);
 	j++;
-	while (j < ((*i) - start + 2))
+	start++;
+	while (j < len - 1)
 	{
-		new_node->cmd->name_options_args[j] = u->cleaned_prompt[start + 1];
+		// printf("Current cleaned prompt = %s\n", u->cleaned_prompt[start]);
+		new_node->cmd->name_options_args[j] = u->cleaned_prompt[start];
 		// printf("new_node->cmd->name_options_args[%i] = %s\n",j, new_node->cmd->name_options_args[j]);
 		j++;
 		start++;
@@ -309,6 +313,14 @@ bool	is_token_operator(char *splited, char *cleaned)
 	return (false);
 }
 
+bool is_token_redir_delim(char *cleaned)
+{
+	if (!ft_strcmp(cleaned, RED_IN_DELIM))
+		return true;
+	return false;
+	
+}
+
 void	new_node_operator(t_pars **pars, char *cleaned)
 {
 	// ! Allocate a new node;
@@ -320,9 +332,6 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 	new_node = malloc(sizeof(t_pars));
 	if (!new_node)
 		return ;
-	node_operator = malloc(sizeof(t_operator));
-	if (!node_operator)
-		return ;
 	// -------------------malloc t_pars node + sub_node--------------------
 
 
@@ -332,21 +341,34 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 
 	// ! STEP 1 : init bools switches
 	new_node->isCommand = false;
+	new_node->cmd = NULL;
+
 	new_node->isFile = false;
-	new_node->isOperator = true;
+	new_node->fl = NULL;
+
+	new_node->prev = NULL;
+	new_node->next = NULL;
+	// ! STEP 1.1 : init the right node
+	if (is_token_redir_delim(cleaned))
+	{
+		new_node->isOperator = false;
+		new_node->isDelim = true;
+		new_node->DELIM = cleaned;
+		return ;
+	}
+
+	// ! INIT A NODE IF AND ONLY IF THE CURRENT OPERATOR ISNT A << OPERATOR
+	node_operator = malloc(sizeof(t_operator));
+	if (!node_operator)
+		return ;
+
 	new_node->isDelim = false;
+	new_node->isOperator = true;
 	new_node->DELIM = NULL;
 
 	// ! STEP 2 :connecting the t_operator node
 	new_node->operator = node_operator;
 	
-	// ! STEP 3 : NULL init other substructures nodes
-	new_node->fl = NULL;
-	new_node->cmd = NULL;
-
-	// ! STEP 4 : init prev and next both to NULL
-	new_node->prev = NULL;
-	new_node->next = NULL;
 	// -------------------global init node--------------------
 
 
@@ -464,7 +486,8 @@ void	new_node_delim(t_pars **pars, char *cleaned)
 	new_node->isDelim = true;
 	new_node->isCommand = false;
 	new_node->isFile = false;
-	new_node->isOperator = true;
+	// new_node->isOperator = true;
+	new_node->isOperator = false;
 
 	// ! STEP 2 : NULL init other substructures nodes
 	new_node->operator = NULL;
