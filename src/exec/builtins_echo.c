@@ -6,11 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/11 14:08:22 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:13:38 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 /*
 	Determines which environment variable the given string/key corresponds to,

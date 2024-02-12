@@ -6,15 +6,15 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/10 14:05:55 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:13:07 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 /*
 	Handles '<<' operator.
-	lst->next is the '<<' operator, and lst->next->next is the file to redirect from.
+	lst->next is the '<<' op., and lst->next->next is the file to redirect from.
 */
 int	redirect_input_delimitor(t_pars *lst)
 {
@@ -22,42 +22,45 @@ int	redirect_input_delimitor(t_pars *lst)
 	pid_t	ch_pid;
 	char	*rl_buff;
 
-	//check killswitch instead of doing this
-	if (!(lst->next) || !(lst->next->next))
-		return (1);
-	//
-	if (access("/tmp/a0987654321aaa.tmp", F_OK) == 0)	//If temp file of that name already exists
-		unlink("/tmp/a0987654321aaa.tmp");	//Just delete it lmfao HORRIBLY TERRIBLE AND BAD
+	//check_masterkill(lst); UNCOMMENT
+	if (access("/tmp/a0987654321aaa.tmp", F_OK) == 0)
+		unlink("/tmp/a0987654321aaa.tmp");
+	open_fd = open("/tmp/a0987654321aaa.tmp", O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 	ch_pid = fork();
+	if (ch_pid == -1)
+		return (perror("fork"), exit(EXIT_FAILURE), 1);
 	if (ch_pid == 0)
 	{
 		signal(SIGINT, (sighandler_t)SIGINT);
-		open_fd = open("/tmp/a0987654321aaa.tmp", O_RDWR | O_CREAT);
 		rl_buff = ft_strdup("");
-		while(ft_strncmp(rl_buff, lst->next->next->DELIM, ft_strlen(lst->next->next->DELIM)) != 0)//rl_buff != lst->next->next->DELIM 
+		while (ft_strncmp(rl_buff, lst->next->next->DELIM,
+				ft_strlen(lst->next->next->DELIM)) != 0)
 		{
 			free(rl_buff);
 			rl_buff = readline("> ");
-			if (rl_buff == NULL)	//CTRL + D was pressed, execute command with what input we already have
+			if (rl_buff == NULL)
 				break ;
-			if (ft_strncmp(rl_buff, lst->next->next->DELIM, ft_strlen(lst->next->next->DELIM)) != 0)
-				ft_putstr_fd(rl_buff, open_fd);
+			if (ft_strncmp(rl_buff, lst->next->next->DELIM,
+					ft_strlen(lst->next->next->DELIM)) != 0)
+				ft_putendl_fd(rl_buff, open_fd);
 		}
 		free(rl_buff);
 		close(open_fd);
+		lst->next->next->isFile = true;
+		lst->next->next->fl->file_exist = true;
+		lst->next->next->fl->file_name = "/tmp/a0987654321aaa.tmp";
+		lst->next->next->fl->auth_r = true;
+		redirect_input(lst);
+		close(open_fd);
 	}
 	wait(NULL);
-	lst->next->next->isFile = true;
-	lst->next->next->fl->file_exist = true;
-	lst->next->next->fl->file_name = "/tmp/a0987654321aaa.tmp";
-	lst->next->next->fl->auth_r = true;
-	redirect_input(lst);
+	close(open_fd);
 	unlink("/tmp/a0987654321aaa.tmp");
 }
 
 /*
 	Handles '<' operator.
-	lst->next is the '<' operator, and lst->next->next is the file to redirect from.
+	lst->next is the '<' op., and lst->next->next is the file to redirect from.
 */
 int	redirect_input(t_pars *lst)
 {
@@ -68,7 +71,7 @@ int	redirect_input(t_pars *lst)
 	if (lst->next->next->fl->file_exist == false)
 		return (ft_putendl_fd("Error: redirect input: nonexistant file.", 2), 1);
 	if (lst->isCommand == false)
-		return (ft_putendl_fd("Error: redirect input: input redirection to file instead of command.", 2), 1);
+		return (ft_putendl_fd("Error: redirect input: redir to file.", 2), 1);
 	open_fd = open(lst->next->next->fl->file_name, O_RDONLY, S_IRUSR);
 	if (open_fd == -1)
 		return (perror("open"), 1);
@@ -174,69 +177,110 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
     return (fds);
 }
 
+void	pipes_child_func(t_pars *lst, int input_fd, int **fds, int i)
+{
+	if (input_fd != -1)
+    {
+		dup2(input_fd, STDIN_FILENO);
+        close(input_fd);
+    }
+    if (lst->next != NULL && lst->next->next != NULL && lst->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
+        dup2(fds[i][1], STDOUT_FILENO);
+    close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
+    if (i != 0)	//Closes the Write end of the previous pipe, if it exists
+        close(fds[i - 1][1]);
+    execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+}
+
 /*
 	Handles the pipe '|' operator.
+	Input_fd is -1 when pipes() called for the first time,
+		meaning we don't redirect input this iteration.
 */
-void	pipes(t_pars *lst, int input_fd)
+int	pipes(t_pars *lst, int input_fd)
 {
-    int i;
-    int **fds;
-    pid_t *ch_pid;
-    t_pars *temp;
+    int 	i;
+	int		len;
+    int 	**fds;
+    pid_t 	*ch_pid;
 
-	// Commented for testing, remove once parsing is joined to execution.
-	// if (lst->prev->MasterKill == true)
-	// {
-	// 	free_t_pars(&lst);
-	// 	ft_putendl_fd("Pipes: Error: invalid input.", 2);
-	// 	return ;
-	// }
+	check_masterkill(lst);
 	i = 0;
 	fds = create_pipes(lst, &ch_pid);
-	temp = lst;
+	len = lstlen(lst);
     while (lst != NULL && lst->isCommand == true)
     {
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
-        {
-            if (input_fd != -1)	//If it's not the first time pipes() is called, we redirect STDIN
-            {
-                dup2(input_fd, STDIN_FILENO);
-                close(input_fd);
-            }
-            if (lst->next != NULL && lst->next->next != NULL && lst->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
-                dup2(fds[i][1], STDOUT_FILENO);
-            close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
-            if (i != 0)	//Closes the Write end of the previous pipe, if it exists
-                close(fds[i - 1][1]);
-            execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
-        }
-        else if (ch_pid[i] < 0)	//Error
-        {
-            perror("fork");
-			free_arr((void **)fds, sizeof(fds) / sizeof(fds[0]));
-			free(ch_pid);
-            exit(EXIT_FAILURE);
-        }
+			pipes_child_func(lst, input_fd, fds, i);
+        else if (ch_pid[i] < 0)
+			fork_error(fds, &ch_pid);
         close(fds[i][1]);
         if (i != 0)
             close(fds[i - 1][0]);
-        input_fd = fds[i][0];
-        i++;
+        input_fd = fds[i++][0];
         lst = lst->next;
     }
-	i = 0;
-    close(fds[0][0]);
-    while (i < lstlen(temp))
-    {
+    while (len-- >= 0)
         wait(NULL);
-        // close(fds[i][0]);
-        i++;
-    }
-    // Free allocated memory
-    free(ch_pid);
-    free_arr((void **)fds, lstlen(temp));
+	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, len), 0);
 }
+
+// void	pipes(t_pars *lst, int input_fd)
+// {
+//     int i;
+//     int **fds;
+//     pid_t *ch_pid;
+//     t_pars *temp;
+
+// 	// Commented for testing, uncomment once parsing is joined to execution.
+// 	// if (lst->prev->MasterKill == true)
+// 	// {
+// 	// 	free_t_pars(&lst);
+// 	// 	ft_putendl_fd("Pipes: Error: invalid input.", 2);
+// 	// 	return ;
+// 	// }
+// 	i = 0;
+// 	fds = create_pipes(lst, &ch_pid);
+// 	temp = lst;
+//     while (lst != NULL && lst->isCommand == true)
+//     {
+//         ch_pid[i] = fork();
+//         if (ch_pid[i] == 0)
+//         {
+//             if (input_fd != -1)
+//             {
+//                 dup2(input_fd, STDIN_FILENO);
+//                 close(input_fd);
+//             }
+//             if (lst->next != NULL && lst->next->next != NULL && lst->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
+//                 dup2(fds[i][1], STDOUT_FILENO);
+//             close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
+//             if (i != 0)	//Closes the Write end of the previous pipe, if it exists
+//                 close(fds[i - 1][1]);
+//             execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+//         }
+//         else if (ch_pid[i] < 0)	//Error
+//         {
+//             perror("fork");
+// 			free_arr((void **)fds, sizeof(fds) / sizeof(fds[0]));
+// 			free(ch_pid);
+//             exit(EXIT_FAILURE);
+//         }
+//         close(fds[i][1]);
+//         if (i != 0)
+//             close(fds[i - 1][0]);
+//         input_fd = fds[i][0];
+//         i++;
+//         lst = lst->next;
+//     }
+// 	i = 0;
+//     close(fds[0][0]);
+//     while (i++ < lstlen(temp))
+//         wait(NULL);
+//     free(ch_pid);
+//     free_arr((void **)fds, lstlen(temp));
+// }
 
 int main(void) {
 	// Create a sample linked list of commands
@@ -256,7 +300,6 @@ int main(void) {
 	command1->next = command2;
 
 	command2->isCommand = false;
-	command2->isDelim = true;
 	command2->operator = malloc(sizeof(t_operator));
 	command2->operator->redir_in_delim = true;
 	command2->cmd = malloc(sizeof(t_command));
@@ -267,6 +310,7 @@ int main(void) {
 	command2->next = command3;//
 
 	command3->isFile = true;
+	command3->isDelim = true;
 	command3->fl = malloc(sizeof(t_file));
 	command3->isDelim = true;
 	command3->DELIM = "EOF";
@@ -276,6 +320,8 @@ int main(void) {
 	command3->cmd->name_options_args[0] = NULL;
 	command3->prev = command2;
 	command3->next = NULL;//command4
+
+	// rev << EOF
 
 	// command4->isCommand = true;
 	// command4->cmd = malloc(sizeof(t_command));

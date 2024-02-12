@@ -6,11 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/11 13:36:21 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:14:02 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 // void	print_list(t_env_list *envp)
 // {

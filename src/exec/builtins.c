@@ -6,11 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/11 13:35:43 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:13:57 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 /*
 	cd MUST be called with the full line received from readline(),

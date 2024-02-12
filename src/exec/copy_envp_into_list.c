@@ -6,11 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/11 12:32:34 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:13:49 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 static t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
 {

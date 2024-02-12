@@ -6,11 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/11 12:31:42 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:13:42 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 int	g_sig_received;
 
