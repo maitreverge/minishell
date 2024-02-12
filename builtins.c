@@ -6,26 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 13:43:08 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:35:43 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_tokens(char **t)
-{
-	int	i;
-
-	i = 0;
-	if (t == NULL)
-		return ;
-	while (t[i])
-	{
-		free(t[i]);
-		i++;
-	}
-	free(t);
-}
 
 /*
 	cd MUST be called with the full line received from readline(),
@@ -48,7 +33,7 @@ int	ft_cd(char *s, t_env_list *envp)
 		homepath = ft_strjoin("/home/", getenv("USER"));
 		chdir(homepath);
 		free(homepath);
-		free_tokens(tokens);
+		free_arr(tokens, sizeof(tokens) / sizeof(tokens[0]));
 		ft_pwd(envp, 1, false);
 		return (0);
 	}
@@ -57,12 +42,12 @@ int	ft_cd(char *s, t_env_list *envp)
 		chdir(tokens[1]);
 		ft_pwd(envp, 1, false);
 	}
-	free_tokens(tokens);
+	free_arr(tokens, sizeof(tokens) / sizeof(tokens[0]));
 	return (0);
 }
 
 /*Also changes the env PWD variable to reflect any changes.*/
-int	ft_pwd(t_env_list *envp, int fd, bool print)
+void	ft_pwd(t_env_list *envp, int fd, bool print)
 {
 	char		*cwd;
 	char		*new_pwd_env;
@@ -89,7 +74,6 @@ int	ft_pwd(t_env_list *envp, int fd, bool print)
 	if (cwd != NULL)
 		free(cwd);
 	envp = temp;
-	return (0);
 }
 
 /*Displays a list of the environment variables for the

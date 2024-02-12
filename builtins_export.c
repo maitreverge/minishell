@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 14:20:46 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:36:21 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	ft_unset(t_env_list **envp, char *line)
 	}	
 }
 
-/*Adds 's' to the list of environment variables*/
-void	ft_export(t_env_list **envp, char *line)//// void	ft_export(t_env_list *envp, char *key, char *value)
+/*Adds 'line' to the list of environment variables*/
+void	ft_export(t_env_list **envp, char *line)
 {
 	t_env_list 	*temp;
 	char 		**s;

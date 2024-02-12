@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 14:19:53 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/11 14:08:22 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,6 @@ int	check_if_env_var(char *s, t_all *all)
 /*
 	Make sure to pass the ENTIRE line (got by readline()),
 	otherwise the function might not work properly.
-*/
-/*	TODO:
-		-echo $? prints exit status of last command
 */
 int	ft_echo(char *s, t_all *all, t_pars *pars, int fd)
 {

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/09 18:42:52 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:35:08 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void	copy_env_into_list(t_env_list **env, char **envp);
 void	free_tokens(char **t);
 int		ft_echo(char *s, t_all *all, t_pars *pars, int fd);
 int		ft_cd(char *path, t_env_list *envp);
-int		ft_pwd(t_env_list *envp, int fd, bool print);
+void	ft_pwd(t_env_list *envp, int fd, bool print);
 void	ft_export(t_env_list **envp, char *line);
 void	ft_unset(t_env_list **envp, char *line);
 int		ft_exit(t_all *all, char *readline_return, int fd);

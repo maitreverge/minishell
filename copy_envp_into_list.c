@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/07 12:56:29 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/11 12:32:34 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
 	new_node->original_envp = envp;
 	new_node->key = s_key;
 	new_node->value = s_value;
-	new_node->next = NULL; // add 
+	new_node->next = NULL;
 	return (new_node);
 }
 
