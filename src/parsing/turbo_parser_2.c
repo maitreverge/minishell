@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 12:05:04 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 14:31:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,9 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 	new_node = malloc(sizeof(t_pars));
 	if (!new_node)
 		return ;
+	node_operator = malloc(sizeof(t_operator));
+	if (!node_operator)
+		return ;
 	// -------------------malloc t_pars node + sub_node--------------------
 
 
@@ -346,32 +349,18 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 	new_node->isFile = false;
 	new_node->fl = NULL;
 
-	new_node->prev = NULL;
-	new_node->next = NULL;
-	// ! STEP 1.1 : init the right node
-	if (is_token_redir_delim(cleaned))
-	{
-		new_node->isOperator = false;
-		new_node->isDelim = true;
-		new_node->DELIM = cleaned;
-		return ;
-	}
-
-	// ! INIT A NODE IF AND ONLY IF THE CURRENT OPERATOR ISNT A << OPERATOR
-	node_operator = malloc(sizeof(t_operator));
-	if (!node_operator)
-		return ;
-
 	new_node->isDelim = false;
-	new_node->isOperator = true;
 	new_node->DELIM = NULL;
 
-	// ! STEP 2 :connecting the t_operator node
+	new_node->isOperator = true;
 	new_node->operator = node_operator;
 	
+	new_node->prev = NULL;
+	new_node->next = NULL;
+
+	// ! STEP 2 :connecting the t_operator node
+	
 	// -------------------global init node--------------------
-
-
 
 	// -------------------init substructure--------------------
 	
@@ -439,7 +428,7 @@ bool is_last_node_redir_delim(t_pars **pars)
 
 	last = lstlast(*pars);
 
-	if (last->operator->redir_in_delim)
+	if (last->isRedirIn)
 		return (true);
 	return (false);
 }
@@ -484,28 +473,24 @@ void	new_node_delim(t_pars **pars, char *cleaned)
 
 	// ! STEP 1 : init bools switches
 	new_node->isDelim = true;
-	new_node->isCommand = false;
-	new_node->isFile = false;
-	// new_node->isOperator = true;
-	new_node->isOperator = false;
+	new_node->DELIM = cleaned;
 
-	// ! STEP 2 : NULL init other substructures nodes
-	new_node->operator = NULL;
-	new_node->fl = NULL;
+	
+	new_node->isCommand = false;
 	new_node->cmd = NULL;
+	
+	new_node->isFile = false;
+	new_node->fl = NULL;
+	
+	new_node->isOperator = false;
+	new_node->operator = NULL;
+	
 
 	// ! STEP 3 : init prev and next both to NULL
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	// -------------------global init node--------------------
 
-
-
-	// -------------------init substructure--------------------
-
-	new_node->DELIM = cleaned;
-	
-	// -------------------init substructure--------------------
 
 	// ! last step : lstaddback
 	lstadd_back(pars, new_node);
@@ -547,11 +532,24 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			// i++;
 		}
 		
-		else if ((is_last_node_cmd(pars) ))
+		else if ((is_last_node_cmd(pars)))
 		{
 			if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
 		}
+
+		// else if (is_last_node_redir_delim(pars))
+		// {
+		// 	if(!is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+		// 		new_node_delim(pars, cur->cleaned_prompt[i]);
+		// 	else // two consecutive operators tokens
+		// 	{
+		// 		printf("TWO CONSECUTIVE OPERATORS\n\n");
+		// 		(*pars)->MasterKill = true;
+		// 		break ;
+		// 	}
+			
+		// }
 		
 		else if (is_last_node_operator(pars))
 		{
@@ -567,19 +565,6 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				printf("TWO CONSECUTIVE OPERATORS\n\n");
 				break ;
 			}
-		}
-
-
-		else if ((is_last_node_file(pars)) || is_last_node_redir_delim(pars))
-		{
-			if(is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-				new_node_command(pars, u_alloc, &i);
-			else // current token 
-			{
-				(*pars)->MasterKill = true;
-				break ;
-			}
-			
 		}
 		
 		if (cur->cleaned_prompt[i])

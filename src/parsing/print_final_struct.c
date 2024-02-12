@@ -25,7 +25,7 @@ void	print_final_struct(t_pars **pars)
 		}
 		else if (cur->isDelim)
 		{
-			printf("CURRENT NODE IS A DELIM OPERATOR\n\n");
+			printf("CURRENT NODE IS A DELIM STRING\n\n");
 			printf("\033[33mOperator = << \n\033[0m");
 			printf("\033[33mDELIM value = %s\n\033[0m", cur->DELIM);
 		}
@@ -40,9 +40,9 @@ void	print_final_struct(t_pars **pars)
 			printf("\033[34m%s\033[0m", cur->fl->auth_x ? "EXECUTION AUTHORISATION ✅\n" : "EXECUTION AUTHORISATION ❌\n");
 
 		}
-		else if (cur->isOperator && !cur->isDelim)
+		else if (cur->isOperator)
 		{
-			printf("CURRENT NODE IS AN OPERATOR OTHER THAN DELIM\n\n");
+			printf("CURRENT NODE IS AN OPERATOR\n\n");
 			if (cur->operator->pipe)
 				printf("Operator = | \n");
 			if (cur->operator->redir_in)
@@ -51,6 +51,8 @@ void	print_final_struct(t_pars **pars)
 				printf("Operator = > \n");
 			if (cur->operator->redir_out_app)
 				printf("Operator = >> \n");
+			if (cur->operator->redir_in_delim)
+				printf("Operator = << \n");
 		}
 		printf("\n------------------------\n");
 		cur = cur->next;
