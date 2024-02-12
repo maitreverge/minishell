@@ -45,13 +45,13 @@ void	print_final_struct(t_pars **pars)
 			printf("CURRENT NODE IS AN OPERATOR\n\n");
 			if (cur->operator->pipe)
 				printf("Operator = | \n");
-			if (cur->operator->redir_in)
+			else if (cur->operator->redir_in)
 				printf("Operator = < \n");
-			if (cur->operator->redir_out)
+			else if (cur->operator->redir_out)
 				printf("Operator = > \n");
-			if (cur->operator->redir_out_app)
+			else if (cur->operator->redir_out_app)
 				printf("Operator = >> \n");
-			if (cur->operator->redir_in_delim)
+			else if (cur->operator->redir_in_delim)
 				printf("Operator = << \n");
 		}
 		printf("\n------------------------\n");

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 14:40:15 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 15:44:29 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,7 +439,7 @@ bool is_last_node_redir_delim_string(t_pars **pars)
 
 	last = lstlast(*pars);
 
-	if (last->operator->redir_in_delim)
+	if (last->isRedirIn)
 		return (true);
 	return (false);
 }
@@ -543,10 +543,21 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			// i++;
 		}
 		
-		else if ((is_last_node_cmd(pars)) || is_last_node_redir_delim_string(pars))
+		else if ((is_last_node_cmd(pars)))
 		{
 			if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
+		}
+
+		else if (is_last_node_redir_delim_string(pars))
+		{
+			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_operator(pars, cur->cleaned_prompt[i]);
+			else // last case : consecutive two operator_tokens
+			{
+				(*pars)->MasterKill = true;
+				break ;
+			}	
 		}
 
 		else if (is_last_node_operator(pars))

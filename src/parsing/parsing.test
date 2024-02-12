@@ -1,6 +1,6 @@
 ERROR INPUTS :
 
-bin/ls -l -a -w | grep -n $PWD '$PWD' $nope << EOF | rev > test.txt
+	bin/ls -l -a -w | grep -n $PWD '$PWD' $nope << EOF | rev > test.txt
 
 echo
 
