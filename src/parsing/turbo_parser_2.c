@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 14:31:46 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 14:36:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,7 +428,7 @@ bool is_last_node_redir_delim(t_pars **pars)
 
 	last = lstlast(*pars);
 
-	if (last->isRedirIn)
+	if (last->operator->redir_in_delim)
 		return (true);
 	return (false);
 }
@@ -538,19 +538,6 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				new_node_operator(pars, cur->cleaned_prompt[i]);
 		}
 
-		// else if (is_last_node_redir_delim(pars))
-		// {
-		// 	if(!is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-		// 		new_node_delim(pars, cur->cleaned_prompt[i]);
-		// 	else // two consecutive operators tokens
-		// 	{
-		// 		printf("TWO CONSECUTIVE OPERATORS\n\n");
-		// 		(*pars)->MasterKill = true;
-		// 		break ;
-		// 	}
-			
-		// }
-		
 		else if (is_last_node_operator(pars))
 		{
 			if (is_last_node_pipe(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
