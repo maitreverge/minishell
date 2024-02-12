@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:16:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 18:21:37 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 18:31:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ bool is_token_redir_out(char *splited, char *cleaned)
 {
 	if (!ft_strcmp(splited, cleaned))
 	{
-		if (!ft_strcmp(cleaned, PIPE))
-			return (true);
-		else if (!ft_strcmp(cleaned, RED_OUT))
+		if (!ft_strcmp(cleaned, RED_OUT))
 			return (true);
 		else if (!ft_strcmp(cleaned, RED_OUT_APP))
 			return (true);

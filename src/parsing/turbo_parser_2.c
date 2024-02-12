@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 18:22:00 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 18:43:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				break ;
 			}
 		}
-		
-		// ! CASE 1 = Last Node is a Command ==> operator
-		else if ((is_last_node_cmd(pars)))
+		else if ((is_last_node_cmd(pars))) // ! CASE 1 = Last Node is a Command ==> operator
 		{
 			if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
@@ -121,12 +119,9 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				break ;
 			}
 		}
-
-		// ! CASE 2 = Last Node is a File
-		
-		else if (is_last_node_file)
+		else if (is_last_node_file(pars)) // ! CASE 2 = Last Node is a File
 		{
-			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]) || is_token_redit_out(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]) || is_token_redir_out(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
 			else
 			{
@@ -135,11 +130,9 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				break ;
 			}
 		}
-		
-		// ! CASE 3 = Last Node is a Here_Doc
-		else if (is_last_node_here_doc(pars))
+		else if (is_last_node_here_doc(pars))// ! CASE 3 = Last Node is a Here_Doc
 		{
-			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]) || is_token_redit_out(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]) || is_token_redir_out(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
 			else
 			{
@@ -148,8 +141,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				break ;
 			}
 		}
-		// ! CASE 4 = Last Node is a Operator
-		else if (is_last_node_operator(pars))
+		else if (is_last_node_operator(pars)) // ! CASE 4 = Last Node is a Operator
 		{
 			// Whole block checks for double consecutive 
 			if (is_last_node_pipe(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
@@ -165,11 +157,8 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				break ;
 			}
 		}
-		
 		if (cur->cleaned_prompt[i])
 			i++;
-		
-		// ! maybe another edge case ???
 	}
 	
 	// ! print the whole struct

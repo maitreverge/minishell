@@ -23,11 +23,11 @@ void	print_final_struct(t_pars **pars)
 			for (int i = 0; cur->cmd->name_options_args[i]; i++)
 				printf("\033[31mCommand name_options_args #%i = %s\n\033[0m", i + 1, cur->cmd->name_options_args[i]);			
 		}
-		else if (cur->isDelim)
+		else if (cur->isHereDoc)
 		{
 			printf("CURRENT NODE IS A DELIM STRING\n\n");
 			printf("\033[33mOperator = << \n\033[0m");
-			printf("\033[33mDELIM value = %s\n\033[0m", cur->DELIM);
+			printf("\033[33mDELIM value = %s\n\033[0m", cur->here_doc);
 		}
 		else if (cur->isFile)
 		{

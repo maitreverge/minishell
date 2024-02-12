@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 18:22:15 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 18:32:13 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,9 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 
 // turbo_parser_2
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
-bool	is_token_operator(char *splited, char *cleaned);
+void	search_redir_in(t_pars **pars, char **splited, char **cleaned);
+bool	testing_builtin(char *cleaned);
+char *join_path_command(char *splited, char *cleaned, char **paths);
 
 
 //extract_paths
@@ -199,7 +201,7 @@ bool is_last_node_operator(t_pars **pars);
 bool is_last_node_pipe(t_pars **pars);
 bool is_last_node_redir(t_pars **pars);
 
-bool is_last_node_r_in_delim(t_pars **pars)
+bool is_last_node_r_in_delim(t_pars **pars);
 bool is_last_node_here_doc(t_pars **pars);
 
 bool is_last_node_cmd(t_pars **pars);
@@ -209,11 +211,13 @@ bool is_token_pipe(char *splited, char *cleaned);
 bool is_token_redir_out(char *splited, char *cleaned);
 
 
+
+
 // new_nodes
 void	new_node_command(t_pars **pars, t_alloc **utils, int *i);
 void	new_node_file(t_pars **pars, char *cleaned);
 void	new_node_operator(t_pars **pars, char *cleaned);
-void	new_node_here_doc(t_pars **pars, char *cleaned)
+void	new_node_here_doc(t_pars **pars, char *cleaned);
 
 
 // print_final_struct
