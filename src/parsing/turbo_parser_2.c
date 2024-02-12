@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 14:36:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 14:40:15 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,7 +422,18 @@ bool is_last_node_redir(t_pars **pars)
 	return (false);
 }
 
-bool is_last_node_redir_delim(t_pars **pars)
+bool is_last_node_redir_delim_operator(t_pars **pars)
+{
+	t_pars *last;
+
+	last = lstlast(*pars);
+
+	if (last->operator->redir_in_delim)
+		return (true);
+	return (false);
+}
+
+bool is_last_node_redir_delim_string(t_pars **pars)
 {
 	t_pars *last;
 
@@ -532,7 +543,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			// i++;
 		}
 		
-		else if ((is_last_node_cmd(pars)))
+		else if ((is_last_node_cmd(pars)) || is_last_node_redir_delim_string(pars))
 		{
 			if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
@@ -544,7 +555,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 				new_node_command(pars, u_alloc, &i);
 			else if (is_last_node_redir(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_file(pars, cur->cleaned_prompt[i]);
-			else if (is_last_node_redir_delim(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			else if (is_last_node_redir_delim_operator(pars) && !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_delim(pars, cur->cleaned_prompt[i]);
 			else // last case : consecutive two operator_tokens
 			{
