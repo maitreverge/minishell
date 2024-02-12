@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 17:25:25 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 18:22:15 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,17 +198,23 @@ bool is_token_redir_delim(char *cleaned);
 bool is_last_node_operator(t_pars **pars);
 bool is_last_node_pipe(t_pars **pars);
 bool is_last_node_redir(t_pars **pars);
-bool is_last_node_redir_delim_operator(t_pars **pars);
-bool is_last_node_redir_delim_string(t_pars **pars);
+
+bool is_last_node_r_in_delim(t_pars **pars)
+bool is_last_node_here_doc(t_pars **pars);
+
 bool is_last_node_cmd(t_pars **pars);
 bool is_last_node_file(t_pars **pars);
 bool is_token_pipe(char *splited, char *cleaned);
+
+bool is_token_redir_out(char *splited, char *cleaned);
+
 
 // new_nodes
 void	new_node_command(t_pars **pars, t_alloc **utils, int *i);
 void	new_node_file(t_pars **pars, char *cleaned);
 void	new_node_operator(t_pars **pars, char *cleaned);
-void	new_node_delim(t_pars **pars, char *cleaned);
+void	new_node_here_doc(t_pars **pars, char *cleaned)
+
 
 // print_final_struct
 void	print_final_struct(t_pars **pars);

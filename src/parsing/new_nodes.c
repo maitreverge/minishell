@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 17:15:55 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 17:35:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,17 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 
 	// ! STEP 1 : init bools switches
 	new_node->isCommand = true;
-	new_node->isFile = false;
-	new_node->isOperator = false;
-	new_node->isDelim = false;
-	new_node->DELIM = NULL;
-
-
-	// ! STEP 2 :connecting the t_command node
 	new_node->cmd = new_node_command;
 	
-	// ! STEP 3 : NULL init other substructures nodes
+	new_node->isFile = false;
 	new_node->fl = NULL;
+	
+	new_node->isOperator = false;
 	new_node->operator = NULL;
+	
+	new_node->isHereDoc = false;
+	new_node->here_doc = NULL;
 
-	// ! STEP 4 : init prev and next both to NULL
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	// -------------------global init node--------------------
@@ -146,20 +143,19 @@ void	new_node_file(t_pars **pars, char *cleaned)
 	// -------------------global init node--------------------
 
 	// ! STEP 1 : init bools switches
-	new_node->isCommand = false;
-	new_node->isFile = true;
-	new_node->isOperator = false;
-	new_node->isDelim = false;
-	new_node->DELIM = NULL;
 
-	// ! STEP 2 :connecting the t_operator node
+	new_node->isFile = true;
 	new_node->fl = node_file;
 	
-	// ! STEP 3 : NULL init other substructures nodes
-	new_node->operator = NULL;
+	new_node->isCommand = false;
 	new_node->cmd = NULL;
+	
+	new_node->isOperator = false;
+	new_node->operator = NULL;
+	
+	new_node->isHereDoc = false;
+	new_node->here_doc = NULL;
 
-	// ! STEP 4 : init prev and next both to NULL
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	// -------------------global init node--------------------
@@ -218,17 +214,17 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 	// -------------------global init node--------------------
 
 	// ! STEP 1 : init bools switches
+	new_node->isOperator = true;
+	new_node->operator = node_operator;
+	
 	new_node->isCommand = false;
 	new_node->cmd = NULL;
 
 	new_node->isFile = false;
 	new_node->fl = NULL;
 
-	new_node->isDelim = false;
-	new_node->DELIM = NULL;
-
-	new_node->isOperator = true;
-	new_node->operator = node_operator;
+	new_node->isHereDoc = false;
+	new_node->here_doc = NULL;
 	
 	new_node->prev = NULL;
 	new_node->next = NULL;
@@ -264,9 +260,8 @@ void	new_node_operator(t_pars **pars, char *cleaned)
 	lstadd_back(pars, new_node);
 }
 
-void	new_node_delim(t_pars **pars, char *cleaned)
+void	new_node_here_doc(t_pars **pars, char *cleaned)
 {
-	// ! Allocate a new node;
 	t_pars	*new_node;
 
 	// -------------------malloc t_pars node + sub_node--------------------
@@ -276,13 +271,11 @@ void	new_node_delim(t_pars **pars, char *cleaned)
 	// -------------------malloc t_pars node + sub_node--------------------
 
 
-
-
 	// -------------------global init node--------------------
 
 	// ! STEP 1 : init bools switches
-	new_node->isDelim = true;
-	new_node->DELIM = cleaned;
+	new_node->isHereDoc = true;
+	new_node->here_doc = cleaned;
 
 	
 	new_node->isCommand = false;
