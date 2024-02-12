@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 17:35:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 21:09:52 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	}
 	else
 	{
-		new_node->cmd->command_path = join_path_command(u->splitted_prompt[*i], u->cleaned_prompt[*i], u->paths);
+		new_node->cmd->command_path = join_path_command(u->cleaned_prompt[*i], u->paths);
 		new_node->cmd->isBuiltin = false;
 	}
 	// -------------------init substructure--------------------

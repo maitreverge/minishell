@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 18:32:13 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 21:09:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
 void	search_redir_in(t_pars **pars, char **splited, char **cleaned);
 bool	testing_builtin(char *cleaned);
-char *join_path_command(char *splited, char *cleaned, char **paths);
+char *join_path_command(char *cleaned, char **paths);
 
 
 //extract_paths

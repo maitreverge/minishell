@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/11 15:38:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 21:15:07 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,9 @@ bool	is_buff_valid_doll(char *str)
 {
 	int i;
 	char starting_quote;
-	char end_quote;
 
 	i = 0;
 	starting_quote = 0;
-	end_quote = 0;
 
 	if (!str)
 		return false;
@@ -184,8 +182,8 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars
 void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **pars)
 {
 	t_utils *u;
-	char *result;
-	char *temp_doll;
+	// char *result;
+	// char *temp_doll;
 	bool expansion;
 
 	u = *utils;
@@ -232,22 +230,16 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **
 			u->j++;
 		}
 	}
-	// ? Does the current dollar sign meet the expension criterias ?
-	// ! NO ==> Skip the whole $block until the next $ sign, quote or space if not inside a quote
-	// * YES 
-	// ? Does the key exists in s_env ?
-	// * NO
-	// ! NO ==> Skip the whole $block until the next $ sign, quote or space if not inside a quote
-	// * YES ==> assign the `value` into a temp char*, count the whole value strlen, add it to real_len, skip i  
-
 	// ! STEP 2 : allocating the buffer result with calloc
 
 
 	u->j = 0;
 	u->k = 0;
 	u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
-	if (!u->result[u->i])
-		exit -1; // la maxi security tavu
+	
+	// !IMPORTANT  need to build an exit function
+	// if (!u->result[u->i])
+	// 	exit -1; // la maxi security tavu
 
 	// ! STEP 3 : copying the "cleaned" version of each input
 
@@ -342,8 +334,10 @@ char **ft_clean_prompt(char **buff, t_utils **utils, t_env_list **s_env, t_pars 
 		// ! STEP 2 : allocating the buffer result with calloc
 		
 		u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
-		if (!u->result[u->i])
-			exit -1; // la maxi security tavu
+		
+		// ! IMPORTANT : need to build a function which exits in case of failed malloc
+		// if (!u->result[u->i])
+		// 	exit -1; // la maxi security tavu
 		
 		// ! STEP 3 : copying the "cleaned" version of each input
 		// while (buff[u->i][u->j])

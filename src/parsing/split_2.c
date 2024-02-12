@@ -6,20 +6,18 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:48:33 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/05 14:24:39 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 21:06:33 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static void	allocation(char **buffer, char const *s, char c, size_t len_s)
+static void	allocation(char **buffer, char const *s, char c)
 {
 	size_t	i;
-	size_t	j;
 	size_t	start;
 
 	i = 0;
-	j = 0;
 	start = 0;
 	if (!s)
 		return ;
@@ -40,11 +38,10 @@ static void	allocation(char **buffer, char const *s, char c, size_t len_s)
 char	**ft_2_split(char const *s, char c)
 {
 	char	**buffer;
-	size_t	len_s;
 
 	buffer = (char **)ft_calloc(sizeof(char *), 3);
 	if (!buffer)
 		return (NULL);
-	allocation(buffer, s, c, 2);
+	allocation(buffer, s, c);
 	return (buffer);
 }

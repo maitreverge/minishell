@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 07:26:07 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/11 13:10:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/12 21:04:54 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_pars *init_1st_node_pars(void)
 
 int main(int ac, char **av, char **envp)//, char **env
 {
+	(void)ac;
+	(void)av;
 	t_env_list	*s_env;
 	t_utils		*utils;
 	t_pars		*pars;
