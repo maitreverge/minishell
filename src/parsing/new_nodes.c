@@ -6,30 +6,18 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 11:17:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 14:35:15 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
+void	sub_new_node_1(t_pars **node, t_alloc *u, int *i)
 {
-	t_command	*new_node_command;
-	t_alloc		*u;
-	t_pars		*new_node;
-	int			start;
-	int			j;
+	t_pars *new_node;
 
-	u = *utils;
-	j = 0;
-	new_node = malloc(sizeof(t_pars));
-	if (!new_node)
-		return ;
-	new_node_command = malloc(sizeof(t_command));
-	if (!new_node_command)
-		return ;
+	new_node = *node;
 	new_node->isCommand = true;
-	new_node->cmd = new_node_command;
 	new_node->isFile = false;
 	new_node->fl = NULL;
 	new_node->isOperator = false;
@@ -49,6 +37,26 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 		new_node->cmd->command_path = join_path_command(u->cleaned_prompt[*i], u->paths);
 		new_node->cmd->isBuiltin = false;
 	}
+}
+
+void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
+{
+	t_command	*new_node_command;
+	t_alloc		*u;
+	t_pars		*new_node;
+	int			start;
+	int			j;
+
+	u = *utils;
+	j = 0;
+	new_node = malloc(sizeof(t_pars));
+	if (!new_node)
+		return ;
+	new_node_command = malloc(sizeof(t_command));
+	if (!new_node_command)
+		return ;
+	new_node->cmd = new_node_command;
+	sub_new_node_1(&new_node, u, i);
 	start = *i;
 	while (u->cleaned_prompt[*i])
 	{
@@ -56,14 +64,13 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 			break ;
 		(*i)++;
 	}
-	int len = (*i) - start + 2;
-	new_node->cmd->name_options_args = (char **)ft_calloc(len, sizeof(char *));
+	new_node->cmd->name_options_args = (char **)ft_calloc(((*i) - start + 2), sizeof(char *));
 	if (!new_node->cmd->name_options_args)
 		exit (-1);
 	new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
 	j++;
 	start++;
-	while (j < len - 1)
+	while (j < ((*i) - start + 2) - 1)
 	{
 		new_node->cmd->name_options_args[j] = u->cleaned_prompt[start];
 		j++;
