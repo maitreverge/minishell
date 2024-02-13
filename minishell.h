@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 19:55:43 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 20:22:27 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	new_node_here_doc(t_pars **pars, char *cleaned);
 //split_parser
 char	**parsing_split(char *s);
 size_t	parsing_countwords(char *str);
-void	allocation(char **buffer, char const *str, size_t len_s);
+void	allocation(char **buffer, char *str, size_t len_s);
 
 
 

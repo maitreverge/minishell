@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:48:33 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 21:06:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 20:25:33 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static void	allocation(char **buffer, char const *s, char c)
+static void	split_2_allocation(char **buffer, char const *s, char c)
 {
 	size_t	i;
 	size_t	start;
@@ -42,6 +42,6 @@ char	**ft_2_split(char const *s, char c)
 	buffer = (char **)ft_calloc(sizeof(char *), 3);
 	if (!buffer)
 		return (NULL);
-	allocation(buffer, s, c);
+	split_2_allocation(buffer, s, c);
 	return (buffer);
 }
