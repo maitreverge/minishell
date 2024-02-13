@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 13:57:51 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 14:04:05 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@
 // * .h Florian
 
 
-// ! Master Struct for parsing
 typedef	struct	s_pars
 {
 	// only the first node
@@ -111,8 +110,36 @@ typedef	struct	s_operator
 	bool redir_out;
 	bool redir_out_app;
 } 	t_operator;
+
 // ! Utils structures
 
+typedef	struct	s_utils
+{
+	char	**result; // final parsing
+	char	*to_allocate; // ! useful ??
+	int		i;
+	int		j;
+	int		k;
+	char	starting_quote;
+	char	end_quote;
+	int		real_len;
+	
+}	t_utils;
+
+typedef struct s_env_list
+{
+	char *original_envp; // ! add original value
+	char *key;
+	char *value;
+	struct s_env_list *next;
+}	t_env_list;
+
+typedef struct s_alloc
+{
+	char **splitted_prompt;
+	char **cleaned_prompt;
+	char **paths;
+}	t_alloc;
 
 
 // ! Functions prototypes
