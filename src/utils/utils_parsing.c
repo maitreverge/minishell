@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 13:28:08 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 14:06:33 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ void free_t_file(t_file *file)
 
 void	free_t_pars(t_pars **lst)
 {
-	int		i;
+	// int		i;
 	t_pars 	*temp;
 
-	i = 0;
+	// i = 0;
 	while ((*lst)->next)
 	{
 		temp = (*lst)->next;
