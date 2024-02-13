@@ -71,3 +71,4 @@ src/parsing/test
 src/parsing/parsing.test
 src/parsing/testing_paths.c
 src/parsing/testing.c
+minishell
