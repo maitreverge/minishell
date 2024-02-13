@@ -16,7 +16,7 @@ NAME = libft.a
 
 #CC and CFLAGS variables are mandatory names if you want automatic compilation
 
-CC = gcc
+CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
 
