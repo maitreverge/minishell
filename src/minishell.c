@@ -6,11 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 15:51:24 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:32:41 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 //george main
 // int main(int ac, char **av, char **envp)
@@ -94,17 +94,17 @@ int	check_next_operator(t_pars *lst)
 void	exec_builtin(t_pars *pars, t_all *all)
 {
 	if (ft_strncmp(pars->cmd->command_name, "echo", 4) == 0)
-		ft_echo(all->readline_line, &all, &pars);	//replace 1 with fd
+		ft_echo(all->readline_line, all, pars);	//replace 1 with fd
 	else if (ft_strncmp(pars->cmd->command_name, "cd", 2) == 0)
 		ft_cd(all->readline_line, all->env_lst);
 	else if (ft_strncmp(pars->cmd->command_name, "pwd", 3) == 0)
 		ft_pwd(all->env_lst, true);	//replace 1 with fd
 	else if (ft_strncmp(pars->cmd->command_name, "env", 3) == 0)
-		ft_env(&all);
+		ft_env(all);
 	else if (ft_strncmp(pars->cmd->command_name, "export", 6) == 0)
-		ft_export(all->env_lst, all->readline_line);
+		ft_export(&all->env_lst, all->readline_line);
 	else if (ft_strncmp(pars->cmd->command_name, "unset", 5) == 0)
-		ft_unset(all->env_lst, all->readline_line);
+		ft_unset(&all->env_lst, all->readline_line);
 	else if (ft_strncmp(pars->cmd->command_name, "exit", 4) == 0)
 		ft_exit(pars, all, all->readline_line);
 }
@@ -134,6 +134,8 @@ void	exec_external_func(t_pars *lst)
 
 int	main(int ac, char **av, char **envp)
 {
+	(void)ac;
+	(void)av;
 	t_all		all;
 	t_utils		*utils;
 	t_pars		*pars;
@@ -145,7 +147,7 @@ int	main(int ac, char **av, char **envp)
 	all.readline_line = NULL;
 	while (1)
 	{
-		signals(&all);
+		signals(pars);
 		if (!pars)
 			pars = init_1st_node_pars();
 		all.readline_line = readline("minishell$ ");
@@ -165,7 +167,7 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		}
 		if (check_next_operator(pars) == 1)
-			pipes(pars, -1);
+			pipes(pars, &all, -1);
 		else if (check_next_operator(pars) == 2)
 			redirect_input(pars);
 		else if (check_next_operator(pars) == 3)

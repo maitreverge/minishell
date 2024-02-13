@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 15:46:13 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:26:41 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ int	redirect_input_delimitor(t_pars *lst)
 		close(open_fd);
 	}
 	wait(NULL);
-	close(open_fd);
-	unlink("/tmp/a0987654321aaa.tmp");
+	return (close(open_fd), unlink("/tmp/a0987654321aaa.tmp"), 0);
+	// close(open_fd);
+	// unlink("/tmp/a0987654321aaa.tmp");
 }
 
 /*
@@ -66,7 +67,7 @@ int	redirect_input(t_pars *lst)
 {
 	int		open_fd;
 	pid_t	ch_pid;
-	int		fds[2];
+	//int		fds[2];
 
 	if (lst->next->next->fl->file_exist == false)
 		return (ft_putendl_fd("Error: redirect input: nonexistant file.", 2), 1);
@@ -88,6 +89,7 @@ int	redirect_input(t_pars *lst)
 		exit(EXIT_FAILURE);
 	}
 	wait(NULL);
+	return (0);
 }
 
 /*
@@ -96,7 +98,7 @@ int	redirect_input(t_pars *lst)
 */
 int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 {
-	int		i;
+	// int		i;
 	int		fd[2];
 	int		open_fd;
 	pid_t	ch_pid;
@@ -138,7 +140,7 @@ int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 		close(open_fd);
 		//close(STDOUT_FILENO);
 		if (lst->cmd->isBuiltin == true)
-			exec_builtin(lst, all->env_lst);//add env_list to t_pars
+			exec_builtin(lst, all);//add env_list to t_pars
 		else
 			execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
 	}
@@ -152,6 +154,7 @@ int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 		close(input_fd);
 	close(fd[1]);
 	wait(NULL);
+	return (0);
 }
 
 /*
@@ -175,7 +178,7 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
         {
             perror("pipe");
 			free_t_pars(&lst);
-			free_arr((void **)fds, sizeof(fds) / sizeof(fds[0]));
+			free_arr((void **)fds, size_of_ptr_ptr((void **)fds));
             exit(EXIT_FAILURE);
         }
 		i++;
@@ -183,7 +186,7 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
     return (fds);
 }
 
-void	pipes_child_func(t_pars *lst, int input_fd, int **fds, int i)
+void	pipes_child_func(t_pars *lst, t_all *all, int input_fd, int **fds, int i)
 {
 	if (input_fd != -1)
     {
@@ -193,10 +196,12 @@ void	pipes_child_func(t_pars *lst, int input_fd, int **fds, int i)
     if (lst->next != NULL && lst->next->next != NULL && lst->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
         dup2(fds[i][1], STDOUT_FILENO);
     close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
-    if (i != 0)	//Closes the Write end of the previous pipe, if it exists
+    if (i != 0)//Closes the Write end of the previous pipe, if it exists
+	{
         close(fds[i - 1][1]);
+	}
 	if (lst->cmd->isBuiltin == true)
-		exec_builtin(lst);
+		exec_builtin(lst, all);
 	else
     	execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
 }
@@ -206,7 +211,7 @@ void	pipes_child_func(t_pars *lst, int input_fd, int **fds, int i)
 	Input_fd is -1 when pipes() called for the first time,
 		meaning we don't redirect input this iteration.
 */
-int	pipes(t_pars *lst, int input_fd)
+int	pipes(t_pars *lst, t_all *all, int input_fd)
 {
     int 	i;
 	int		len;
@@ -221,7 +226,7 @@ int	pipes(t_pars *lst, int input_fd)
 	{
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
-			pipes_child_func(lst, input_fd, fds, i);
+			pipes_child_func(lst, all, input_fd, fds, i);
         else if (ch_pid[i] < 0)
 			fork_error(fds, &ch_pid);
         close(fds[i][1]);
@@ -233,7 +238,8 @@ int	pipes(t_pars *lst, int input_fd)
 		else
 			break ;
     }
-    while (len-- >= 0)
-        wait(NULL);
-	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, len), 0);//len can't be passed for free_arr
+	i = 0;
+    while (i++ < len)
+			wait(NULL);
+	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, len), 0);
 }

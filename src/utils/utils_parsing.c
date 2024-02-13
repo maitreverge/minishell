@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 14:16:46 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 09:19:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,34 +78,31 @@ void	free_s_env(t_env_list **env)
 	// free(env);
 }
 
-// void free_t_cmd(t_command *cmd)
-// {
-// 	free(cmd->command_name);
-// 	free(cmd->command_path);
-// 	// free_arr((void **)cmd->name_options_args, sizeof(cmd->name_options_args) / sizeof(cmd->name_options_args[0]));
-// 	free_arr((void **)cmd->name_options_args, 10);
-// }
+void free_t_cmd(t_command *cmd)
+{
+	free(cmd->command_name);
+	free(cmd->command_path);
+	free_arr((void **)cmd->name_options_args, size_of_ptr_ptr((void **)cmd->name_options_args));
+}
 
 // void free_t_file(t_file *file)
 // {
 // 	free(file->file_name);
 // }
 
-// void	free_t_pars(t_pars **lst)
-// {
-// 	// int		i;
-// 	t_pars 	*temp;
+void	free_t_pars(t_pars **lst)
+{
+	t_pars 	*temp;
 
-// 	// i = 0;
-// 	while ((*lst)->next)
-// 	{
-// 		temp = (*lst)->next;
-// 		free_t_cmd((*lst)->cmd);
-// 		free_t_file((*lst)->fl);
-// 		free((*lst));
-// 		(*lst) = temp;
-// 	}
-// }
+	while ((*lst)->next)
+	{
+		temp = (*lst)->next;
+		free_t_cmd((*lst)->cmd);
+		free_t_file((*lst)->fl);
+		free((*lst));
+		(*lst) = temp;
+	}
+}
 
 void	free_s_utils(t_utils **utils)
 {
