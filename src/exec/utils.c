@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:34:17 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 22:13:20 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:56:34 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	free_arr(void **array, int size)
 	free(array);
 }
 
-unsigned int	lstlen(t_pars *lst)
+size_t	lstlen(t_pars *lst)
 {
-	unsigned int	res;
-	t_pars			*temp;
+	size_t	res;
+	t_pars	*temp;
 
 	temp = lst;
 	res = 0;
@@ -41,4 +41,12 @@ unsigned int	lstlen(t_pars *lst)
 	}
 	lst = temp;
 	return (res);
+}
+
+void	fork_error(int **fds, pid_t **ch_pid)
+{
+	perror("fork");
+	free_arr((void **)fds, sizeof(fds) / sizeof(fds[0]));
+	free(*ch_pid);
+	exit(EXIT_FAILURE);
 }

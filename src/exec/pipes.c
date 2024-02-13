@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 22:13:07 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 13:10:16 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,11 @@ int	redirect_output(t_pars *lst, int input_fd)
 		if (dup2(input_fd, fd[0]) < 0)
 		{
 			perror("dup2");
+			close(fd[0]);
 			free_t_pars(&lst);
 			exit(EXIT_FAILURE);
 		}
+		close(fd[0]);
 	}
 	close(fd[0]);
 	ch_pid = fork();
@@ -143,7 +145,8 @@ int	redirect_output(t_pars *lst, int input_fd)
 		free_t_pars(&lst);
 		exit(EXIT_FAILURE);
 	}
-	close(input_fd);
+	if (input_fd != -1)
+		close(input_fd);
 	close(fd[1]);
 	wait(NULL);
 }
@@ -204,12 +207,12 @@ int	pipes(t_pars *lst, int input_fd)
     int 	**fds;
     pid_t 	*ch_pid;
 
-	check_masterkill(lst);
+	//check_masterkill(lst);
 	i = 0;
 	fds = create_pipes(lst, &ch_pid);
-	len = lstlen(lst);
+	len = lstlen(lst); // minus num_of_pipes. lstlen is too long
     while (lst != NULL && lst->isCommand == true)
-    {
+	{
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
 			pipes_child_func(lst, input_fd, fds, i);
@@ -219,149 +222,12 @@ int	pipes(t_pars *lst, int input_fd)
         if (i != 0)
             close(fds[i - 1][0]);
         input_fd = fds[i++][0];
-        lst = lst->next;
+		if (lst->next && lst->next->next)
+        	lst = lst->next->next;	//to skip the pipe operator and go to the next cmd
+		else
+			break ;
     }
     while (len-- >= 0)
         wait(NULL);
 	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, len), 0);
-}
-
-// void	pipes(t_pars *lst, int input_fd)
-// {
-//     int i;
-//     int **fds;
-//     pid_t *ch_pid;
-//     t_pars *temp;
-
-// 	// Commented for testing, uncomment once parsing is joined to execution.
-// 	// if (lst->prev->MasterKill == true)
-// 	// {
-// 	// 	free_t_pars(&lst);
-// 	// 	ft_putendl_fd("Pipes: Error: invalid input.", 2);
-// 	// 	return ;
-// 	// }
-// 	i = 0;
-// 	fds = create_pipes(lst, &ch_pid);
-// 	temp = lst;
-//     while (lst != NULL && lst->isCommand == true)
-//     {
-//         ch_pid[i] = fork();
-//         if (ch_pid[i] == 0)
-//         {
-//             if (input_fd != -1)
-//             {
-//                 dup2(input_fd, STDIN_FILENO);
-//                 close(input_fd);
-//             }
-//             if (lst->next != NULL && lst->next->next != NULL && lst->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
-//                 dup2(fds[i][1], STDOUT_FILENO);
-//             close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
-//             if (i != 0)	//Closes the Write end of the previous pipe, if it exists
-//                 close(fds[i - 1][1]);
-//             execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
-//         }
-//         else if (ch_pid[i] < 0)	//Error
-//         {
-//             perror("fork");
-// 			free_arr((void **)fds, sizeof(fds) / sizeof(fds[0]));
-// 			free(ch_pid);
-//             exit(EXIT_FAILURE);
-//         }
-//         close(fds[i][1]);
-//         if (i != 0)
-//             close(fds[i - 1][0]);
-//         input_fd = fds[i][0];
-//         i++;
-//         lst = lst->next;
-//     }
-// 	i = 0;
-//     close(fds[0][0]);
-//     while (i++ < lstlen(temp))
-//         wait(NULL);
-//     free(ch_pid);
-//     free_arr((void **)fds, lstlen(temp));
-// }
-
-int main(void) {
-	// Create a sample linked list of commands
-	t_pars *command1 = ft_calloc(sizeof(t_pars), 1);
-	t_pars *command2 = ft_calloc(sizeof(t_pars), 1);
-	t_pars *command3 = ft_calloc(sizeof(t_pars), 1);
-	// t_pars *command4 = ft_calloc(sizeof(t_pars), 1);
-
-	// Set the necessary fields for each command
-	command1->isCommand = true;
-	command1->cmd = malloc(sizeof(t_command));
-	command1->cmd->command_path = "/bin/rev";
-	command1->cmd->name_options_args = malloc(sizeof(char*) * 2);
-	command1->cmd->name_options_args[0] = "rev";
-	command1->cmd->name_options_args[1] = NULL;
-	command1->prev = NULL;
-	command1->next = command2;
-
-	command2->isCommand = false;
-	command2->operator = malloc(sizeof(t_operator));
-	command2->operator->redir_in_delim = true;
-	command2->cmd = malloc(sizeof(t_command));
-	command2->cmd->command_path = NULL;
-	command2->cmd->name_options_args = malloc(sizeof(char*) * 1);
-	command2->cmd->name_options_args[0] = NULL;
-	command2->prev = command1;
-	command2->next = command3;//
-
-	command3->isFile = true;
-	command3->isDelim = true;
-	command3->fl = malloc(sizeof(t_file));
-	command3->isDelim = true;
-	command3->DELIM = "EOF";
-	command3->cmd = malloc(sizeof(t_command));
-	command3->cmd->command_path = NULL;
-	command3->cmd->name_options_args = malloc(sizeof(char*) * 2);
-	command3->cmd->name_options_args[0] = NULL;
-	command3->prev = command2;
-	command3->next = NULL;//command4
-
-	// rev << EOF
-
-	// command4->isCommand = true;
-	// command4->cmd = malloc(sizeof(t_command));
-	// command4->cmd->command_path = "/bin/rev";
-	// command4->cmd->name_options_args = malloc(sizeof(char*) * 3);
-	// command4->cmd->name_options_args[0] = "rev";
-	// command4->cmd->name_options_args[1] = NULL;
-	// command4->prev = command3;
-	// command4->next = NULL;
-
-	// int i = 0;
-	// t_pars *lst = command1;
-	// t_pars *temp = lst;
-	// while (lst->next)
-	// {
-	// 	if (lst->next->isPipe == true)
-	// 		i++;
-	// 	lst = lst->next;
-	// }
-	// lst = temp;
-
-
-	//pipes(command1, -1);
-	//redirect_output(command1, -1);
-	redirect_input_delimitor(command1);
-
-	// Free the allocated memory
-	free(command1->cmd->name_options_args);
-	free(command1->cmd);
-	free(command1);
-	free(command2->cmd->name_options_args);
-	free(command2->cmd);
-	free(command2->operator);
-	free(command2);
-	free(command3->cmd->name_options_args);
-	free(command3->cmd);
-	free(command3->fl);
-	free(command3);
-	// free(command4->cmd->name_options_args);
-	// free(command4->cmd);
-	// free(command4);
-	return 0;
 }
