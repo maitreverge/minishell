@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:16:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 18:42:55 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:56:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 bool	is_token_opr(char *splited, char *cleaned)
 {

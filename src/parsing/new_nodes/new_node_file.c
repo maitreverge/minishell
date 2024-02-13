@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:46:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 18:59:05 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:36:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 static t_pars	*initialize_new_node(char *cleaned)
 {

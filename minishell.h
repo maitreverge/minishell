@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 18:42:25 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:55:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,20 @@ typedef struct s_alloc
 
 // ! Functions prototypes
 
+// new_nodes
+void	new_node_command(t_pars **pars, t_alloc **utils, int *i);
+void	new_node_file(t_pars **pars, char *cleaned);
+void	new_node_operator(t_pars **pars, char *cleaned);
+void	new_node_here_doc(t_pars **pars, char *cleaned);
+
+//split_parser
+char	**parsing_split(char *s);
+size_t	parsing_countwords(char *str);
+void	allocation(char **buffer, char const *str, size_t len_s);
+
+
+
+
 // turbo_parser
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
 
@@ -175,7 +189,6 @@ int		ft_strcmp(char *s1, char *s2);
 
 
 // split_parser
-char	**parsing_split(char *s);
 size_t	parsing_countwords(char *str);
 
 //pars_struct_fts
@@ -213,11 +226,6 @@ bool is_token_redir_out(char *splited, char *cleaned);
 
 
 
-// new_nodes
-void	new_node_command(t_pars **pars, t_alloc **utils, int *i);
-void	new_node_file(t_pars **pars, char *cleaned);
-void	new_node_operator(t_pars **pars, char *cleaned);
-void	new_node_here_doc(t_pars **pars, char *cleaned);
 
 
 // print_final_struct

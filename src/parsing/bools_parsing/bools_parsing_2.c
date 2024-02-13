@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:55:59 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 11:00:05 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:56:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 bool	is_last_node_redir(t_pars **pars)
 {

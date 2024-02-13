@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:58:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 18:39:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:56:45 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 bool	is_last_node_pipe(t_pars **pars)
 {

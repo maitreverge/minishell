@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:53:26 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 18:53:59 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:36:51 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 void	new_node_here_doc(t_pars **pars, char *cleaned)
 {
