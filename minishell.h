@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 20:22:27 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 09:17:22 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,6 @@ typedef struct s_all
 {
 	t_env_list	*env_lst;
 	char		*readline_line;
-	int			last_exit_status;
 }	t_all;
 
 
@@ -256,12 +255,13 @@ void	copy_env_into_list(t_env_list **env, char **envp);
 
 /*Builtins*/
 void	free_tokens(char **t);
-int		ft_echo(char *s, t_all *all, t_pars *pars, int fd);
+int		ft_echo(char *s, t_all *all, t_pars *pars);//, int fd
 int		ft_cd(char *path, t_env_list *envp);
-void	ft_pwd(t_env_list *envp, int fd, bool print);
+void	ft_pwd(t_env_list *envp, bool print);// int fd,
 void	ft_export(t_env_list **envp, char *line);
 void	ft_unset(t_env_list **envp, char *line);
-int		ft_exit(t_all *all, char *readline_return, int fd);
+int		ft_env(t_all *all);
+int		ft_exit(t_pars *pars, t_all *all, char *readline_return);
 
 /*Signal handler*/
 int		signals(t_pars *all);
@@ -270,7 +270,7 @@ int		signals(t_pars *all);
 int	pipes(t_pars *lst, int fd_stdin);
 int	redirect_input_delimitor(t_pars *lst);
 int	redirect_input(t_pars *lst);
-int	redirect_output(t_pars *lst, int input_fd);
+int	redirect_output(t_pars *lst, t_all *all, int input_fd);
 
 /*Utils.c*/
 void	free_arr(void **array, int size);

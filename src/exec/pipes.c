@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 13:10:16 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:46:13 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ int	redirect_input_delimitor(t_pars *lst)
 	{
 		signal(SIGINT, (sighandler_t)SIGINT);
 		rl_buff = ft_strdup("");
-		while (ft_strncmp(rl_buff, lst->next->next->DELIM,
-				ft_strlen(lst->next->next->DELIM)) != 0)
+		while (ft_strncmp(rl_buff, lst->next->next->here_doc,
+				ft_strlen(lst->next->next->here_doc)) != 0)
 		{
 			free(rl_buff);
 			rl_buff = readline("> ");
 			if (rl_buff == NULL)
 				break ;
-			if (ft_strncmp(rl_buff, lst->next->next->DELIM,
-					ft_strlen(lst->next->next->DELIM)) != 0)
+			if (ft_strncmp(rl_buff, lst->next->next->here_doc,
+					ft_strlen(lst->next->next->here_doc)) != 0)
 				ft_putendl_fd(rl_buff, open_fd);
 		}
 		free(rl_buff);
@@ -94,7 +94,7 @@ int	redirect_input(t_pars *lst)
 	Handles '>' and '>>' operators.
 	lst->next is the '>'/'>>' operator, and lst->next->next is the file to redirect to.
 */
-int	redirect_output(t_pars *lst, int input_fd)
+int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 {
 	int		i;
 	int		fd[2];
@@ -137,7 +137,10 @@ int	redirect_output(t_pars *lst, int input_fd)
 		close(fd[1]);
 		close(open_fd);
 		//close(STDOUT_FILENO);
-		execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+		if (lst->cmd->isBuiltin == true)
+			exec_builtin(lst, all->env_lst);//add env_list to t_pars
+		else
+			execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
 	}
 	else if (ch_pid < 0)
 	{
@@ -192,7 +195,10 @@ void	pipes_child_func(t_pars *lst, int input_fd, int **fds, int i)
     close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
     if (i != 0)	//Closes the Write end of the previous pipe, if it exists
         close(fds[i - 1][1]);
-    execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+	if (lst->cmd->isBuiltin == true)
+		exec_builtin(lst);
+	else
+    	execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
 }
 
 /*
@@ -222,12 +228,12 @@ int	pipes(t_pars *lst, int input_fd)
         if (i != 0)
             close(fds[i - 1][0]);
         input_fd = fds[i++][0];
-		if (lst->next && lst->next->next)
+		if (lst->next && lst->next->isOperator == true && lst->next->operator->pipe == true && lst->next->next)
         	lst = lst->next->next;	//to skip the pipe operator and go to the next cmd
 		else
 			break ;
     }
     while (len-- >= 0)
         wait(NULL);
-	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, len), 0);
+	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, len), 0);//len can't be passed for free_arr
 }
