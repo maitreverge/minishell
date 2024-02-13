@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 07:26:07 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 21:04:54 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 10:52:34 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,19 @@ void	free_firstnode_pars(t_pars **pars)
 	free(*pars);
 }
 
-t_pars *init_1st_node_pars(void)
+t_pars	*init_1st_node_pars(void)
 {
-	t_pars *new;
-	
+	t_pars	*new;
+
 	new = (t_pars *)malloc(sizeof(t_pars));
 	if (!new)
 		return (NULL);
-	new->last_exit_status = 0; // first node init exit status
-	
-	// ! init NULL sub-nodes
+	new->last_exit_status = 0;
 	new->cmd = NULL;
 	new->fl = NULL;
 	new->operator = NULL;
-
-	// ! NULL init adresses
 	new->prev = NULL;
 	new->next = NULL;
-		
 	return (new);
 }
 

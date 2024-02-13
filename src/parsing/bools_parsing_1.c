@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bools_parsing.c                                    :+:      :+:    :+:   */
+/*   bools_parsing_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:16:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/12 18:31:43 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 10:59:41 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 bool	is_token_operator(char *splited, char *cleaned)
 {
-	// ! checks if there is a operator intead of an operator within quotes
 	if (!ft_strcmp(splited, cleaned))
 	{
 		if (!ft_strcmp(cleaned, RED_IN))
@@ -31,15 +30,14 @@ bool	is_token_operator(char *splited, char *cleaned)
 	return (false);
 }
 
-bool is_token_redir_delim(char *cleaned)
+bool	is_token_redir_delim(char *cleaned)
 {
 	if (!ft_strcmp(cleaned, RED_IN_DELIM))
-		return true;
-	return false;
-	
+		return (true);
+	return (false);
 }
 
-bool is_token_pipe(char *splited, char *cleaned)
+bool	is_token_pipe(char *splited, char *cleaned)
 {
 	if (!ft_strcmp(splited, cleaned))
 	{
@@ -49,7 +47,7 @@ bool is_token_pipe(char *splited, char *cleaned)
 	return (false);
 }
 
-bool is_token_redir_out(char *splited, char *cleaned)
+bool	is_token_redir_out(char *splited, char *cleaned)
 {
 	if (!ft_strcmp(splited, cleaned))
 	{
@@ -61,90 +59,12 @@ bool is_token_redir_out(char *splited, char *cleaned)
 	return (false);
 }
 
-bool is_last_node_operator(t_pars **pars)
+bool	is_last_node_operator(t_pars **pars)
 {
-	t_pars *last;
+	t_pars	*last;
 
 	last = lstlast(*pars);
-
 	if (last->isOperator)
 		return (true);
 	return (false);
 }
-
-bool is_last_node_pipe(t_pars **pars)
-{
-	t_pars *last;
-
-	last = lstlast(*pars);
-
-	if (last->operator)
-	{
-		if (last->operator->pipe)
-			return (true);
-	}
-	return (false);
-}
-
-// ! checks if > >> and <
-bool is_last_node_redir(t_pars **pars)
-{
-	t_pars *last;
-
-	last = lstlast(*pars);
-
-	if (last->operator)
-	{
-		if (last->operator->redir_in || last->operator->redir_out || last->operator->redir_out_app)
-			return (true);
-	}
-	return (false);
-}
-
-bool is_last_node_r_in_delim(t_pars **pars)
-{
-	t_pars *last;
-
-	last = lstlast(*pars);
-
-	if (last->operator)
-	{
-		if (last->operator->redir_in_delim)
-			return (true);
-	}
-	return (false);
-}
-
-bool is_last_node_here_doc(t_pars **pars)
-{
-	t_pars *last;
-
-	last = lstlast(*pars);
-
-	if (last->isHereDoc)
-		return (true);
-	return (false);
-}
-
-bool is_last_node_cmd(t_pars **pars)
-{
-	t_pars *last;
-
-	last = lstlast(*pars);
-
-	if (last->isCommand)
-		return (true);
-	return (false);
-}
-
-bool is_last_node_file(t_pars **pars)
-{
-	t_pars *last;
-
-	last = lstlast(*pars);
-
-	if (last->isFile)
-		return (true);
-	return (false);
-}
-

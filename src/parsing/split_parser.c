@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/01 13:56:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 11:10:37 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static void	allocation(char **buffer, char const *str, size_t len_s)
 {
-	size_t	i; // global index
-	size_t	j; // index d'allocation de buffer char **
-	size_t	start; // little checkpoint for remembering reversed allocation starting point
-	char start_quote;
-	char end_quote;
+	char	start_quote;
+	char	end_quote;
+	size_t	i;
+	size_t	j;
+	size_t	start;
 
 	i = 0;
 	j = 0;
@@ -29,20 +29,15 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 	{
 		start_quote = 0;
 		end_quote = 0;
-
-		// ! skip whitespaces
 		while (is_whitespace(str[i]) && str[i])
 			i++;
-
-		// ! skip to the next following word
-		// need to kickstart start = i in each case
 		if (is_any_quote(str[i]) && str[i])
 		{
-			start = i; // indexing checkpoint
+			start = i;
 			while (is_any_quote(str[i]) && str[i])
 			{
 				start_quote = str[i];
-				while(str[i] && start_quote != end_quote)
+				while (str[i] && start_quote != end_quote)
 				{
 					i++;
 					if (str[i] == start_quote)
@@ -54,30 +49,30 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 				}
 				end_quote = 0;
 				if (is_whitespace(str[i]) || !str[i])
-					break;
-				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+					break ;
+				while (str[i] && !is_whitespace(str[i])
+					&& !is_any_quote(str[i]))
 					i++;
 				if (is_whitespace(str[i]) || !str[i])
-					break;
+					break ;
 			}
 		}
 		else if (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
 		{
-			start = i; // indexing checkpoint
+			start = i;
 			while (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
 			{
-				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+				while (str[i] && !is_whitespace(str[i])
+					&& !is_any_quote(str[i]))
 					i++;
-				
 				if (is_whitespace(str[i]) || !str[i])
-					break;
-				
+					break ;
 				if (is_any_quote(str[i]) && str[i])
 				{
 					while (is_any_quote(str[i]) && str[i])
 					{
 						start_quote = str[i];
-						while(str[i] && start_quote != end_quote)
+						while (str[i] && start_quote != end_quote)
 						{
 							i++;
 							if (str[i] == start_quote)
@@ -89,18 +84,16 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 						}
 						end_quote = 0;
 						if (is_whitespace(str[i]) || !str[i])
-							break;
-						
-						while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+							break ;
+						while (str[i] && !is_whitespace(str[i])
+							&& !is_any_quote(str[i]))
 							i++;
 						if (is_whitespace(str[i]) || !str[i])
-							break;
+							break ;
 					}
 				}
 			}
 		}
-
-		// ! allocation function alamano
 		if (j < len_s)
 		{
 			buffer[j] = ft_calloc(sizeof(char), (i - start + 1));
@@ -114,28 +107,25 @@ static void	allocation(char **buffer, char const *str, size_t len_s)
 
 size_t	parsing_countwords(char *str)
 {
-	size_t i; // global index
-	size_t result; // return value
-	char start_quote;
-	char end_quote;
-	
+	char	end_quote;
+	char	start_quote;
+	size_t	i;
+	size_t	result;
+
 	i = 0;
 	result = 0;
-
 	while (str[i])
 	{
 		start_quote = 0;
 		end_quote = 0;
 		while (is_whitespace(str[i]) && str[i])
 			i++;
-		
-		// ! first char is a quote
 		if (is_any_quote(str[i]) && str[i])
 		{
 			while (is_any_quote(str[i]) && str[i])
 			{
 				start_quote = str[i];
-				while(str[i] && start_quote != end_quote)
+				while (str[i] && start_quote != end_quote)
 				{
 					i++;
 					if (str[i] == start_quote)
@@ -149,42 +139,42 @@ size_t	parsing_countwords(char *str)
 				if (is_whitespace(str[i]) || !str[i])
 				{
 					result++;
-					break;
+					break ;
 				}
-				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+				while (str[i] && !is_whitespace(str[i])
+					&& !is_any_quote(str[i]))
 					i++;
 				if (is_whitespace(str[i]) || !str[i])
 				{
 					result++;
-					break;
+					break ;
 				}
 			}
 		}
-		else if (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i])) // MAYBE ADD WHITE
+		else if (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
 		{
-			while (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i])) // MAYBE ADD WHITE
+			while (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
 			{
-				while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+				while (str[i] && !is_whitespace(str[i])
+					&& !is_any_quote(str[i]))
 					i++;
-				
 				if (is_whitespace(str[i]) || !str[i])
 				{
 					result++;
-					break;
+					break ;
 				}
-				
 				if (is_any_quote(str[i]) && str[i])
 				{
 					while (is_any_quote(str[i]) && str[i])
 					{
 						start_quote = str[i];
-						while(str[i] && start_quote != end_quote)
+						while (str[i] && start_quote != end_quote)
 						{
 							i++;
 							if (str[i] == start_quote)
 							{
 								end_quote = start_quote;
-								i++; // ! added last minute
+								i++;
 								break ;
 							}
 						}
@@ -192,14 +182,15 @@ size_t	parsing_countwords(char *str)
 						if (is_whitespace(str[i]) || !str[i])
 						{
 							result++;
-							break;
+							break ;
 						}
-						while(str[i] && !is_whitespace(str[i]) && !is_any_quote(str[i]))
+						while (str[i] && !is_whitespace(str[i])
+							&& !is_any_quote(str[i]))
 							i++;
 						if (is_whitespace(str[i]) || !str[i])
 						{
 							result++;
-							break;
+							break ;
 						}
 					}
 				}
