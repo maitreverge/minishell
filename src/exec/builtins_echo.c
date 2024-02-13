@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 16:07:21 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:49:52 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*compare_env_var_with_envp(char *str, t_all *all)
 		{
 			env_split = ft_split(all->env_lst->original_envp, '=');
 			res = ft_strdup(env_split[1]);
-			free_tokens(env_split);
+			free_arr((void **)env_split, size_of_ptr_ptr((void **)env_split));
 			free(s);
 			return (res);
 		}
@@ -95,7 +95,7 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 	{
 		printf("\n");
 		//ft_putstr_fd("\n", fd);
-		free_tokens(tokens);
+		free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
 		return (0);
 	}
 	last = 0;
@@ -137,7 +137,8 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 			}
 			free(trimmed);
 		}
-		free_tokens(tokens);
+		free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
+		//free_tokens(tokens);
 		pars->prev->last_exit_status = 0;
 		return (0);
 	}
@@ -175,7 +176,8 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 		}
 		printf("\n");
 	}
-	free_tokens(tokens);
+	free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
+//	free_tokens(tokens);
 	pars->prev->last_exit_status = 0;
 	return (0);
 }
