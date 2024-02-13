@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 15:42:31 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:04:41 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_cd(char *s, t_env_list *envp)
 		homepath = ft_strjoin("/home/", getenv("USER"));
 		chdir(homepath);
 		free(homepath);
-		free_arr(tokens, sizeof(tokens) / sizeof(tokens[0]));
+		free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
 		ft_pwd(envp, false);
 		return (0);
 	}
@@ -42,7 +42,7 @@ int	ft_cd(char *s, t_env_list *envp)
 		chdir(tokens[1]);
 		ft_pwd(envp, false);
 	}
-	free_arr(tokens, sizeof(tokens) / sizeof(tokens[0]));
+	free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
 	return (0);
 }
 

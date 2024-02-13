@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 15:45:39 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:32:26 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,15 +258,21 @@ int		ft_exit(t_pars *pars, t_all *all, char *readline_return);
 int		signals(t_pars *all);
 
 /*Pipes, redirections*/
-int	pipes(t_pars *lst, int fd_stdin);
-int	redirect_input_delimitor(t_pars *lst);
-int	redirect_input(t_pars *lst);
-int	redirect_output(t_pars *lst, t_all *all, int input_fd);
+void	exec_builtin(t_pars *pars, t_all *all);
+int		pipes(t_pars *lst, t_all *all, int fd_stdin);
+int		redirect_input_delimitor(t_pars *lst);
+int		redirect_input(t_pars *lst);
+int		redirect_output(t_pars *lst, t_all *all, int input_fd);
 
 /*Utils.c*/
+size_t	size_of_ptr_ptr(void **arr);
 void	free_arr(void **array, int size);
 void	free_t_pars(t_pars **lst);
 size_t	lstlen(t_pars *lst);
 void	fork_error(int **fds, pid_t **ch_pid);
+
+/*Flo, but i don't want to touch his part of this .h*/
+t_pars	*init_1st_node_pars(void);
+void	free_firstnode_pars(t_pars **pars);
 
 #endif

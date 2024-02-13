@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 15:36:13 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:07:21 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*compare_env_var_with_envp(char *str, t_all *all)
 }
 
 /*Checks if the given string 's' is an environment variable*/
-int	check_if_env_var(char *s, t_all *all)
+int	check_if_env_var(char *s, t_all *all, t_pars *pars)
 {
 	char	*free_v;
 
@@ -59,13 +59,13 @@ int	check_if_env_var(char *s, t_all *all)
 			if (free_v != NULL)
 			{
 				free(free_v);
-				all->last_exit_status = 1;
+				pars->last_exit_status = 1;
 				return (1);
 			}
 			else
 			{
 				free(free_v);
-				all->last_exit_status = 2;
+				pars->last_exit_status = 2;
 				return (2);
 			}
 		}
@@ -107,7 +107,7 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 		while (tokens[i])
 		{
 			trimmed = ft_strtrim(tokens[i++], "\"");
-			if (check_if_env_var(trimmed, all) == 1)
+			if (check_if_env_var(trimmed, all, pars) == 1)
 			{
 				result = compare_env_var_with_envp(trimmed, all);
 				printf("%s", result);
@@ -124,7 +124,7 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 				trimmed[0] = pars->prev->last_exit_status;
 				trimmed[1] = '\0';
 			}
-			else if (check_if_env_var(trimmed, all) == 2)
+			else if (check_if_env_var(trimmed, all, pars) == 2)
 				continue ;
 			if (i == last - 1)
 				//ft_putstr_fd(trimmed, fd);
@@ -147,7 +147,7 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 		while (tokens[i])
 		{
 			trimmed = ft_strtrim(tokens[i++], "\"");
-			if (check_if_env_var(trimmed, all) == 1)
+			if (check_if_env_var(trimmed, all, pars) == 1)
 			{
 				result = compare_env_var_with_envp(trimmed, all);
 				printf("%s ", result);
@@ -163,7 +163,7 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 				trimmed[1] = '\0';
 			}
 			/*Has a $ sign, but isn't in the list of env vars.*/
-			else if (check_if_env_var(trimmed, all) == 2)
+			else if (check_if_env_var(trimmed, all, pars) == 2)
 				continue ;
 			//printf("%s ", trimmed);
 			char *temp;
