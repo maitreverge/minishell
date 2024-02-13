@@ -18,6 +18,13 @@ NAME = libft.a
 
 CC = cc
 
+# MakeFile Colors
+RESET = \033[0m
+BOLD = \033[1m
+RED = \033[91m
+GREEN = \033[92m
+YELLOW = \033[33m
+
 CFLAGS = -Wall -Wextra -Werror
 
 SRC = ft_memset.c \
@@ -76,16 +83,18 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 bonus: $(BONUSOBJ)
-	ar rcs $(NAME) $^
+	@ar rcs $(NAME) $^
 
 $(NAME): $(OBJ)
-	ar rcs $(NAME) $^
+	@ar rcs $(NAME) $^
 
 clean:
-	rm -f *.o
-	rm -f ./*/*.o
+	@echo "$(BOLD)$(YELLOW)🧹        Cleaned .o libft files      🧹$(RESET)"
+	@rm -f *.o
+	@rm -f ./*/*.o
 
 fclean: clean
-	rm -f $(NAME)
+	@echo "$(BOLD)$(YELLOW)🧹          Cleaned libft.a       🧹$(RESET)"
+	@rm -f $(NAME)
 
 re: fclean all

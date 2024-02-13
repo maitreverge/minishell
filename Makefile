@@ -6,11 +6,12 @@
 #    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/02/13 20:41:02 by flverge          ###   ########.fr        #
+#    Updated: 2024/02/13 21:05:37 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: all clean fclean re
+# Executable
+NAME = minishell
 
 # Compiler
 CC = cc
@@ -33,27 +34,37 @@ LDFLAGS = -L./lft -lft -lreadline
 #Specify libft's object files
 LFT = ./lft/*.o
 
-# Executable
-NAME = minishell
+# MakeFile Colors
+RESET = \033[0m
+BOLD = \033[1m
+RED = \033[91m
+GREEN = \033[92m
+YELLOW = \033[33m
 
 all: $(NAME)
 
 # Link object files into executable
 $(NAME): $(LFT) $(OBJ)
-	$(CC) $(SRC) -o $@ $(LDFLAGS) $(CFLAGS)
+	@echo "$(BOLD)$(RED)🛠️            Compiling minishell          🛠️$(RESET)"
+	@$(CC) $(SRC) -o $@ $(LDFLAGS) $(CFLAGS)
+	@echo "$(BOLD)$(GREEN)🥳      minishell fully compiled, ready to use      🥳$(RESET)"
 
 # Compile libft
 $(LFT):
-	$(MAKE) -C ./lft
+	@echo "$(BOLD)$(RED)🛠️            Compiling libft          🛠️$(RESET)"
+	@make -s -C ./lft
+	@echo "$(BOLD)$(GREEN)😎            Libft Compiled          😎$(RESET)"
 #$(MAKE) bonus -C ./lft
 
 # Clean up object files and executable
 clean:
-	rm -rf $(OBJ)
-	$(MAKE) -C ./lft clean
+	@rm -rf $(OBJ)
+	@make clean -s -C ./lft
 
 fclean: clean
-	rm -rf $(NAME)
-	$(MAKE) -C ./lft fclean
+	@rm -rf $(NAME)
+	@make fclean -s -C ./lft
 
 re: fclean all
+
+.PHONY: all clean fclean re
