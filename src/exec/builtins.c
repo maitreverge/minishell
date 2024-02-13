@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 22:13:57 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:42:31 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,20 @@ int	ft_cd(char *s, t_env_list *envp)
 		chdir(homepath);
 		free(homepath);
 		free_arr(tokens, sizeof(tokens) / sizeof(tokens[0]));
-		ft_pwd(envp, 1, false);
+		ft_pwd(envp, false);
 		return (0);
 	}
 	else if (tokens != NULL)
 	{
 		chdir(tokens[1]);
-		ft_pwd(envp, 1, false);
+		ft_pwd(envp, false);
 	}
 	free_arr(tokens, sizeof(tokens) / sizeof(tokens[0]));
 	return (0);
 }
 
 /*Also changes the env PWD variable to reflect any changes.*/
-void	ft_pwd(t_env_list *envp, int fd, bool print)
+void	ft_pwd(t_env_list *envp, bool print)// int fd,
 {
 	char		*cwd;
 	char		*new_pwd_env;
@@ -55,12 +55,13 @@ void	ft_pwd(t_env_list *envp, int fd, bool print)
 
 	cwd = NULL;
 	cwd = getcwd(cwd, 0);
-	if (fd < 0)
-		return (free_s_env(&envp), exit(EXIT_FAILURE), 1);
+	// if (fd < 0)
+	// 	return (free_s_env(&envp), exit(EXIT_FAILURE), 1);
 	if (print == true)
 	{
-		ft_putstr_fd(cwd, fd);
-		ft_putchar_fd('\n', fd);	
+		printf("%s\n", cwd);
+		// ft_putstr_fd(cwd, fd);
+		// ft_putchar_fd('\n', fd);	
 	}
 	new_pwd_env = ft_strjoin("PWD=", cwd);
 	temp = envp;
@@ -78,28 +79,29 @@ void	ft_pwd(t_env_list *envp, int fd, bool print)
 
 /*Displays a list of the environment variables for the
 	current terminal session.*/
-int	ft_env(t_all *all, int fd)
+int	ft_env(t_all *all)//, int fd
 {
 	t_env_list *temp;
 
 	temp = all->env_lst;
-	if (fd < 0)
-	{
-		free_s_env(&all->env_lst);
-		perror("ft_env: fd < 0");
-		return (exit(EXIT_FAILURE), 1);
-	}
+	// if (fd < 0)
+	// {
+	// 	free_s_env(&all->env_lst);
+	// 	perror("ft_env: fd < 0");
+	// 	return (exit(EXIT_FAILURE), 1);
+	// }
 	while (all->env_lst != NULL)
 	{
-		ft_putstr_fd(all->env_lst->original_envp, fd);
-		ft_putchar_fd('\n', fd);
+		printf("%s\n", all->env_lst->original_envp);
+		// ft_putstr_fd(all->env_lst->original_envp, fd);
+		// ft_putchar_fd('\n', fd);
 		all->env_lst = all->env_lst->next;
 	}
 	all->env_lst = temp;
 	return (0);
 }
 
-int	ft_exit(t_all *all, char *readline_return, int fd)
+int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
 {
 	char				**s;
 	int					i;
@@ -110,57 +112,58 @@ int	ft_exit(t_all *all, char *readline_return, int fd)
 		i++;
 	if (i > 2)
 	{
-		ft_putstr_fd("exit: too many arguments\n", fd);
+		printf("exit: too many arguments\n");
+		// ft_putstr_fd("exit: too many arguments\n", fd);
 		return (0);
 	}
 	if (readline_return != NULL)
 		free(readline_return);
 	free_s_env(&all->env_lst);
-	exit(all->last_exit_status);
+	exit(pars->prev->last_exit_status);
 }
 
-int main(int ac, char **av, char **envp)
-{
-	(void)ac;
-	(void)av;
-	t_all		all;
-	t_pars		pars;
+// int main(int ac, char **av, char **envp)
+// {
+// 	(void)ac;
+// 	(void)av;
+// 	t_all		all;
+// 	t_pars		pars;
 
-	copy_env_into_list(&all.env_lst, envp);
-	all.last_exit_status = EMPTY_EXIT_LIST;
-	all.readline_line = NULL;
-	while (1)
-	{
-		signals(&all);
-		all.readline_line = readline("minishell$ ");
-		if (all.readline_line == NULL)	//checks for ctrl+d
-		{
-			printf("exit\r");
-			free_s_env(&all.env_lst);
-			if (all.readline_line != NULL)
-				free(all.readline_line);
-			return (exit(0), 1);
-		}
-		// if (ft_strchr(all.readline_line, '|'))
-		// 	pipes(ft_split(all.readline_line, '|'), envp);
-		if (ft_strncmp(all.readline_line, "echo", 4) == 0)
-			ft_echo(all.readline_line, &all, &pars, 1);	//replace 1 with fd
-		else if (ft_strncmp(all.readline_line, "cd", 2) == 0)
-			ft_cd(all.readline_line, all.env_lst);
-		else if (ft_strncmp(all.readline_line, "pwd", 3) == 0)
-			ft_pwd(all.env_lst, 1, true);	//replace 1 with fd
-		else if (ft_strncmp(all.readline_line, "env", 3) == 0)
-			ft_env(&all, 1);
-		else if (ft_strncmp(all.readline_line, "export", 6) == 0)
-			ft_export(&all.env_lst, all.readline_line);
-		else if (ft_strncmp(all.readline_line, "unset", 5) == 0)
-			ft_unset(&all.env_lst, all.readline_line);
-		else if (ft_strncmp(all.readline_line, "exit", 4) == 0)
-			ft_exit(&all, all.readline_line, 1);
-		add_history(all.readline_line);
-		free(all.readline_line);
-	}
-	free_s_env(&all.env_lst);
-	free(all.readline_line);
-	return 0;
-}
+// 	copy_env_into_list(&all.env_lst, envp);
+// 	all.last_exit_status = EMPTY_EXIT_LIST;
+// 	all.readline_line = NULL;
+// 	while (1)
+// 	{
+// 		signals(&all);
+// 		all.readline_line = readline("minishell$ ");
+// 		if (all.readline_line == NULL)	//checks for ctrl+d
+// 		{
+// 			printf("exit\r");
+// 			free_s_env(&all.env_lst);
+// 			if (all.readline_line != NULL)
+// 				free(all.readline_line);
+// 			return (exit(0), 1);
+// 		}
+// 		// if (ft_strchr(all.readline_line, '|'))
+// 		// 	pipes(ft_split(all.readline_line, '|'), envp);
+// 		if (ft_strncmp(all.readline_line, "echo", 4) == 0)
+// 			ft_echo(all.readline_line, &all, &pars, 1);	//replace 1 with fd
+// 		else if (ft_strncmp(all.readline_line, "cd", 2) == 0)
+// 			ft_cd(all.readline_line, all.env_lst);
+// 		else if (ft_strncmp(all.readline_line, "pwd", 3) == 0)
+// 			ft_pwd(all.env_lst, 1, true);	//replace 1 with fd
+// 		else if (ft_strncmp(all.readline_line, "env", 3) == 0)
+// 			ft_env(&all, 1);
+// 		else if (ft_strncmp(all.readline_line, "export", 6) == 0)
+// 			ft_export(&all.env_lst, all.readline_line);
+// 		else if (ft_strncmp(all.readline_line, "unset", 5) == 0)
+// 			ft_unset(&all.env_lst, all.readline_line);
+// 		else if (ft_strncmp(all.readline_line, "exit", 4) == 0)
+// 			ft_exit(&all, all.readline_line, 1);
+// 		add_history(all.readline_line);
+// 		free(all.readline_line);
+// 	}
+// 	free_s_env(&all.env_lst);
+// 	free(all.readline_line);
+// 	return 0;
+// }
