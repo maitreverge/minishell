@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 14:04:05 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 18:42:25 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
 void	search_redir_in(t_pars **pars, char **splited, char **cleaned);
 bool	testing_builtin(char *cleaned);
-char *join_path_command(char *cleaned, char **paths);
+char	*join_path_cmd(char *cleaned, char **paths);
 
 
 //extract_paths
@@ -195,7 +195,7 @@ int		lstsize(t_pars *lst);
 
 // bools_parsing
 
-bool	is_token_operator(char *splited, char *cleaned);
+bool	is_token_opr(char *splited, char *cleaned);
 bool is_token_redir_delim(char *cleaned);
 bool is_last_node_operator(t_pars **pars);
 bool is_last_node_pipe(t_pars **pars);

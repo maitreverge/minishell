@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:58:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 11:12:02 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 18:39:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ bool	testing_builtin(char *cleaned)
 	return (false);
 }
 
-char	*join_path_command(char *cleaned, char **paths)
+char	*join_path_cmd(char *cleaned, char **paths)
 {
 	char	*real_path;
 	int		j;
