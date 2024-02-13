@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 21:09:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 13:27:45 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,31 @@ typedef	struct	s_operator
 	bool redir_out;
 	bool redir_out_app;
 } 	t_operator;
-
 // ! Utils structures
+
+
+// ! Master Struct for parsing
+typedef	struct	s_pars
+{
+	// only the first node
+	bool MasterKill;
+	int		last_exit_status; // variable of $?
+
+	bool isDelim;//For '<<' operator
+	char *DELIM;//same
+
+	bool	isCommand;
+	struct s_command	*cmd;
+	
+	bool isFile;
+	struct s_file *fl;
+	
+	bool isOperator;
+	struct s_operator *operator;
+	
+	struct s_pars *prev;
+	struct s_pars *next;
+}	t_pars;
 
 typedef	struct	s_utils
 {
@@ -248,20 +271,26 @@ void	copy_env_into_list(t_env_list **env, char **envp);
 
 /*Builtins*/
 void	free_tokens(char **t);
-int		ft_echo(char *s, t_all *all, int fd);
+int		ft_echo(char *s, t_all *all, t_pars *pars, int fd);
 int		ft_cd(char *path, t_env_list *envp);
-int		ft_pwd(t_env_list *envp, int fd, bool print);
+void	ft_pwd(t_env_list *envp, int fd, bool print);
 void	ft_export(t_env_list **envp, char *line);
 void	ft_unset(t_env_list **envp, char *line);
 int		ft_exit(t_all *all, char *readline_return, int fd);
 
 /*Signal handler*/
-int		signals(t_all *all);
+int		signals(t_pars *all);
 
 /*Pipes, redirections*/
-void	pipes(t_pars *lst, int fd_stdin);
+int	pipes(t_pars *lst, int fd_stdin);
+int	redirect_input_delimitor(t_pars *lst);
+int	redirect_input(t_pars *lst);
+int	redirect_output(t_pars *lst, int input_fd);
 
 /*Utils.c*/
 void	free_arr(void **array, int size);
+void	free_t_pars(t_pars **lst);
+size_t	lstlen(t_pars *lst);
+void	fork_error(int **fds, pid_t **ch_pid);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/01/29 15:50:38 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:14:02 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 // void	print_list(t_env_list *envp)
 // {
@@ -18,7 +18,7 @@
 
 // 	while (envp != NULL)
 // 	{
-// 		printf("%s\n", envp->env_line);
+// 		printf("%s\n", envp->original_envp);
 // 		envp = envp->next;
 // 	}
 // 	envp = temp;
@@ -34,11 +34,11 @@ void	ft_unset(t_env_list **envp, char *line)
 	prev = temp;////
 	if (line == NULL)
 	{
-		free_list(*envp);
+		free_s_env(envp);
 		perror("ft_unset error: line == NULL");
 		exit(EXIT_FAILURE);
 	}
-	while (temp->next != NULL && ft_strncmp(temp->env_line, line, ft_strlen(line)) != 0)
+	while (temp->next != NULL && ft_strncmp(temp->original_envp, line, ft_strlen(line)) != 0)
 	{
 		prev = temp;
 		temp = temp->next;
@@ -46,13 +46,13 @@ void	ft_unset(t_env_list **envp, char *line)
 	if (temp != NULL)
 	{
 		prev->next = temp->next;
-		free(temp->env_line);
+		free(temp->original_envp);
 		free(temp);
 	}	
 }
 
-/*Adds 's' to the list of environment variables*/
-void	ft_export(t_env_list **envp, char *line)//// void	ft_export(t_env_list *envp, char *key, char *value)
+/*Adds 'line' to the list of environment variables*/
+void	ft_export(t_env_list **envp, char *line)
 {
 	t_env_list 	*temp;
 	char 		**s;
