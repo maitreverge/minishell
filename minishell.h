@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 13:27:45 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/13 13:57:51 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,56 +114,6 @@ typedef	struct	s_operator
 // ! Utils structures
 
 
-// ! Master Struct for parsing
-typedef	struct	s_pars
-{
-	// only the first node
-	bool MasterKill;
-	int		last_exit_status; // variable of $?
-
-	bool isDelim;//For '<<' operator
-	char *DELIM;//same
-
-	bool	isCommand;
-	struct s_command	*cmd;
-	
-	bool isFile;
-	struct s_file *fl;
-	
-	bool isOperator;
-	struct s_operator *operator;
-	
-	struct s_pars *prev;
-	struct s_pars *next;
-}	t_pars;
-
-typedef	struct	s_utils
-{
-	char	**result; // final parsing
-	char	*to_allocate; // ! useful ??
-	int		i;
-	int		j;
-	int		k;
-	char	starting_quote;
-	char	end_quote;
-	int		real_len;
-	
-}	t_utils;
-
-typedef struct s_env_list
-{
-	char *original_envp; // ! add original value
-	char *key;
-	char *value;
-	struct s_env_list *next;
-}	t_env_list;
-
-typedef struct s_alloc
-{
-	char **splitted_prompt;
-	char **cleaned_prompt;
-	char **paths;
-}	t_alloc;
 
 // ! Functions prototypes
 
