@@ -26,7 +26,6 @@ void	print_final_struct(t_pars **pars)
 		else if (cur->isHereDoc)
 		{
 			printf("CURRENT NODE IS A DELIM STRING\n\n");
-			printf("\033[33mOperator = << \n\033[0m");
 			printf("\033[33mDELIM value = %s\n\033[0m", cur->here_doc);
 		}
 		else if (cur->isFile)
