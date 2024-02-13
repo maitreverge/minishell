@@ -6,38 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 14:57:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 15:27:20 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-// void	sub_new_node_1(t_pars **node, t_alloc *u, int *i)
-// {
-// 	t_pars *new_node;
-
-// 	new_node = *node;
-// 	new_node->isCommand = true;
-// 	new_node->isFile = false;
-// 	new_node->fl = NULL;
-// 	new_node->isOperator = false;
-// 	new_node->operator = NULL;
-// 	new_node->isHereDoc = false;
-// 	new_node->here_doc = NULL;
-// 	new_node->prev = NULL;
-// 	new_node->next = NULL;
-// 	new_node->cmd->command_name = u->cleaned_prompt[*i];
-// 	if (testing_builtin(u->cleaned_prompt[*i]))
-// 	{
-// 		new_node->cmd->isBuiltin = true;
-// 		new_node->cmd->command_path = u->cleaned_prompt[*i];
-// 	}
-// 	else
-// 	{
-// 		new_node->cmd->command_path = join_path_command(u->cleaned_prompt[*i], u->paths);
-// 		new_node->cmd->isBuiltin = false;
-// 	}
-// }
 
 void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 {
