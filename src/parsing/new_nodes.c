@@ -6,15 +6,37 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 15:27:20 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 15:42:15 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+t_pars *initialize_new_node(t_alloc *u, int i)
+{
+    t_pars *new_node;
+    t_command *new_node_command;
+	
+    new_node_command = malloc(sizeof(t_command));
+    new_node = malloc(sizeof(t_pars));
+    if (!new_node || !new_node_command)
+        return NULL;
+    new_node->isCommand = true;
+    new_node->cmd = new_node_command;
+    new_node->isFile = false;
+    new_node->fl = NULL;
+    new_node->isOperator = false;
+    new_node->operator = NULL;
+    new_node->isHereDoc = false;
+    new_node->here_doc = NULL;
+    new_node->prev = NULL;
+    new_node->next = NULL;
+    new_node->cmd->command_name = u->cleaned_prompt[i];
+    return (new_node);
+}
+
 void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 {
-	t_command	*new_node_command;
 	t_alloc		*u;
 	t_pars		*new_node;
 	int			start;
@@ -22,23 +44,8 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 
 	u = *utils;
 	j = 0;
-	new_node = malloc(sizeof(t_pars));
-	if (!new_node)
-		return ;
-	new_node_command = malloc(sizeof(t_command));
-	if (!new_node_command)
-		return ;
-	new_node->isCommand = true;
-	new_node->cmd = new_node_command;
-	new_node->isFile = false;
-	new_node->fl = NULL;
-	new_node->isOperator = false;
-	new_node->operator = NULL;
-	new_node->isHereDoc = false;
-	new_node->here_doc = NULL;
-	new_node->prev = NULL;
-	new_node->next = NULL;
-	new_node->cmd->command_name = u->cleaned_prompt[*i];
+
+	new_node = initialize_new_node(u, *i);
 	if (testing_builtin(u->cleaned_prompt[*i]))
 	{
 		new_node->cmd->isBuiltin = true;
@@ -71,6 +78,18 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	}
 	lstadd_back(pars, new_node);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 void	new_node_file(t_pars **pars, char *cleaned)
 {
