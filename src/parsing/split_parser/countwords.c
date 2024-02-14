@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 19:51:26 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 19:53:13 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 11:35:24 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 size_t	parsing_countwords(char *str)
 {
-	char	end_quote;
-	char	start_quote;
-	size_t	i;
+	int	start_quote;
+	int	end_quote;
+	int	i;
 	size_t	result;
 
 	i = 0;

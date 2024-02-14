@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 10:04:22 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 11:30:12 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,9 @@ void	free_s_utils(t_utils **utils)
 	current = *utils;
 	free_split(current->result);
 	free(current);
+}
+
+void	free_firstnode_pars(t_pars **pars)
+{
+	free(*pars);
 }
