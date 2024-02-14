@@ -6,7 +6,7 @@
 #    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/02/13 21:05:37 by flverge          ###   ########.fr        #
+#    Updated: 2024/02/14 09:32:32 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,15 @@ NAME = minishell
 CC = cc
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -g
 
 # Source files
 SRC = $(wildcard src/exec/*.c) \
     $(wildcard src/utils/*.c) \
     $(wildcard src/parsing/*.c) \
+    $(wildcard src/parsing/bools_parsing/*.c) \
+    $(wildcard src/parsing/new_nodes/*.c) \
+    $(wildcard src/parsing/split_parser/*.c) \
     src/minishell.c
 
 # Object files
