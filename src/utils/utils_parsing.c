@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 09:22:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 09:29:53 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,6 @@ void	free_s_env(t_env_list **env)
 	}
 	// free(env);
 }
-
-void free_t_cmd(t_command *cmd)
-{
-	free(cmd->command_name);
-	free(cmd->command_path);
-	free_arr((void **)cmd->name_options_args, size_of_ptr_ptr((void **)cmd->name_options_args));
-}
-
-// void free_t_file(t_file *file)
-// {
-// 	free(file->file_name);
-// }
 
 void	free_t_pars(t_pars **lst)
 {
