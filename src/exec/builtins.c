@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 14:20:54 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 15:04:27 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	ft_env(t_all *all)//, int fd
 	return (0);
 }
 
+/*Remember to also free all!!!*/
 int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
 {
 	char				**s;

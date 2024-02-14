@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 14:53:48 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 15:58:48 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,22 +91,23 @@ int	check_next_operator(t_pars *lst)
 	return (0);
 }
 
-void	exec_builtin(t_pars *pars, t_all *all)
+int	exec_builtin(t_pars *pars, t_all *all)
 {
 	if (ft_strncmp(pars->cmd->name_options_args[0], "echo", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-		ft_echo(all->readline_line, all, pars);	//replace 1 with fd
+			ft_echo(all->readline_line, all, pars);
 	else if (ft_strncmp(pars->cmd->name_options_args[0], "cd", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-		ft_cd(all->readline_line, all->env_lst);
+			ft_cd(all->readline_line, all->env_lst);
 	else if (ft_strncmp(pars->cmd->name_options_args[0], "pwd", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-		ft_pwd(&all->env_lst, true);	//replace 1 with fd
+			ft_pwd(&all->env_lst, true);
 	else if (ft_strncmp(pars->cmd->name_options_args[0], "env", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-		ft_env(all);
+			ft_env(all);
 	else if (ft_strncmp(pars->cmd->name_options_args[0], "export", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-		ft_export(&all->env_lst, all->readline_line);
+			ft_export(&all->env_lst, all->readline_line);
 	else if (ft_strncmp(pars->cmd->name_options_args[0], "unset", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-		ft_unset(&all->env_lst, all->readline_line);
-	else if (ft_strncmp(pars->cmd->name_options_args[0], "exit", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-		ft_exit(pars, all, all->readline_line);
+			ft_unset(&all->env_lst, all->readline_line);
+	if (ft_strncmp(pars->cmd->name_options_args[0], "exit", ft_strlen(pars->cmd->name_options_args[0])) == 0)
+			ft_exit(pars, all, all->readline_line);
+	return (0);
 }
 
 void	exec_external_func(t_pars *lst)
@@ -168,12 +169,6 @@ int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	/*
-	a node of type struct could not be init on the stack, it need to
-	persist on the heap until the end of minishell.
-	That's why i changed it to *all instead of all, because malloc
-	can't allocate something that is not a pointer
-	*/
 	t_all		*all;
 	t_utils		*utils;
 	t_pars		*pars;
@@ -190,6 +185,7 @@ int	main(int ac, char **av, char **envp)
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
+			//there are certainly things here that i forgot to free
 			printf("exit\r");
 			free_s_env(&all->env_lst);
 			free_firstnode_pars(&pars);
@@ -205,13 +201,13 @@ int	main(int ac, char **av, char **envp)
 		}
 		// pars = pars->next;
 		if (check_next_operator(pars->next) == 1)
-			pipes(pars->next, all, -1);
+			pipes(&pars->next, all, -1);
 		else if (check_next_operator(pars->next) == 2)
-			redirect_input(pars->next);
+			redirect_input(&pars->next);
 		else if (check_next_operator(pars->next) == 3)
-			redirect_input_delimitor(pars->next);
+			redirect_input_delimitor(&pars->next);
 		else if (check_next_operator(pars->next) == 4)
-			redirect_output(pars->next, all, -1);
+			redirect_output(&pars->next, all, -1);
 		else //there are no operators
 		{
 			if (pars && pars->next && pars->next->cmd->isBuiltin == true)

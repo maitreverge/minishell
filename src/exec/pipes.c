@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 16:26:41 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 16:03:46 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	Handles '<<' operator.
 	lst->next is the '<<' op., and lst->next->next is the file to redirect from.
 */
-int	redirect_input_delimitor(t_pars *lst)
+int	redirect_input_delimitor(t_pars **lst)
 {
 	int		open_fd;
 	pid_t	ch_pid;
@@ -33,23 +33,23 @@ int	redirect_input_delimitor(t_pars *lst)
 	{
 		signal(SIGINT, (sighandler_t)SIGINT);
 		rl_buff = ft_strdup("");
-		while (ft_strncmp(rl_buff, lst->next->next->here_doc,
-				ft_strlen(lst->next->next->here_doc)) != 0)
+		while (ft_strncmp(rl_buff, (*lst)->next->next->here_doc,
+				ft_strlen((*lst)->next->next->here_doc)) != 0)
 		{
 			free(rl_buff);
 			rl_buff = readline("> ");
 			if (rl_buff == NULL)
 				break ;
-			if (ft_strncmp(rl_buff, lst->next->next->here_doc,
-					ft_strlen(lst->next->next->here_doc)) != 0)
+			if (ft_strncmp(rl_buff, (*lst)->next->next->here_doc,
+					ft_strlen((*lst)->next->next->here_doc)) != 0)
 				ft_putendl_fd(rl_buff, open_fd);
 		}
 		free(rl_buff);
 		close(open_fd);
-		lst->next->next->isFile = true;
-		lst->next->next->fl->file_exist = true;
-		lst->next->next->fl->file_name = "/tmp/a0987654321aaa.tmp";
-		lst->next->next->fl->auth_r = true;
+		(*lst)->next->next->isFile = true;
+		(*lst)->next->next->fl->file_exist = true;
+		(*lst)->next->next->fl->file_name = "/tmp/a0987654321aaa.tmp";
+		(*lst)->next->next->fl->auth_r = true;
 		redirect_input(lst);
 		close(open_fd);
 	}
@@ -63,17 +63,17 @@ int	redirect_input_delimitor(t_pars *lst)
 	Handles '<' operator.
 	lst->next is the '<' op., and lst->next->next is the file to redirect from.
 */
-int	redirect_input(t_pars *lst)
+int	redirect_input(t_pars **lst)
 {
 	int		open_fd;
 	pid_t	ch_pid;
 	//int		fds[2];
 
-	if (lst->next->next->fl->file_exist == false)
+	if ((*lst)->next->next->fl->file_exist == false)
 		return (ft_putendl_fd("Error: redirect input: nonexistant file.", 2), 1);
-	if (lst->isCommand == false)
+	if ((*lst)->isCommand == false)
 		return (ft_putendl_fd("Error: redirect input: redir to file.", 2), 1);
-	open_fd = open(lst->next->next->fl->file_name, O_RDONLY, S_IRUSR);
+	open_fd = open((*lst)->next->next->fl->file_name, O_RDONLY, S_IRUSR);
 	if (open_fd == -1)
 		return (perror("open"), 1);
 	dup2(open_fd, STDIN_FILENO);
@@ -81,11 +81,11 @@ int	redirect_input(t_pars *lst)
 		return (perror("close"), 1);
 	ch_pid = fork();
 	if (ch_pid == 0)
-		execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
 	else if (ch_pid < 0)
 	{
 		perror("fork");
-		free_t_pars(&lst);
+		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
 	wait(NULL);
@@ -96,7 +96,7 @@ int	redirect_input(t_pars *lst)
 	Handles '>' and '>>' operators.
 	lst->next is the '>'/'>>' operator, and lst->next->next is the file to redirect to.
 */
-int	redirect_output(t_pars *lst, t_all *all, int input_fd)
+int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 {
 	// int		i;
 	int		fd[2];
@@ -106,7 +106,7 @@ int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 	if (pipe(fd) < 0)
     {
 		perror("pipe");
-		free_t_pars(&lst);
+		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
 	if (input_fd >= 0)
@@ -115,7 +115,7 @@ int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 		{
 			perror("dup2");
 			close(fd[0]);
-			free_t_pars(&lst);
+			free_t_pars(lst);
 			exit(EXIT_FAILURE);
 		}
 		close(fd[0]);
@@ -124,14 +124,14 @@ int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 	ch_pid = fork();
 	if (ch_pid == 0)
 	{
-		if (lst->next == NULL)
+		if ((*lst)->next == NULL)
 			return (ft_putendl_fd("Error, next is null.", 2), 1);
-		else if (lst->next->next == NULL)
+		else if ((*lst)->next->next == NULL)
 			return (ft_putendl_fd("Error, next next is null.", 2), 1);
-		if (lst->next && lst->next->next && lst->next->next->fl->auth_w == true && lst->next->operator->redir_out == true)
-			open_fd = open(lst->next->next->fl->file_name, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
-		else if (lst->next && lst->next->next && lst->next->next->fl->auth_w == true && lst->next->operator->redir_out_app == true)
-			open_fd = open(lst->next->next->fl->file_name, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+		if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out == true)
+			open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+		else if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out_app == true)
+			open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 		else
 			return (ft_putendl_fd("Error, insufficient permissions.", 2), 1);
 		dup2(open_fd, fd[1]);
@@ -139,15 +139,15 @@ int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 		close(fd[1]);
 		close(open_fd);
 		//close(STDOUT_FILENO);
-		if (lst->cmd->isBuiltin == true)
-			exec_builtin(lst, all);//add env_list to t_pars
+		if ((*lst)->cmd->isBuiltin == true)
+			exec_builtin(*lst, all);//add env_list to t_pars
 		else
-			execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
 	}
 	else if (ch_pid < 0)
 	{
 		perror("fork");
-		free_t_pars(&lst);
+		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
 	if (input_fd != -1)
@@ -161,13 +161,13 @@ int	redirect_output(t_pars *lst, t_all *all, int input_fd)
 	Allocates space for fds and child pid array,
 		and creates the pipe links in fds
 */
-int	**create_pipes(t_pars *lst, pid_t **ch_pid)
+int	**create_pipes(t_pars **lst, pid_t **ch_pid)
 {
     int		len;
     int		i;
     int 	**fds;
 
-	len = lstlen(lst);
+	len = lstlen(*lst);
 	*ch_pid = ft_calloc(sizeof(pid_t), len);
 	fds = ft_calloc(sizeof(int *), len);
 	i = 0;
@@ -177,7 +177,7 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
         if (pipe(fds[i]) == -1)
         {
             perror("pipe");
-			free_t_pars(&lst);
+			free_t_pars(lst);
 			free_arr((void **)fds, size_of_ptr_ptr((void **)fds));
             exit(EXIT_FAILURE);
         }
@@ -186,24 +186,24 @@ int	**create_pipes(t_pars *lst, pid_t **ch_pid)
     return (fds);
 }
 
-void	pipes_child_func(t_pars *lst, t_all *all, int input_fd, int **fds, int i)
+void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 {
 	if (input_fd != -1)
     {
 		dup2(input_fd, STDIN_FILENO);
         close(input_fd);
     }
-    if (lst->next != NULL && lst->next->next != NULL && lst->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
+    if ((*lst)->next != NULL && (*lst)->next->next != NULL && (*lst)->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
         dup2(fds[i][1], STDOUT_FILENO);
     close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
     if (i != 0)//Closes the Write end of the previous pipe, if it exists
 	{
         close(fds[i - 1][1]);
 	}
-	if (lst->cmd->isBuiltin == true)
-		exec_builtin(lst, all);
+	if ((*lst)->cmd->isBuiltin == true)
+		exec_builtin(*lst, all);
 	else
-    	execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL);
+    	execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
 }
 
 /*
@@ -211,7 +211,7 @@ void	pipes_child_func(t_pars *lst, t_all *all, int input_fd, int **fds, int i)
 	Input_fd is -1 when pipes() called for the first time,
 		meaning we don't redirect input this iteration.
 */
-int	pipes(t_pars *lst, t_all *all, int input_fd)
+int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
     int 	i;
 	int		len;
@@ -221,8 +221,8 @@ int	pipes(t_pars *lst, t_all *all, int input_fd)
 	//check_masterkill(lst);
 	i = 0;
 	fds = create_pipes(lst, &ch_pid);
-	len = lstlen(lst); // minus num_of_pipes. lstlen is too long
-    while (lst != NULL && lst->isCommand == true)
+	len = lstlen(*lst); // minus num_of_pipes. lstlen is too long
+    while ((*lst) != NULL && (*lst)->isCommand == true)
 	{
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
@@ -233,8 +233,8 @@ int	pipes(t_pars *lst, t_all *all, int input_fd)
         if (i != 0)
             close(fds[i - 1][0]);
         input_fd = fds[i++][0];
-		if (lst->next && lst->next->isOperator == true && lst->next->operator->pipe == true && lst->next->next)
-        	lst = lst->next->next;	//to skip the pipe operator and go to the next cmd
+		if ((*lst)->next && (*lst)->next->isOperator == true && (*lst)->next->operator->pipe == true && (*lst)->next->next)
+        	(*lst) = (*lst)->next->next;	//to skip the pipe operator and go to the next cmd
 		else
 			break ;
     }
