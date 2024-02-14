@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 15:58:48 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 18:25:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,21 +93,20 @@ int	check_next_operator(t_pars *lst)
 
 int	exec_builtin(t_pars *pars, t_all *all)
 {
-	if (ft_strncmp(pars->cmd->name_options_args[0], "echo", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-			ft_echo(all->readline_line, all, pars);
-	else if (ft_strncmp(pars->cmd->name_options_args[0], "cd", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-			ft_cd(all->readline_line, all->env_lst);
-	else if (ft_strncmp(pars->cmd->name_options_args[0], "pwd", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-			ft_pwd(&all->env_lst, true);
-	else if (ft_strncmp(pars->cmd->name_options_args[0], "env", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-			ft_env(all);
-	else if (ft_strncmp(pars->cmd->name_options_args[0], "export", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-			ft_export(&all->env_lst, all->readline_line);
-	else if (ft_strncmp(pars->cmd->name_options_args[0], "unset", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-			ft_unset(&all->env_lst, all->readline_line);
-	if (ft_strncmp(pars->cmd->name_options_args[0], "exit", ft_strlen(pars->cmd->name_options_args[0])) == 0)
-			ft_exit(pars, all, all->readline_line);
-	return (0);
+	if (!ft_strcmp(pars->cmd->name_options_args[0], "echo"))
+		ft_echo(all->readline_line, all, pars);	//replace 1 with fd
+	else if (!ft_strcmp(pars->cmd->name_options_args[0], "cd"))
+		ft_cd(all->readline_line, all->env_lst);
+	else if (!ft_strcmp(pars->cmd->name_options_args[0], "pwd"))
+		ft_pwd(&all->env_lst, true);	//replace 1 with fd
+	else if (!ft_strcmp(pars->cmd->name_options_args[0], "env"))
+		ft_env(all);
+	else if (!ft_strcmp(pars->cmd->name_options_args[0], "export"))
+		ft_export(&all->env_lst, all->readline_line);
+	else if (!ft_strcmp(pars->cmd->name_options_args[0], "unset"))
+		ft_unset(&all->env_lst, all->readline_line);
+	else if (!ft_strcmp(pars->cmd->name_options_args[0], "exit"))
+		ft_exit(pars, all, all->readline_line);
 }
 
 void	exec_external_func(t_pars *lst)
@@ -120,14 +119,14 @@ void	exec_external_func(t_pars *lst)
 		if (execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL) < 0)
 		{
 			perror("execve");
-			free_t_pars(&lst);
+			// free_t_pars(&lst);
 			return ;
 		}
 	}
 	else if (ch_pid < 0)
 	{
 		perror("fork");
-		free_t_pars(&lst);
+		// free_t_pars(&lst);
 		return ;
 	}
 	wait(NULL);
@@ -196,7 +195,7 @@ int	main(int ac, char **av, char **envp)
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
 		if (pars->MasterKill == true)
 		{
-			//probably free some stuff
+			free_firstnode_pars(&pars);
 			break ;
 		}
 		// pars = pars->next;

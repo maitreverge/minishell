@@ -37,9 +37,12 @@ a bit of ✨norm✨
 
 
 
-Gestion du $?
+TO DO :
 
-init master struct avant le parsing
+VALGRIND sur echo abc
 
-faire un edge case dans mon parsing
+Verifier la gestion des authorisations de fichiers
+
+
+Allouer NULL sur 'init struct de pars sur tout les bools et les sous_noeuds
 
