@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:28:16 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 09:36:24 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 10:04:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,18 @@ void free_t_cmd(t_command *cmd) // ! function not referenced into minishell.h
 void free_t_file(t_file *file) // ! function not referenced into minishell.h
 {
 	free(file->file_name);
+}
+
+void	free_t_pars(t_pars **lst)
+{
+	t_pars	*temp;
+
+	while ((*lst)->next)
+	{
+		temp = (*lst)->next;
+		free_t_cmd((*lst)->cmd);
+		free_t_file((*lst)->fl);
+		free((*lst));
+		(*lst) = temp;
+	}
 }
