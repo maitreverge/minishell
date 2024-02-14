@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:28:16 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 10:04:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 13:42:29 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ void	free_t_pars(t_pars **lst)
 	while ((*lst)->next)
 	{
 		temp = (*lst)->next;
-		free_t_cmd((*lst)->cmd);
-		free_t_file((*lst)->fl);
+		if ((*lst)->cmd != NULL)
+			free_t_cmd((*lst)->cmd);
+		if ((*lst)->fl != NULL)
+			free_t_file((*lst)->fl);
 		free((*lst));
 		(*lst) = temp;
 	}
