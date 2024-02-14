@@ -6,7 +6,7 @@
 #    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/02/14 10:02:50 by flverge          ###   ########.fr        #
+#    Updated: 2024/02/14 17:06:59 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME = minishell
 CC = cc
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 # Source files
 SRC = $(wildcard src/exec/*.c) \
