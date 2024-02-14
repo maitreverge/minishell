@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 16:04:41 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 14:20:54 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,20 @@ int	ft_cd(char *s, t_env_list *envp)
 		chdir(homepath);
 		free(homepath);
 		free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
-		ft_pwd(envp, false);
+		ft_pwd(&envp, false);
 		return (0);
 	}
 	else if (tokens != NULL)
 	{
 		chdir(tokens[1]);
-		ft_pwd(envp, false);
+		ft_pwd(&envp, false);
 	}
 	free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
 	return (0);
 }
 
 /*Also changes the env PWD variable to reflect any changes.*/
-void	ft_pwd(t_env_list *envp, bool print)// int fd,
+void	ft_pwd(t_env_list **envp, bool print)
 {
 	char		*cwd;
 	char		*new_pwd_env;
@@ -55,26 +55,22 @@ void	ft_pwd(t_env_list *envp, bool print)// int fd,
 
 	cwd = NULL;
 	cwd = getcwd(cwd, 0);
-	// if (fd < 0)
-	// 	return (free_s_env(&envp), exit(EXIT_FAILURE), 1);
 	if (print == true)
 	{
 		printf("%s\n", cwd);
-		// ft_putstr_fd(cwd, fd);
-		// ft_putchar_fd('\n', fd);	
 	}
 	new_pwd_env = ft_strjoin("PWD=", cwd);
-	temp = envp;
-	while (ft_strncmp(envp->original_envp, "PWD", 3) != 0)
-		envp = envp->next;
-	if (envp != NULL)
+	temp = *envp;
+	while (ft_strncmp((*envp)->original_envp, "PWD", 3) != 0)
+		*envp = (*envp)->next;
+	if (*envp != NULL)
 	{
-		free(envp->original_envp);
-		envp->original_envp = new_pwd_env;
+		//free((*envp)->original_envp);
+		(*envp)->original_envp = new_pwd_env;
 	}
 	if (cwd != NULL)
 		free(cwd);
-	envp = temp;
+	*envp = temp;
 }
 
 /*Displays a list of the environment variables for the

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 13:15:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 14:53:48 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,19 @@ int	check_next_operator(t_pars *lst)
 
 void	exec_builtin(t_pars *pars, t_all *all)
 {
-	if (ft_strncmp(pars->cmd->command_name, "echo", ft_strlen(pars->cmd->command_name)) == 0)
+	if (ft_strncmp(pars->cmd->name_options_args[0], "echo", ft_strlen(pars->cmd->name_options_args[0])) == 0)
 		ft_echo(all->readline_line, all, pars);	//replace 1 with fd
-	else if (ft_strncmp(pars->cmd->command_name, "cd", ft_strlen(pars->cmd->command_name)) == 0)
+	else if (ft_strncmp(pars->cmd->name_options_args[0], "cd", ft_strlen(pars->cmd->name_options_args[0])) == 0)
 		ft_cd(all->readline_line, all->env_lst);
-	else if (ft_strncmp(pars->cmd->command_name, "pwd", ft_strlen(pars->cmd->command_name)) == 0)
-		ft_pwd(all->env_lst, true);	//replace 1 with fd
-	else if (ft_strncmp(pars->cmd->command_name, "env", ft_strlen(pars->cmd->command_name)) == 0)
+	else if (ft_strncmp(pars->cmd->name_options_args[0], "pwd", ft_strlen(pars->cmd->name_options_args[0])) == 0)
+		ft_pwd(&all->env_lst, true);	//replace 1 with fd
+	else if (ft_strncmp(pars->cmd->name_options_args[0], "env", ft_strlen(pars->cmd->name_options_args[0])) == 0)
 		ft_env(all);
-	else if (ft_strncmp(pars->cmd->command_name, "export", ft_strlen(pars->cmd->command_name)) == 0)
+	else if (ft_strncmp(pars->cmd->name_options_args[0], "export", ft_strlen(pars->cmd->name_options_args[0])) == 0)
 		ft_export(&all->env_lst, all->readline_line);
-	else if (ft_strncmp(pars->cmd->command_name, "unset", ft_strlen(pars->cmd->command_name)) == 0)
+	else if (ft_strncmp(pars->cmd->name_options_args[0], "unset", ft_strlen(pars->cmd->name_options_args[0])) == 0)
 		ft_unset(&all->env_lst, all->readline_line);
-	else if (ft_strncmp(pars->cmd->command_name, "exit", ft_strlen(pars->cmd->command_name)) == 0)
+	else if (ft_strncmp(pars->cmd->name_options_args[0], "exit", ft_strlen(pars->cmd->name_options_args[0])) == 0)
 		ft_exit(pars, all, all->readline_line);
 }
 
@@ -214,12 +214,13 @@ int	main(int ac, char **av, char **envp)
 			redirect_output(pars->next, all, -1);
 		else //there are no operators
 		{
-			if (pars->next->cmd->isBuiltin == true)
+			if (pars && pars->next && pars->next->cmd->isBuiltin == true)
 				exec_builtin(pars->next, all);
-			else
+			else if (pars && pars->next)
 				exec_external_func(pars->next);
 		}
-		add_history(all->readline_line);
+		if (pars && pars->next)
+			add_history(all->readline_line);
 		free(all->readline_line);
 		free_t_pars(&pars);//not sure, but seems right
 		// ! need to free cleaned prompt and splitted

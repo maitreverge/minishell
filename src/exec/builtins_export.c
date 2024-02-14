@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 16:17:51 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 14:48:59 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,31 @@ void	ft_unset(t_env_list **envp, char *line)
 	if (temp != NULL)
 	{
 		prev->next = temp->next;
-		free(temp->original_envp);
-		free(temp);
+		// free(temp->original_envp);
+		// free(temp->key);
+		// free(temp->value);
+		// free(temp);
 	}	
 }
 
 /* Inserts a new node with the given environment variable into the list */
-t_env_list *insert_node_env(char **env_var)
+t_env_list *insert_node_env(char *env_var)
 {
-	t_env_list *new_node;
+	t_env_list	*new_node;
+	char		**spl;
 	
 	new_node = malloc(sizeof(t_env_list));
+	spl = ft_split(env_var, '=');
 	if (new_node == NULL)
 	{
 		perror("Failed to allocate memory for new node");
 		exit(EXIT_FAILURE);
 	}
-	new_node->key = env_var[0];
-	new_node->value = env_var[1];
-	new_node->original_envp = ft_strjoin(env_var[0], env_var[1]);
+	new_node->key = spl[0];
+	new_node->value = spl[1];
+	new_node->original_envp = env_var;
 	new_node->next = NULL;
-	return new_node;
+	return (new_node);
 }
 
 /*Adds 'line' to the list of environment variables*/
@@ -74,21 +78,21 @@ void	ft_export(t_env_list **envp, char *line)
 {
 	t_env_list 	*temp;
 	char 		**s;
-	int 		i;
+	// int 		i;
 
 	temp = *envp;
 	s = ft_split(line, ' ');	//otherwise we literally get "export FLO=BG" as the env var
 	if (*envp == NULL)
-		*envp = insert_node_env(s);
+		*envp = insert_node_env(s[1]);
 	else
 	{
 		while (temp->next != NULL)
 			temp = temp->next;
-		temp->next = insert_node_env(s);
+		temp->next = insert_node_env(s[1]);
 	}
-	i = 0;
-	while (s[i])
-		free(s[i++]);
-	free(s);
+	// i = 0;
+	// while (s[i])
+	// 	free(s[i++]);
+	// free(s);
 }
 
