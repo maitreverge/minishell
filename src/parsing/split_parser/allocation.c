@@ -6,84 +6,112 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 20:34:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 12:09:09 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-static void	detecting_quotes(char *str, int *start_quote, int *end_quote, int *i)
+static t_split_utils	*init_u_alloc(void)
 {
-	while (is_any_quote(str[(*i)]) && str[(*i)])
+	t_split_utils	*new;
+
+	new = malloc(sizeof(t_split_utils));
+	if (!new)
+		return (NULL);
+	new->start_quote = 0;
+	new->end_quote = 0;
+	new->i = 0;
+	new->j = 0;
+	new->start = 0;
+	new->result = 0;
+	return (new);
+}
+
+static void	sub_detecting_quotes(char *str, t_split_utils **split)
+{
+	t_split_utils	*u;
+
+	u = *split;
+	while (is_any_quote(str[u->i]) && str[u->i])
 	{
-		*start_quote = str[(*i)];
-		while (str[(*i)] && *start_quote != *end_quote)
+		u->start_quote = str[u->i];
+		while (str[u->i] && u->start_quote != u->end_quote)
 		{
-			(*i)++;
-			if (str[(*i)] == *start_quote)
+			u->i++;
+			if (str[u->i] == u->start_quote)
 			{
-				*end_quote = *start_quote;
-				(*i)++;
+				u->end_quote = u->start_quote;
+				u->i++;
 				break ;
 			}
 		}
-		*end_quote = 0;
-		if (is_whitespace(str[(*i)]) || !str[(*i)])
+		u->end_quote = 0;
+		if (is_whitespace(str[u->i]) || !str[u->i])
 			break ;
-		while (str[(*i)] && !is_whitespace(str[(*i)])
-			&& !is_any_quote(str[(*i)]))
-			(*i)++;
-		if (is_whitespace(str[(*i)]) || !str[(*i)])
+		while (str[u->i] && !is_whitespace(str[u->i])
+			&& !is_any_quote(str[u->i]))
+			u->i++;
+		if (is_whitespace(str[u->i]) || !str[u->i])
 			break ;
+	}
+}
+
+static void	alloc(t_split_utils **split, size_t len_s, char **buffer, char *str)
+{
+	t_split_utils	*u;
+
+	u = *split;
+	if (u->j < len_s)
+	{
+		buffer[u->j] = ft_calloc(sizeof(char), (u->i - u->start + 1));
+		if (!buffer[u->j])
+			return ;
+		ft_strncpy(buffer[u->j], &str[u->start], u->i - u->start);
+		u->j++;
+	}
+}
+
+static void	detecting_quote(t_split_utils **split, char *str)
+{
+	t_split_utils	*u;
+
+	u = *split;
+	u->start = u->i;
+	while (!is_any_quote(str[u->i]) && str[u->i] && !is_whitespace(str[u->i]))
+	{
+		while (str[u->i] && !is_whitespace(str[u->i])
+			&& !is_any_quote(str[u->i]))
+			u->i++;
+		if (is_whitespace(str[u->i]) || !str[u->i])
+			break ;
+		if (is_any_quote(str[u->i]) && str[u->i])
+			sub_detecting_quotes(str, &u);
 	}
 }
 
 void	allocation(char **buffer, char *str, size_t len_s)
 {
-	int	start_quote;
-	int	end_quote;
-	int	i;
-	size_t	j;
-	size_t	start;
+	t_split_utils	*u;
 
-	j = 0;
-	i = 0;
-	start = 0;
+	u = init_u_alloc();
 	if (!str)
 		return ;
-	while (str[i])
+	while (str[u->i])
 	{
-		start_quote = 0;
-		end_quote = 0;
-		while (is_whitespace(str[i]) && str[i])
-			i++;
-		if (is_any_quote(str[i]) && str[i])
+		u->start_quote = 0;
+		u->end_quote = 0;
+		while (is_whitespace(str[u->i]) && str[u->i])
+			u->i++;
+		if (is_any_quote(str[u->i]) && str[u->i])
 		{
-			start = i;
-			detecting_quotes(str, &start_quote, &end_quote, &i);
+			u->start = u->i;
+			sub_detecting_quotes(str, &u);
 		}
-		else if (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
-		{
-			start = i;
-			while (!is_any_quote(str[i]) && str[i] && !is_whitespace(str[i]))
-			{
-				while (str[i] && !is_whitespace(str[i])
-					&& !is_any_quote(str[i]))
-					i++;
-				if (is_whitespace(str[i]) || !str[i])
-					break ;
-				if (is_any_quote(str[i]) && str[i])
-					detecting_quotes(str, &start_quote, &end_quote, &i);
-			}
-		}
-		if (j < len_s)
-		{
-			buffer[j] = ft_calloc(sizeof(char), (i - start + 1));
-			if (!buffer[j])
-				return ;
-			ft_strncpy(buffer[j], &str[start], i - start);
-			j++;
-		}
+		else if (!is_any_quote(str[u->i]) && str[u->i]
+			&& !is_whitespace(str[u->i]))
+			detecting_quote(&u, str);
+		alloc(&u, len_s, buffer, str);
 	}
+	free(u);
 }
-

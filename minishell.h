@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 15:59:10 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 18:23:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,17 @@ typedef struct s_alloc
 	char **cleaned_prompt;
 	char **paths;
 }	t_alloc;
+
+// struct for norming parsing
+typedef struct s_split_utils
+{
+	int start_quote;
+	int end_quote;
+	int i;
+	size_t j; // allocation
+	int start; // allocation
+	size_t result; // countwords
+}	t_split_utils;
 
 
 // ! Functions prototypes
