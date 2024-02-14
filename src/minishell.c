@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 12:37:57 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:15:56 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,24 +203,25 @@ int	main(int ac, char **av, char **envp)
 			//probably free some stuff
 			break ;
 		}
-		pars = pars->next;
-		if (check_next_operator(pars) == 1)
-			pipes(pars, all, -1);
-		else if (check_next_operator(pars) == 2)
-			redirect_input(pars);
-		else if (check_next_operator(pars) == 3)
-			redirect_input_delimitor(pars);
-		else if (check_next_operator(pars) == 4)
-			redirect_output(pars, all, -1);
+		// pars = pars->next;
+		if (check_next_operator(pars->next) == 1)
+			pipes(pars->next, all, -1);
+		else if (check_next_operator(pars->next) == 2)
+			redirect_input(pars->next);
+		else if (check_next_operator(pars->next) == 3)
+			redirect_input_delimitor(pars->next);
+		else if (check_next_operator(pars->next) == 4)
+			redirect_output(pars->next, all, -1);
 		else //there are no operators
 		{
-			if (pars->cmd->isBuiltin == true)
-				exec_builtin(pars, all);
+			if (pars->next->cmd->isBuiltin == true)
+				exec_builtin(pars->next, all);
 			else
-				exec_external_func(pars);
+				exec_external_func(pars->next);
 		}
 		add_history(all->readline_line);
 		free(all->readline_line);
 		free_t_pars(&pars);//not sure, but seems right
+		// ! need to free cleaned prompt and splitted
 	}
 }

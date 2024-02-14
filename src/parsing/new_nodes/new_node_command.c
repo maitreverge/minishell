@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 19:36:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 13:32:02 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static void	new_node_cmd_2(t_pars *new_node, t_alloc *u, int start, int *i)
 	new_node->cmd->name_options_args = (char **)ft_calloc(len, sizeof(char *));
 	if (!new_node->cmd->name_options_args)
 		exit (-1);
-	new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
+	// new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
+	new_node->cmd->name_options_args[j] = ft_strdup(new_node->cmd->command_path);
 	j++;
 	start++;
 	while (j < len - 1)
@@ -67,12 +68,13 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	if (testing_builtin(u->cleaned_prompt[*i]))
 	{
 		nde->cmd->isBuiltin = true;
-		nde->cmd->command_path = u->cleaned_prompt[*i];
+		// nde->cmd->command_path = u->cleaned_prompt[*i];
+		nde->cmd->command_path = ft_strdup(u->cleaned_prompt[*i]);
 	}
 	else
 	{
-		nde->cmd->command_path = join_path_cmd(u->cleaned_prompt[*i], u->paths);
 		nde->cmd->isBuiltin = false;
+		nde->cmd->command_path = join_path_cmd(u->cleaned_prompt[*i], u->paths);
 	}
 	start = *i;
 	while (u->cleaned_prompt[*i])
