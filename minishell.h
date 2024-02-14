@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 11:38:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 11:53:18 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,12 +141,13 @@ typedef struct s_alloc
 	char **paths;
 }	t_alloc;
 
+// struct for norming parsing
 typedef struct s_split_utils
 {
 	int start_quote;
 	int end_quote;
 	int i;
-	int j; // allocation
+	size_t j; // allocation
 	int start; // allocation
 	size_t result; // countwords
 }	t_split_utils;
