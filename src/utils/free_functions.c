@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 10:04:22 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 13:26:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ void	free_split(char **to_free)
 
 	i = 0;
 	current = to_free;
-	while (current[i])
-	{
-		free(current[i]);
-		i++;
-	}
+	// if (current[i])
+	// {
+		while (current[i])
+		{
+			free(current[i]);
+			i++;
+		}
+	// }
 	free(to_free);
 }
 
