@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 07:26:07 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 16:33:01 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 16:39:34 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,17 @@ t_pars	*init_1st_node_pars(void)
 	new = (t_pars *)malloc(sizeof(t_pars));
 	if (!new)
 		return (NULL);
+	new->MasterKill = false;
+	new->isRedirIn = false;
 	new->last_exit_status = 0;
+	new->isCommand = false;
 	new->cmd = NULL;
+	new->isFile = false;
 	new->fl = NULL;
+	new->isOperator = false;
 	new->operator = NULL;
+	new->isHereDoc = false;
+	new->here_doc = NULL;
 	new->prev = NULL;
 	new->next = NULL;
 	return (new);
