@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 11:28:41 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 11:29:37 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 20:22:06 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,17 @@ t_pars	*init_1st_node_pars(void)
 	new = (t_pars *)malloc(sizeof(t_pars));
 	if (!new)
 		return (NULL);
+	new->MasterKill = false;
+	new->isRedirIn = false;
 	new->last_exit_status = 0;
+	new->isCommand = false;
 	new->cmd = NULL;
+	new->isFile = false;
 	new->fl = NULL;
+	new->isOperator = false;
 	new->operator = NULL;
+	new->isHereDoc = false;
+	new->here_doc = NULL;
 	new->prev = NULL;
 	new->next = NULL;
 	return (new);

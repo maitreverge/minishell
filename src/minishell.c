@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 18:25:26 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 20:18:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	check_next_operator(t_pars *lst)
 	return (0);
 }
 
-int	exec_builtin(t_pars *pars, t_all *all)
+void	exec_builtin(t_pars *pars, t_all *all)
 {
 	if (!ft_strcmp(pars->cmd->name_options_args[0], "echo"))
 		ft_echo(all->readline_line, all, pars);	//replace 1 with fd
