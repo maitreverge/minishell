@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 16:49:52 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 12:19:30 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 			else if (trimmed[0] == '$' && trimmed[1] == '?')
 			{
 				free(trimmed);
+				trimmed = malloc(sizeof(char) * 2);
 				trimmed[0] = pars->prev->last_exit_status;
 				trimmed[1] = '\0';
 			}

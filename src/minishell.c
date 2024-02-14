@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 10:52:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 12:37:57 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,19 @@ int	check_next_operator(t_pars *lst)
 
 void	exec_builtin(t_pars *pars, t_all *all)
 {
-	if (ft_strncmp(pars->cmd->command_name, "echo", 4) == 0)
+	if (ft_strncmp(pars->cmd->command_name, "echo", ft_strlen(pars->cmd->command_name)) == 0)
 		ft_echo(all->readline_line, all, pars);	//replace 1 with fd
-	else if (ft_strncmp(pars->cmd->command_name, "cd", 2) == 0)
+	else if (ft_strncmp(pars->cmd->command_name, "cd", ft_strlen(pars->cmd->command_name)) == 0)
 		ft_cd(all->readline_line, all->env_lst);
-	else if (ft_strncmp(pars->cmd->command_name, "pwd", 3) == 0)
+	else if (ft_strncmp(pars->cmd->command_name, "pwd", ft_strlen(pars->cmd->command_name)) == 0)
 		ft_pwd(all->env_lst, true);	//replace 1 with fd
-	else if (ft_strncmp(pars->cmd->command_name, "env", 3) == 0)
+	else if (ft_strncmp(pars->cmd->command_name, "env", ft_strlen(pars->cmd->command_name)) == 0)
 		ft_env(all);
-	else if (ft_strncmp(pars->cmd->command_name, "export", 6) == 0)
+	else if (ft_strncmp(pars->cmd->command_name, "export", ft_strlen(pars->cmd->command_name)) == 0)
 		ft_export(&all->env_lst, all->readline_line);
-	else if (ft_strncmp(pars->cmd->command_name, "unset", 5) == 0)
+	else if (ft_strncmp(pars->cmd->command_name, "unset", ft_strlen(pars->cmd->command_name)) == 0)
 		ft_unset(&all->env_lst, all->readline_line);
-	else if (ft_strncmp(pars->cmd->command_name, "exit", 4) == 0)
+	else if (ft_strncmp(pars->cmd->command_name, "exit", ft_strlen(pars->cmd->command_name)) == 0)
 		ft_exit(pars, all, all->readline_line);
 }
 
@@ -183,11 +183,10 @@ int	main(int ac, char **av, char **envp)
 	
 	// Nodes all and node t_env_list are create and init here
 	all = init_t_all_struct(envp);
-	
 	pars = init_1st_node_pars();
+	signals(pars);
 	while (1)
 	{
-		signals(pars);
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
@@ -204,6 +203,7 @@ int	main(int ac, char **av, char **envp)
 			//probably free some stuff
 			break ;
 		}
+		pars = pars->next;
 		if (check_next_operator(pars) == 1)
 			pipes(pars, all, -1);
 		else if (check_next_operator(pars) == 2)
@@ -221,6 +221,6 @@ int	main(int ac, char **av, char **envp)
 		}
 		add_history(all->readline_line);
 		free(all->readline_line);
-		//probably free the list
+		free_t_pars(&pars);//not sure, but seems right
 	}
 }
