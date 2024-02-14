@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:58:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 11:12:02 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:56:45 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 bool	is_last_node_pipe(t_pars **pars)
 {
@@ -67,7 +67,7 @@ bool	testing_builtin(char *cleaned)
 	return (false);
 }
 
-char	*join_path_command(char *cleaned, char **paths)
+char	*join_path_cmd(char *cleaned, char **paths)
 {
 	char	*real_path;
 	int		j;

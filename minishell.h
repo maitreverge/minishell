@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 16:32:26 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 09:15:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@
 // * .h Florian
 
 
-// ! Master Struct for parsing
 typedef	struct	s_pars
 {
 	// only the first node
@@ -111,6 +110,7 @@ typedef	struct	s_operator
 	bool redir_out;
 	bool redir_out_app;
 } 	t_operator;
+
 // ! Utils structures
 
 typedef	struct	s_utils
@@ -141,7 +141,22 @@ typedef struct s_alloc
 	char **paths;
 }	t_alloc;
 
+
 // ! Functions prototypes
+
+// new_nodes
+void	new_node_command(t_pars **pars, t_alloc **utils, int *i);
+void	new_node_file(t_pars **pars, char *cleaned);
+void	new_node_operator(t_pars **pars, char *cleaned);
+void	new_node_here_doc(t_pars **pars, char *cleaned);
+
+//split_parser
+char	**parsing_split(char *s);
+size_t	parsing_countwords(char *str);
+void	allocation(char **buffer, char *str, size_t len_s);
+
+
+
 
 // turbo_parser
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
@@ -150,7 +165,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
 void	search_redir_in(t_pars **pars, char **splited, char **cleaned);
 bool	testing_builtin(char *cleaned);
-char *join_path_command(char *cleaned, char **paths);
+char	*join_path_cmd(char *cleaned, char **paths);
 
 
 //extract_paths
@@ -174,7 +189,6 @@ int		ft_strcmp(char *s1, char *s2);
 
 
 // split_parser
-char	**parsing_split(char *s);
 size_t	parsing_countwords(char *str);
 
 //pars_struct_fts
@@ -194,7 +208,7 @@ int		lstsize(t_pars *lst);
 
 // bools_parsing
 
-bool	is_token_operator(char *splited, char *cleaned);
+bool	is_token_opr(char *splited, char *cleaned);
 bool is_token_redir_delim(char *cleaned);
 bool is_last_node_operator(t_pars **pars);
 bool is_last_node_pipe(t_pars **pars);
@@ -212,11 +226,6 @@ bool is_token_redir_out(char *splited, char *cleaned);
 
 
 
-// new_nodes
-void	new_node_command(t_pars **pars, t_alloc **utils, int *i);
-void	new_node_file(t_pars **pars, char *cleaned);
-void	new_node_operator(t_pars **pars, char *cleaned);
-void	new_node_here_doc(t_pars **pars, char *cleaned);
 
 
 // print_final_struct

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 11:33:09 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 18:43:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		last_p_node = lstlast(*pars);
 		if (!last_p_node->prev)
 		{
-			if (!is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			if (!is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_command(pars, u_alloc, &i);
 			else
 			{
@@ -37,7 +37,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		}
 		else if ((is_last_node_cmd(pars)))
 		{
-			if (is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			if (is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
 			else
 			{
@@ -73,13 +73,13 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		else if (is_last_node_operator(pars))
 		{
 			if (is_last_node_pipe(pars)
-				&& !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				&& !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_command(pars, u_alloc, &i);
 			else if (is_last_node_redir(pars)
-				&& !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				&& !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_file(pars, cur->cleaned_prompt[i]);
 			else if (is_last_node_r_in_delim(pars)
-				&& !is_token_operator(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				&& !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_here_doc(pars, cur->cleaned_prompt[i]);
 			else
 			{

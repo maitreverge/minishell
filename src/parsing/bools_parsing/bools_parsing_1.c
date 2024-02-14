@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:16:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 10:59:41 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/13 19:56:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
-bool	is_token_operator(char *splited, char *cleaned)
+bool	is_token_opr(char *splited, char *cleaned)
 {
 	if (!ft_strcmp(splited, cleaned))
 	{
