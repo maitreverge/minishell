@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 18:43:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/14 10:54:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,6 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		if (cur->cleaned_prompt[i])
 			i++;
 	}
-	print_final_struct(pars);
+	// ! Turn this comment off to see on stdout what's in the struct
+	// print_final_struct(pars);
 }

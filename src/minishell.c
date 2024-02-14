@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/13 16:32:41 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/14 10:52:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,57 +132,95 @@ void	exec_external_func(t_pars *lst)
 	wait(NULL);
 }
 
+t_all	*init_t_all_struct(char **envp)
+{
+	t_all		*new_all;
+	t_env_list	*new_list;
+
+	// allocate two nodes for t_all and t_env_list
+	new_all = malloc(sizeof(t_all));
+	if (!new_all)
+		return (NULL);
+	new_list = malloc(sizeof(t_env_list));
+	if (!new_list)
+		return (NULL);
+
+	// connecting node t_all to sub_node t_env_list
+	new_all->env_lst = new_list;
+	
+	// Init sub_node to null
+	new_all->env_lst = NULL;
+	
+	// init readline buffer to null
+	new_all->readline_line = NULL;
+
+	// init env_list nodes from envp
+	copy_env_into_list(&new_all->env_lst, envp);
+	
+
+	// ! IMPORTANT :
+	// both t_all and t_env_list need to be freed when an exit signal occurs
+
+	return (new_all);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	t_all		all;
+	/*
+	a node of type struct could not be init on the stack, it need to
+	persist on the heap until the end of minishell.
+	That's why i changed it to *all instead of all, because malloc
+	can't allocate something that is not a pointer
+	*/
+	t_all		*all;
 	t_utils		*utils;
 	t_pars		*pars;
-
+	
 	utils = NULL;
 	pars = NULL;
-
-	copy_env_into_list(&all.env_lst, envp);
-	all.readline_line = NULL;
+	
+	// Nodes all and node t_env_list are create and init here
+	all = init_t_all_struct(envp);
+	
+	pars = init_1st_node_pars();
 	while (1)
 	{
 		signals(pars);
-		if (!pars)
-			pars = init_1st_node_pars();
-		all.readline_line = readline("minishell$ ");
-		if (all.readline_line == NULL)	//checks for ctrl+d
+		all->readline_line = readline("minishell$ ");
+		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
 			printf("exit\r");
-			free_s_env(&all.env_lst);
+			free_s_env(&all->env_lst);
 			free_firstnode_pars(&pars);
-			if (all.readline_line != NULL)
-				free(all.readline_line);
+			if (all->readline_line != NULL)
+				free(all->readline_line);
 			return (exit(0), 1);
 		}
-		turbo_parser(all.readline_line, &pars, &all.env_lst, &utils);
+		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
 		if (pars->MasterKill == true)
 		{
 			//probably free some stuff
 			break ;
 		}
 		if (check_next_operator(pars) == 1)
-			pipes(pars, &all, -1);
+			pipes(pars, all, -1);
 		else if (check_next_operator(pars) == 2)
 			redirect_input(pars);
 		else if (check_next_operator(pars) == 3)
 			redirect_input_delimitor(pars);
 		else if (check_next_operator(pars) == 4)
-			redirect_output(pars, &all, -1);
+			redirect_output(pars, all, -1);
 		else //there are no operators
 		{
 			if (pars->cmd->isBuiltin == true)
-				exec_builtin(pars, &all);
+				exec_builtin(pars, all);
 			else
 				exec_external_func(pars);
 		}
-		add_history(all.readline_line);
-		free(all.readline_line);
+		add_history(all->readline_line);
+		free(all->readline_line);
 		//probably free the list
 	}
 }
