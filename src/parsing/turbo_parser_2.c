@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 11:50:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/15 13:07:36 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			i++;
 	}
 	// ! Turn this comment off to see on stdout what's in the struct
+	printf("\n\nTHIS IS WHAT'S INSIDE THE STRUCT POST PARSING \n\n");
 	print_final_struct(pars);
+	printf("\n\nTHIS IS WHAT'S INSIDE THE STRUCT POST PARSING \n\n");
 }

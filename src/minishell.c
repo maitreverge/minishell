@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 20:18:43 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/15 13:18:32 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,13 @@ int	main(int ac, char **av, char **envp)
 			return (exit(0), 1);
 		}
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
+
+		
+		printf("\n\n\nTHIS IS WHAT'S INSIDE THE STRUCT BEFORE FREE \n\n");
+		print_final_struct(&pars);
+		printf("\n\n\nTHIS IS WHAT'S INSIDE THE STRUCT BEFORE FREE \n\n");
+		
+		
 		if (pars->MasterKill == true)
 		{
 			free_firstnode_pars(&pars);
@@ -217,6 +224,10 @@ int	main(int ac, char **av, char **envp)
 		if (pars && pars->next)
 			add_history(all->readline_line);
 		free(all->readline_line);
+
+
+
+		
 		free_t_pars(&pars);//not sure, but seems right
 		// ! need to free cleaned prompt and splitted
 	}

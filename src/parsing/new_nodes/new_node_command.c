@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 13:32:02 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/15 13:41:52 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static t_pars	*initialize_new_node(t_alloc *u, int i)
 	new_node->here_doc = NULL;
 	new_node->prev = NULL;
 	new_node->next = NULL;
-	new_node->cmd->command_name = u->cleaned_prompt[i];
+	new_node->cmd->command_name = ft_strdup(u->cleaned_prompt[i]);
 	return (new_node);
 }
 
@@ -51,7 +51,7 @@ static void	new_node_cmd_2(t_pars *new_node, t_alloc *u, int start, int *i)
 	start++;
 	while (j < len - 1)
 	{
-		new_node->cmd->name_options_args[j] = u->cleaned_prompt[start];
+		new_node->cmd->name_options_args[j] = ft_strdup(u->cleaned_prompt[start]);
 		j++;
 		start++;
 	}
