@@ -6,7 +6,7 @@
 #    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/02/14 17:06:59 by flverge          ###   ########.fr        #
+#    Updated: 2024/02/15 18:04:35 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRC = $(wildcard src/exec/*.c) \
     $(wildcard src/parsing/*.c) \
     $(wildcard src/parsing/bools_parsing/*.c) \
     $(wildcard src/parsing/new_nodes/*.c) \
-    $(wildcard src/parsing/split_parser/*.c) \
+    $(wildcard src/parsing/splitted_prompt/*.c) \
     $(wildcard src/parsing/utils_parsing/*.c) \
     src/minishell.c
 
