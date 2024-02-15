@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 11:30:07 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/15 11:58:27 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,6 +341,9 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 		exit (-1);
 	u = *s_utils;
 	len_splited_prompt = parsing_countwords(prompt);
+	
+	printf("\033[1;32mThere is %i nodes in readline\033[0m\n", len_splited_prompt);
+	
 	if (unclosed_quotes(prompt))
 	{
 		ft_putendl_fd("Error : Unclosed quote detected", 2);
