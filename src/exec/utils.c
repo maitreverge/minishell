@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:34:17 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 09:22:08 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/15 10:49:59 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,13 @@ size_t	lstlen(t_pars *lst)
 /*Returns the number of elements in a given void ** array.*/
 size_t	size_of_ptr_ptr(void **arr)
 {
-	size_t	i;
 	size_t	len;
 
-	i = 0;
 	len = 0;
-	while (arr[i] != NULL)
-	{
+	if (!arr)
+		return (0);
+	while ((char *)arr[len] != NULL)
 		len++;
-		i++;
-	}
 	return (len);
 }
 
