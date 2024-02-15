@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 16:03:46 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:41:29 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 	//check_masterkill(lst);
 	i = 0;
 	fds = create_pipes(lst, &ch_pid);
-	len = lstlen(*lst); // minus num_of_pipes. lstlen is too long
+	len = lstlen(*lst) - num_of_pipes(*lst); // minus num_of_pipes. lstlen is too long
     while ((*lst) != NULL && (*lst)->isCommand == true)
 	{
         ch_pid[i] = fork();

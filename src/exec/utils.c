@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:34:17 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/15 10:49:59 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:26:33 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,23 @@ size_t	size_of_ptr_ptr(void **arr)
 		return (0);
 	while ((char *)arr[len] != NULL)
 		len++;
+	return (len);
+}
+
+size_t	num_of_pipes(t_pars *lst)
+{
+	size_t	len;
+	t_pars	*temp;
+
+	temp = lst;
+	len = 0;
+	while (lst)
+	{
+		if (lst->isOperator && lst->operator->pipe == true)
+			len++;
+		lst = lst->next;
+	}
+	lst = temp;
 	return (len);
 }
 
