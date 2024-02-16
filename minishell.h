@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/15 12:14:31 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 10:33:23 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,7 @@ void	print_final_struct(t_pars **pars);
 
 bool	is_operator_char(char c);
 
+void	free_t_alloc(t_alloc **alloc);
 
 
 
