@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 08:22:54 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 11:19:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 11:11:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_utils	*utils_init_struct(int len) // ! free this single node
 	if (!current->result)
 		exit(-1);
 	current->result[len] = 0;
-	current->to_allocate = NULL;
+	// current->to_allocate = NULL;
 	current->i = 0;
 	current->j = 0;
 	current->k = 0;

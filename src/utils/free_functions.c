@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 18:26:32 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 11:10:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,24 @@ void	free_split(char **to_free)
 {
 	char	**current;
 	int		i;
+	int 	len;
+
+	if (!to_free)
+		return;
 
 	i = 0;
+	len = 0;
 	current = to_free;
-	while (current[i + 1] != NULL)
+	while (current[len] != NULL)
+		len++;
+	current = to_free;
+	while (i < len)
 	{
-		free(current[i]);
+		if (current[i])
+		{
+			free(current[i]);
+			current[i] = NULL;  // set the pointer to NULL after freeing it
+		}
 		i++;
 	}
 	free(to_free);
@@ -56,3 +68,15 @@ void	free_firstnode_pars(t_pars **pars)
 {
 	free(*pars);
 }
+
+void	free_t_alloc(t_alloc *alloc)
+{
+	// t_alloc *to_free;
+	
+	// to_free = *alloc;
+	free_split(alloc->splitted_prompt);
+	free_split(alloc->paths);
+	// free_split(alloc->cleaned_prompt); // already free in t_utils function
+	free(alloc);
+}
+

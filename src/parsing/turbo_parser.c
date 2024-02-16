@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/15 12:12:35 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 11:04:03 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,7 +343,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 	// ! fixed amount of nodes
 	len_splited_prompt = parsing_countwords(prompt);
 	
-	printf("\033[1;32mThere is %i nodes in readline\033[0m\n", len_splited_prompt);
+	// printf("\033[1;32mThere is %i nodes in readline\033[0m\n", len_splited_prompt);
 	
 	if (unclosed_quotes(prompt))
 	{
@@ -352,9 +352,20 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 	}
 	u = utils_init_struct(len_splited_prompt);
 	utils_alloc->splitted_prompt = parsing_split(prompt);
+
+	// ! checking what's in splitted+prompt
+	for (int i = 0; utils_alloc->splitted_prompt[i] != NULL; i++)
+		printf("\033[1;31mSplitted Prompt #%i = %s\033[0m\n", i, utils_alloc->splitted_prompt[i]);
+	
 	utils_alloc->cleaned_prompt = ft_clean_prompt(utils_alloc->splitted_prompt, &u, s_env, pars);
+
+	// ! checking what's in cleaned_prompt
+	for (int i = 0; utils_alloc->cleaned_prompt[i] != NULL; i++)
+		printf("\033[1;32mCleaned Prompt #%i = %s\033[0m\n", i, utils_alloc->cleaned_prompt[i]);
+	
 	utils_alloc->paths = extract_paths(s_env);
 	// ! allocating within the nodes
 	pars_alloc(pars, &utils_alloc);
 	free_s_utils(&u);
+	free_t_alloc(utils_alloc);
 }

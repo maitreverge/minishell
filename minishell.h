@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 13:14:44 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/16 15:11:55 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ typedef	struct	s_operator
 typedef	struct	s_utils
 {
 	char	**result; // final parsing
-	char	*to_allocate; // ! useful ??
+	// char	*to_allocate; // ! useful ??
 	int		i;
 	int		j;
 	int		k;
@@ -245,6 +245,7 @@ void	print_final_struct(t_pars **pars);
 
 bool	is_operator_char(char c);
 
+void	free_t_alloc(t_alloc *alloc);
 
 
 
