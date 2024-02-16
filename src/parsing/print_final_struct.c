@@ -9,7 +9,7 @@ void	print_final_struct(t_pars **pars)
 
 	printf("Last exit status = %i\n", (*pars)->last_exit_status);
 	printf("\n------------------------\n");
-	cur = cur->next;
+	// cur = cur->next;
 	while (cur)
 	{
 		if (cur->isCommand)
