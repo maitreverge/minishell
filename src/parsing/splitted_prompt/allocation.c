@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/15 18:21:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 09:48:38 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ static void	sub_detecting_quotes(char *str, t_split_utils **split)
 			}
 		}
 		u->end_quote = 0;
-		if (is_whitespace(str[u->i]) || !str[u->i])
+		if (is_whitespace(str[u->i]) || !str[u->i] || is_operator_char(str[u->i]))
 			break ;
 		while (str[u->i] && !is_whitespace(str[u->i])
 			&& !is_any_quote(str[u->i]))
 			u->i++;
-		if (is_whitespace(str[u->i]) || !str[u->i])
+		if (is_whitespace(str[u->i]) || !str[u->i] || is_operator_char(str[u->i]))
 			break ;
 	}
 }
@@ -78,12 +78,12 @@ static void	detecting_quote(t_split_utils **split, char *str)
 
 	u = *split;
 	u->start = u->i;
-	while (!is_any_quote(str[u->i]) && str[u->i] && !is_whitespace(str[u->i]))
+	while (!is_any_quote(str[u->i]) && str[u->i] && !is_whitespace(str[u->i]) && !is_operator_char(str[u->i]))
 	{
 		while (str[u->i] && !is_whitespace(str[u->i])
-			&& !is_any_quote(str[u->i]))
+			&& !is_any_quote(str[u->i]) && !is_operator_char(str[u->i]))
 			u->i++;
-		if (is_whitespace(str[u->i]) || !str[u->i])
+		if (is_whitespace(str[u->i]) || !str[u->i] || is_operator_char(str[u->i]))
 			break ;
 		if (is_any_quote(str[u->i]) && str[u->i])
 			sub_detecting_quotes(str, &u);
@@ -108,8 +108,16 @@ void	allocation(char **buffer, char *str, size_t len_s)
 			u->start = u->i;
 			sub_detecting_quotes(str, &u);
 		}
-		else if (!is_any_quote(str[u->i]) && str[u->i] && !is_whitespace(str[u->i]))
+		else if (!is_any_quote(str[u->i]) && str[u->i] && !is_whitespace(str[u->i]) && !is_operator_char(str[u->i]))
 			detecting_quote(&u, str);
+		else if (is_operator_char(str[u->i]) && str[u->i]) // new operator condition
+		{
+			u->start = u->i;
+			if ((str[u->i] == '<' && str[u->i + 1] == '<') || (str[u->i] == '>' && str[u->i + 1] == '>'))
+				u->i += 2;
+			else
+				u->i++;
+		}
 		alloc(&u, len_s, buffer, str);
 	}
 	free(u);
