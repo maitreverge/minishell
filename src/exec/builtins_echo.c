@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 12:19:30 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/15 15:57:01 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,59 @@ int	check_if_env_var(char *s, t_all *all, t_pars *pars)
 	return (0);
 }
 
-/*
-	Make sure to pass the ENTIRE line (got by readline()),
-	otherwise the function might not work properly.
-*/
+void	echo_no_nl(char **tokens, t_all *all, t_pars *pars)
+{
+	int		i;
+	int		last;
+	char	*trimmed;
+	char	*result;
+
+	i = 2;
+	last = 0;
+	while (tokens[last])
+	{
+		printf("token[%d] = %s\n", last, tokens[last]);
+		last++;
+	}
+	while (tokens[i])
+	{
+		trimmed = ft_strtrim(tokens[i], "\"");
+		if (check_if_env_var(trimmed, all, pars) == 1)
+		{
+			result = compare_env_var_with_envp(trimmed, all);
+			printf("%s", result);
+			if (i != last)
+				ft_putchar_fd(' ', 1);
+			free(trimmed);
+			free(result);
+			continue ;
+		}
+		else if (trimmed[0] == '$' && trimmed[1] == '?')
+		{
+			free(trimmed);
+			trimmed = malloc(sizeof(char) * 2);
+			trimmed[0] = pars->prev->last_exit_status;
+			trimmed[1] = '\0';
+		}
+		else if (check_if_env_var(trimmed, all, pars) == 2)
+			continue ;
+		if (i == last - 1)
+			printf("%s", trimmed);
+		else
+			printf("%s ", trimmed);
+		free(trimmed);
+		i++;
+	}
+	free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
+	pars->prev->last_exit_status = 0;
+}
+
 int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 {
 	(void)pars; //pars will be used, voiding it for now so that it compiles
 	char	**tokens;
 	char 	*trimmed;
 	char	*result;
-	int		last;
 	int		i;
 
 	tokens = NULL;
@@ -94,55 +136,11 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 	if ((tokens != NULL && tokens[1] == NULL) || tokens == NULL)
 	{
 		printf("\n");
-		//ft_putstr_fd("\n", fd);
 		free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
 		return (0);
 	}
-	last = 0;
-	while (tokens[last])
-		last++;
 	if (ft_strncmp(tokens[1], "-n", 3) == 0)
-	{
-		i = 2;
-		while (tokens[i])
-		{
-			trimmed = ft_strtrim(tokens[i++], "\"");
-			if (check_if_env_var(trimmed, all, pars) == 1)
-			{
-				result = compare_env_var_with_envp(trimmed, all);
-				printf("%s", result);
-				//ft_putstr_fd(result, fd);
-				if (i != last)
-					ft_putchar_fd(' ', 1);
-				free(trimmed);
-				free(result);
-				continue ;
-			}
-			else if (trimmed[0] == '$' && trimmed[1] == '?')
-			{
-				free(trimmed);
-				trimmed = malloc(sizeof(char) * 2);
-				trimmed[0] = pars->prev->last_exit_status;
-				trimmed[1] = '\0';
-			}
-			else if (check_if_env_var(trimmed, all, pars) == 2)
-				continue ;
-			if (i == last - 1)
-				//ft_putstr_fd(trimmed, fd);
-				printf("%s", trimmed);
-			else
-			{
-				printf("%s ", trimmed);
-				//ft_putstr_fd(trimmed, fd);
-				//ft_putchar_fd(' ', fd);
-			}
-			free(trimmed);
-		}
-		free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
-		//free_tokens(tokens);
-		pars->prev->last_exit_status = 0;
-		return (0);
-	}
+		echo_no_nl(tokens, all, pars);
 	else
 	{
 		i = 1;
@@ -153,8 +151,6 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 			{
 				result = compare_env_var_with_envp(trimmed, all);
 				printf("%s ", result);
-				//ft_putstr_fd(result, fd);
-				//ft_putchar_fd(' ', fd);
 				free(trimmed);
 				free(result);
 				continue ;
@@ -167,7 +163,6 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 			/*Has a $ sign, but isn't in the list of env vars.*/
 			else if (check_if_env_var(trimmed, all, pars) == 2)
 				continue ;
-			//printf("%s ", trimmed);
 			char *temp;
 			temp = ft_strtrim(trimmed, "\'");
 			ft_putstr_fd(temp, 1);
@@ -177,8 +172,8 @@ int	ft_echo(char *s, t_all *all, t_pars *pars)//, int fd
 		}
 		printf("\n");
 	}
-	free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
-//	free_tokens(tokens);
+	//if (tokens)
+		//free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens) - 1);
 	pars->prev->last_exit_status = 0;
 	return (0);
 }

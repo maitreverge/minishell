@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 20:19:42 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/15 15:35:27 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,12 +284,13 @@ int	redirect_input_delimitor(t_pars **lst);
 int	redirect_input(t_pars **lst);
 int	redirect_output(t_pars **lst, t_all *all, int input_fd);
 
-/*Utils.c*/
+/*Utils*/
 size_t	size_of_ptr_ptr(void **arr);
 void	free_arr(void **array, int size);
 void	free_t_pars(t_pars **lst);
 size_t	lstlen(t_pars *lst);
 void	fork_error(int **fds, pid_t **ch_pid);
+size_t	num_of_pipes(t_pars *lst);
 
 /*Flo, but i don't want to touch his part of this .h*/
 t_pars	*init_1st_node_pars(void);
