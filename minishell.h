@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 15:11:55 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/16 15:23:55 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef	struct	s_pars
 	// only the first node
 	bool MasterKill;
 	bool isRedirIn; // does the whole input contains at least one redir_in > OR >>
+	int	error_message;
 	int		last_exit_status; // variable of $?
 
 	// Node Command
