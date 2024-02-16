@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/16 10:31:00 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 11:04:03 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,5 +367,5 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 	// ! allocating within the nodes
 	pars_alloc(pars, &utils_alloc);
 	free_s_utils(&u);
-	free_t_alloc(&utils_alloc);
+	free_t_alloc(utils_alloc);
 }
