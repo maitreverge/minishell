@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 17:36:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/16 09:48:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 09:56:28 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void	allocation(char **buffer, char *str, size_t len_s)
 }
 
 
-
+ 
 
 // ! Original subfunctions
 
