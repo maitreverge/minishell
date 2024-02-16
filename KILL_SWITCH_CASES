@@ -5,3 +5,15 @@ Double consecutives operators tokens
 Double file ?
 
 Double EOF ?
+
+✅
+🚫
+EDGE CASES :
+
+Firt token operators
+
+| 		ex : 	| echo      ==> 🚫
+> 		ex : 	> echo bonjour > test   ==> 🚫
+< 		ex : 	< >
+>>		ex : 
+<<		ex : 

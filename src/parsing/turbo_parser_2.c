@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/16 10:10:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 17:56:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		{
 			if (!is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_command(pars, u_alloc, &i);
-			else
+			else // does
 			{
 				(*pars)->MasterKill = true;
 				printf("First Token is a Operator\n");
