@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/15 11:41:29 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/16 15:01:02 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	**create_pipes(t_pars **lst, pid_t **ch_pid)
     int		i;
     int 	**fds;
 
-	len = lstlen(*lst);
+	len = lstlen(*lst) - num_of_pipes(*lst);
 	*ch_pid = ft_calloc(sizeof(pid_t), len);
 	fds = ft_calloc(sizeof(int *), len);
 	i = 0;
@@ -214,14 +214,11 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
     int 	i;
-	int		len;
     int 	**fds;
     pid_t 	*ch_pid;
 
-	//check_masterkill(lst);
 	i = 0;
 	fds = create_pipes(lst, &ch_pid);
-	len = lstlen(*lst) - num_of_pipes(*lst); // minus num_of_pipes. lstlen is too long
     while ((*lst) != NULL && (*lst)->isCommand == true)
 	{
         ch_pid[i] = fork();
@@ -239,7 +236,9 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 			break ;
     }
 	i = 0;
-    while (i++ < len)
+	while (ch_pid[i])
+		i++;
+    while (i-- > -1)
 			wait(NULL);
-	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, len), 0);
+	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, i), 0);
 }

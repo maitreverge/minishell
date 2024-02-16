@@ -3,61 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/15 13:50:08 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 14:45:31 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-//george main
-// int main(int ac, char **av, char **envp)
-// {
-// 	(void)ac;
-// 	(void)av;
-// 	t_all		all;
-// 	t_pars		pars;
-
-// 	copy_env_into_list(&all.env_lst, envp);
-// 	all.last_exit_status = EMPTY_EXIT_LIST;
-// 	all.readline_line = NULL;
-// 	while (1)
-// 	{
-// 		signals(&all);
-// 		all.readline_line = readline("minishell$ ");
-// 		if (all.readline_line == NULL)	//checks for ctrl+d
-// 		{
-// 			printf("exit\r");
-// 			free_s_env(&all.env_lst);
-// 			if (all.readline_line != NULL)
-// 				free(all.readline_line);
-// 			return (exit(0), 1);
-// 		}
-// 		// if (ft_strchr(all.readline_line, '|'))
-// 		// 	pipes(ft_split(all.readline_line, '|'), envp);
-// 		if (ft_strncmp(all.readline_line, "echo", 4) == 0)
-// 			ft_echo(all.readline_line, &all, &pars, 1);	//replace 1 with fd
-// 		else if (ft_strncmp(all.readline_line, "cd", 2) == 0)
-// 			ft_cd(all.readline_line, all.env_lst);
-// 		else if (ft_strncmp(all.readline_line, "pwd", 3) == 0)
-// 			ft_pwd(all.env_lst, 1, true);	//replace 1 with fd
-// 		else if (ft_strncmp(all.readline_line, "env", 3) == 0)
-// 			ft_env(&all, 1);
-// 		else if (ft_strncmp(all.readline_line, "export", 6) == 0)
-// 			ft_export(&all.env_lst, all.readline_line);
-// 		else if (ft_strncmp(all.readline_line, "unset", 5) == 0)
-// 			ft_unset(&all.env_lst, all.readline_line);
-// 		else if (ft_strncmp(all.readline_line, "exit", 4) == 0)
-// 			ft_exit(&all, all.readline_line, 1);
-// 		add_history(all.readline_line);
-// 		free(all.readline_line);
-// 	}
-// 	free_s_env(&all.env_lst);
-// 	free(all.readline_line);
-// 	return 0;
-// }
 
 /*
 	Returns:
@@ -94,7 +47,7 @@ int	check_next_operator(t_pars *lst)
 void	exec_builtin(t_pars *pars, t_all *all)
 {
 	if (!ft_strcmp(pars->cmd->name_options_args[0], "echo"))
-		ft_echo(all->readline_line, all, pars);	//replace 1 with fd
+		ft_echo(pars);	//all->readline_line, all, 
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "cd"))
 		ft_cd(all->readline_line, all->env_lst);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "pwd"))
@@ -198,16 +151,19 @@ int	main(int ac, char **av, char **envp)
 			free_firstnode_pars(&pars);
 			break ;
 		}
-		// pars = pars->next;
-		if (check_next_operator(pars->next) == 1)
-			pipes(&pars->next, all, -1);
-		else if (check_next_operator(pars->next) == 2)
-			redirect_input(&pars->next);
-		else if (check_next_operator(pars->next) == 3)
-			redirect_input_delimitor(&pars->next);
-		else if (check_next_operator(pars->next) == 4)
-			redirect_output(&pars->next, all, -1);
-		else //there are no operators
+		/*This block of 'if's doesn't work. It's contingent upon there being a pipe first, and possibly other operators later.*/
+		while (check_next_operator(pars->next) != 0)
+		{
+			if (check_next_operator(pars->next) == 1)
+				pipes(&pars->next, all, -1);
+			else if (check_next_operator(pars->next) == 2)
+				redirect_input(&pars->next);
+			else if (check_next_operator(pars->next) == 3)
+				redirect_input_delimitor(&pars->next);
+			else if (check_next_operator(pars->next) == 4)
+				redirect_output(&pars->next, all, -1);
+		}
+		if (check_next_operator(pars->next) == 0) //there are no operators
 		{
 			if (pars && pars->next && pars->next->cmd->isBuiltin == true)
 				exec_builtin(pars->next, all);
