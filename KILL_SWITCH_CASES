@@ -10,10 +10,51 @@ Double EOF ?
 🚫
 EDGE CASES :
 
-Firt token operators
+1 / Chaos Monkey inputs
 
-| 		ex : 	| echo      ==> 🚫
-> 		ex : 	> echo bonjour > test   ==> 🚫
-< 		ex : 	< >
->>		ex : 
+||||||||||||||||| ==> 🚫
+<> ==> 🚫
+>< ==> 🚫
+only operators tokens, whatever the combinaison ==> 🚫
+wjrgberg | wrjugerik | iurwjgkier ==> ✅ (each token is treated as a command, minishell needs to trows errors like :)
+
+bash: wrjugerik: command not found...
+bash: iurwjgkier: command not found...
+bash: wjrgberg: command not found...
+
+
+
+
+
+
+1 / Firt token is operators : 
+
+| 		ex : 	| something      ==> 🚫 (First token is pipe ==> will fail 100% whatever comes next)
+
+> 		ex : 	> test    ==> ✅ (create an empty file called `test`, erase its content if it does exists) 
+> 		ex : 	> test | echo bonjour    ==> ✅ (create an empty file called `test`, erase its content if it does exists, outputs `bonjour`) 
+> 		ex : 	> echo bonjour   ==> 🚫 (treated as two consecutives files)
+> 		ex : 	echo bonjour >  ==> 🚫 (needs a file)
+> 		ex : 	echo bonjour > |  ==> 🚫 (unexpected token pipe)
+
+
+>>		ex :	>> test ==> ✅ (create an empty file called `test`, DOES NOT erase his content if it does exists)
+>>		ex :	>> test | echo bonjour ==> ✅ (create an empty file called `test`, DOES NOT erase its content if it does exists + outputs `bonjour`)
+>> 		ex : 	>> echo bonjour   ==> 🚫 (treated as two consecutives files)
+>> 		ex : 	echo bonjour >>  ==> 🚫 (needs a file)
+>> 		ex : 	echo bonjour >> |  ==> 🚫 (unexpected token pipe)
+
+>> 		ex : 	> echo bonjour | rev | >> test ==> 🚫 (treated as two consecutives files)
+>> 		ex : 	>> echo bonjour | rev | >> test ==> 🚫 (treated as two consecutives files)
+>> 		ex : 	echo bonjour | rev | >> test ==> ✅ (create an empty file called `test`, DOES NOT erase his content if it does exists, outputs NOTHING)
+>> 		ex : 	echo bonjour | rev | >> test | echo bonjour ==> ✅ (create an empty file called `test`, DOES NOT erase his content if it does exists, outputs `bonjour` from the second echo)
+
+
+
+< 		ex : 	< test ==> ✅ (if file exists (even with chmod 000), does nothing)
+< 		ex : 	< test ==> 🚫 (if file DOES NOT EXISTS, command fails)
+
+
+
+< 		ex : 	< test | echo bonjour ==> ✅ (outputs `bonjour`)
 <<		ex : 
