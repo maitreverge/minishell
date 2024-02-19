@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 16:43:43 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:21:50 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ int	main(int ac, char **av, char **envp)
 			if (check_next_operator(pars->next) == 1)
 			{
 				fds = pipes(&pars->next, all, fds);
-				break ;
+				continue ;
 			}
 			else if (check_next_operator(pars->next) == 2)
 				redirect_input(&pars->next);

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 16:54:36 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:41:51 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,10 +195,12 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
     }
 	// && (*lst)->next->next != NULL && (*lst)->next->next->isCommand == true
     if ((*lst)->next != NULL)//If it's not the last node, we redirect STDOUT
-        dup2(fds[i][1], STDOUT_FILENO);
+	{
+		dup2(fds[i][1], STDOUT_FILENO);
+		close(fds[i][1]);
+	}
     close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
-    // if (i != 0)//Closes the Write end of the previous pipe, if it exists
-        close(fds[i][1]);
+    // if (i != 0)	//Closes the Write end of the previous pipe, if it exists
 	if ((*lst)->cmd->isBuiltin == true)
 		exec_builtin(*lst, all);
 	else
@@ -226,7 +228,7 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 			pipes_child_func(lst, all, input_fd, fds, i);
         else if (ch_pid[i] < 0)
 			fork_error(fds, &ch_pid);
-        if (i != 0)
+        if (ch_pid[i] > 0 && i > 0)
             close(fds[i - 1][0]);
     	close(fds[i][1]);
         input_fd = fds[i++][0];
@@ -241,8 +243,13 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 	len = 0;
 	while (ch_pid[len])
 		len++;
-    while (len-- >= 0)
+	if (i > 0)
+		close(fds[i - 1][0]);
+    while (len > 0)
+	{
 		wait(NULL);
-	return (close(fds[0][0]), free(ch_pid), fds[i][0]);
+		len--;
+	}
+	return (close(fds[0][0]), free(ch_pid), input_fd);
 	// return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, i), 0);
 }
