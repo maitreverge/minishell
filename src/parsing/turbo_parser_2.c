@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/19 14:26:24 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/19 18:23:56 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,20 @@ static void	last_checker(t_pars **pars)
 	if (last->isCommand)
 	{
 		first_node->MasterKill = true;
-		printf("Last toekn is an operator\n");
+		printf("Last token is an operator\n");
 	}
-	else if (/* condition */)
+	else if (first_node->isOperator && first_node->operator->redir_in && first_node->next->isFile && !first_node->next->fl->file_exist)
 	{
-		/* code */
+		first_node->MasterKill = true;
+		printf("File does not exists\n");
 	}
 	
-	
+	/*
+	2nd case :
+< 		ex : 	< not_existing_file ==> 🚫 (fails)
+< 		ex : 	< not_existing_file | echo bonjour ==> 🚫 (fails, openning a waiting prompt)
+< 		ex : 	< test ==> 🚫 (if file DOES NOT EXISTS, command fails)
+	*/
 }
 
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
@@ -47,7 +53,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		last_p_node = lstlast(*pars);
 		if (!last_p_node->prev) // gestion du premier noeud
 		{
-			if (is_token_pipe(cur->splitted_prompt, cur->cleaned_prompt))
+			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 			{
 				(*pars)->MasterKill = true;
 				printf("First Token is a Pipe\n");

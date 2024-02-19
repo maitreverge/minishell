@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:25:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/16 17:54:34 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/19 18:10:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	print_error(t_pars **pars)
 {
