@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/19 18:23:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/19 18:27:31 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	last_checker(t_pars **pars)
 	first_node = *pars;
 	last = lstlast(*pars);
 
-	if (last->isCommand)
+	if (last->isOperator)
 	{
 		first_node->MasterKill = true;
 		printf("Last token is an operator\n");
