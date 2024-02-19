@@ -6,11 +6,32 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/16 17:56:08 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/19 14:26:24 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+static void	last_checker(t_pars **pars)
+{
+	t_pars *last;
+	t_pars *first_node;
+
+	first_node = *pars;
+	last = lstlast(*pars);
+
+	if (last->isCommand)
+	{
+		first_node->MasterKill = true;
+		printf("Last toekn is an operator\n");
+	}
+	else if (/* condition */)
+	{
+		/* code */
+	}
+	
+	
+}
 
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 {
@@ -24,16 +45,18 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 	while (cur->cleaned_prompt[i])
 	{
 		last_p_node = lstlast(*pars);
-		if (!last_p_node->prev)
+		if (!last_p_node->prev) // gestion du premier noeud
 		{
-			if (!is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
-				new_node_command(pars, u_alloc, &i);
-			else // does
+			if (is_token_pipe(cur->splitted_prompt, cur->cleaned_prompt))
 			{
 				(*pars)->MasterKill = true;
-				printf("First Token is a Operator\n");
+				printf("First Token is a Pipe\n");
 				break ;
 			}
+			else if (is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_operator(pars, cur->cleaned_prompt[i]);
+			else if (!is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+				new_node_command(pars, u_alloc, &i);
 		}
 		else if ((is_last_node_cmd(pars)))
 		{
@@ -48,8 +71,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		}
 		else if (is_last_node_file(pars))
 		{
-			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i])
-				|| is_token_redir_out(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]) || is_token_redir_out(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_operator(pars, cur->cleaned_prompt[i]);
 			else
 			{
@@ -72,14 +94,11 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		}
 		else if (is_last_node_operator(pars))
 		{
-			if (is_last_node_pipe(pars)
-				&& !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			if (is_last_node_pipe(pars) && !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_command(pars, u_alloc, &i);
-			else if (is_last_node_redir(pars)
-				&& !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			else if (is_last_node_redir(pars) && !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_file(pars, cur->cleaned_prompt[i]);
-			else if (is_last_node_r_in_delim(pars)
-				&& !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
+			else if (is_last_node_r_in_delim(pars) && !is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 				new_node_here_doc(pars, cur->cleaned_prompt[i]);
 			else
 			{
@@ -91,6 +110,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 		if (cur->cleaned_prompt[i])
 			i++;
 	}
+	last_checker(pars);
 	// ! Turn this comment off to see on stdout what's in the struct
 	print_final_struct(pars);
 }

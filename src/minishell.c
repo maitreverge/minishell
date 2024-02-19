@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 15:25:18 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/19 11:06:18 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ t_all	*init_t_all_struct(char **envp)
 void	reset_t_pars(t_pars **pars)
 {
 	(*pars)->MasterKill = false;
+	(*pars)->isRedirIn = false; // reseting this one when search_redir_in turn it on
 	(*pars)->error_message = 0;	
 }
 
