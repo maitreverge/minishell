@@ -1,0 +1,82 @@
+-Unclosed quotes
+
+Double consecutives operators tokens
+
+Double file ?
+
+Double EOF ?
+
+✅
+🚫
+EDGE CASES :
+
+1 / Chaos inputs
+
+||||||||||||||||| ==> 🚫
+<> ==> 🚫
+>< ==> 🚫
+only operators tokens, whatever the combinaison ==> 🚫
+wjrgberg | wrjugerik | iurwjgkier ==> ✅ (each token is treated as a command, minishell needs to trows errors like :)
+
+bash: wrjugerik: command not found...
+bash: iurwjgkier: command not found...
+bash: wjrgberg: command not found...
+
+
+
+1 / Firt token is operators : 
+
+| 		ex : 	| something      ==> 🚫 (First token is pipe ==> will fail 100% whatever comes next)
+
+> 		ex : 	> test    ==> ✅ (create an empty file called `test`, erase its content if it does exists) 
+> 		ex : 	> test | echo bonjour    ==> ✅ (create an empty file called `test`, erase its content if it does exists, outputs `bonjour`) 
+> 		ex : 	> echo bonjour   ==> 🚫 (treated as two consecutives files)
+> 		ex : 	echo bonjour >  ==> 🚫 (needs a file)
+> 		ex : 	echo bonjour > |  ==> 🚫 (unexpected token pipe)
+
+
+>>		ex :	>> test ==> ✅ (create an empty file called `test`, DOES NOT erase his content if it does exists)
+>>		ex :	>> test | echo bonjour ==> ✅ (create an empty file called `test`, DOES NOT erase its content if it does exists + outputs `bonjour`)
+>> 		ex : 	>> echo bonjour   ==> 🚫 (treated as two consecutives files)
+>> 		ex : 	echo bonjour >>  ==> 🚫 (needs a file)
+>> 		ex : 	echo bonjour >> |  ==> 🚫 (unexpected token pipe)
+
+>> 		ex : 	> echo bonjour | rev | >> test ==> 🚫 (treated as two consecutives files)
+>> 		ex : 	>> echo bonjour | rev | >> test ==> 🚫 (treated as two consecutives files)
+>> 		ex : 	echo bonjour | rev | >> test ==> ✅ (create an empty file called `test`, DOES NOT erase his content if it does exists, outputs NOTHING)
+>> 		ex : 	echo bonjour | rev | >> test | echo bonjour ==> ✅ (create an empty file called `test`, DOES NOT erase his content if it does exists, outputs `bonjour` from the second echo)
+
+
+
+< 		ex : 	< test ==> ✅ (if file exists (even with chmod 000), does nothing)
+< 		ex : 	< test not_existing_file ==> ✅ (if file exists (even with chmod 000), does nothing)
+< 		ex : 	< test | echo bonjour ==> ✅ (outputs `bonjour`)
+< 		ex : 	< not_existing_file ==> 🚫 (fails)
+< 		ex : 	< not_existing_file | echo bonjour ==> 🚫 (fails, openning a waiting prompt)
+< 		ex : 	< test ==> 🚫 (if file DOES NOT EXISTS, command fails)
+< 		ex : 	< test | echo bonjour ==> ✅ (if file `test` exists, output `bonjour`)
+< 		ex : 	< wlrgnjbedkrtfn | echo bonjour ==> ✅ (open a here_doc like where any command will be executed)
+
+==> ✅
+==> 🚫
+
+<<		ex :	<<  test | echo bonjour | rev ==> ✅ (outputs `ruojnob`) 
+<< 		ex : 	<<  wlrgnjbedkrtfn | echo bonjour ==> ✅ (open a here_doc like where any command will be executed)
+<<		ex :	<< EOF wrigjeriju | echo bonjour  ==> ✅ (open an here_doc until EOF, then execute `echo bonjour`, but `wrigjeriju` isn't necessary executed)
+
+All << as first case will execute whatsoever
+
+
+2 >
+MIND-WRECKING CASES :
+
+echo $0 ==> Outputs `bash`
+
+echo $SHELL | rev > test test test test ==> creates `test` file with nothing on it. The command erase if `test` exists.
+
+echo $? ==> output last exist_status
+
+Check chaotic input like njbhgvfcdxfvghbnjkm8l,
+
+
+

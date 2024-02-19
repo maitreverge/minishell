@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 11:28:41 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 20:22:06 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/16 15:24:30 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_pars	*init_1st_node_pars(void)
 	if (!new)
 		return (NULL);
 	new->MasterKill = false;
+	new->error_message = 0;
 	new->isRedirIn = false;
 	new->last_exit_status = 0;
 	new->isCommand = false;

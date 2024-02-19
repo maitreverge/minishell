@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/19 15:17:49 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/19 18:56:13 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,13 @@ t_all	*init_t_all_struct(char **envp)
 	return (new_all);
 }
 
+void	reset_t_pars(t_pars **pars)
+{
+	(*pars)->MasterKill = false;
+	(*pars)->isRedirIn = false; // reseting this one when search_redir_in turn it on
+	(*pars)->error_message = 0;	
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
@@ -131,9 +138,10 @@ int	main(int ac, char **av, char **envp)
 	// Nodes all and node t_env_list are create and init here
 	all = init_t_all_struct(envp);
 	pars = init_1st_node_pars();
-	signals(pars);
+	signals(pars); // calling 
 	while (1)
 	{
+		reset_t_pars(&pars);
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
