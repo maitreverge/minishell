@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 15:11:18 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:43:43 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,18 +151,24 @@ int	main(int ac, char **av, char **envp)
 			free_firstnode_pars(&pars);
 			break ;
 		}
-		/*This block of 'if's doesn't work. It's contingent upon there being a pipe first, and possibly other operators later.*/
+		int	fds;
+		fds = -1;
 		while (check_next_operator(pars->next) != 0)
 		{
 			if (check_next_operator(pars->next) == 1)
-				pipes(&pars->next, all, -1);
+			{
+				fds = pipes(&pars->next, all, fds);
+				break ;
+			}
 			else if (check_next_operator(pars->next) == 2)
 				redirect_input(&pars->next);
 			else if (check_next_operator(pars->next) == 3)
 				redirect_input_delimitor(&pars->next);
 			else if (check_next_operator(pars->next) == 4)
-				redirect_output(&pars->next, all, -1);
+				redirect_output(&pars->next, all, fds);
 		}
+		if (fds != -1)
+			close(fds);
 		if (check_next_operator(pars->next) == 0) //there are no operators
 		{
 			if (pars && pars->next && pars->next->cmd->isBuiltin == true)

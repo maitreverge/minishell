@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 15:01:02 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:54:36 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,13 +193,12 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 		dup2(input_fd, STDIN_FILENO);
         close(input_fd);
     }
-    if ((*lst)->next != NULL && (*lst)->next->next != NULL && (*lst)->next->next->isCommand == true)	//If it's not the last node, we redirect STDOUT
+	// && (*lst)->next->next != NULL && (*lst)->next->next->isCommand == true
+    if ((*lst)->next != NULL)//If it's not the last node, we redirect STDOUT
         dup2(fds[i][1], STDOUT_FILENO);
     close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
-    if (i != 0)//Closes the Write end of the previous pipe, if it exists
-	{
-        close(fds[i - 1][1]);
-	}
+    // if (i != 0)//Closes the Write end of the previous pipe, if it exists
+        close(fds[i][1]);
 	if ((*lst)->cmd->isBuiltin == true)
 		exec_builtin(*lst, all);
 	else
@@ -214,6 +213,7 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
     int 	i;
+    int 	len;
     int 	**fds;
     pid_t 	*ch_pid;
 
@@ -226,19 +226,23 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 			pipes_child_func(lst, all, input_fd, fds, i);
         else if (ch_pid[i] < 0)
 			fork_error(fds, &ch_pid);
-        close(fds[i][1]);
         if (i != 0)
             close(fds[i - 1][0]);
+    	close(fds[i][1]);
         input_fd = fds[i++][0];
 		if ((*lst)->next && (*lst)->next->isOperator == true && (*lst)->next->operator->pipe == true && (*lst)->next->next)
-        	(*lst) = (*lst)->next->next;	//to skip the pipe operator and go to the next cmd
+        {
+        	// close(fds[i][1]);
+			(*lst) = (*lst)->next->next;	//to skip the pipe operator and go to the next cmd
+		}
 		else
 			break ;
     }
-	i = 0;
-	while (ch_pid[i])
-		i++;
-    while (i-- > -1)
-			wait(NULL);
-	return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, i), 0);
+	len = 0;
+	while (ch_pid[len])
+		len++;
+    while (len-- >= 0)
+		wait(NULL);
+	return (close(fds[0][0]), free(ch_pid), fds[i][0]);
+	// return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, i), 0);
 }

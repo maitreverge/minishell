@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/16 15:11:55 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/16 15:42:38 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,10 +284,10 @@ int		signals(t_pars *all);
 
 /*Pipes, redirections*/
 void	exec_builtin(t_pars *pars, t_all *all);
-int	pipes(t_pars **lst, t_all *all, int fd_stdin);
-int	redirect_input_delimitor(t_pars **lst);
-int	redirect_input(t_pars **lst);
-int	redirect_output(t_pars **lst, t_all *all, int input_fd);
+int		pipes(t_pars **lst, t_all *all, int fd_stdin);
+int		redirect_input_delimitor(t_pars **lst);
+int		redirect_input(t_pars **lst);
+int		redirect_output(t_pars **lst, t_all *all, int input_fd);
 
 /*Utils*/
 size_t	size_of_ptr_ptr(void **arr);
