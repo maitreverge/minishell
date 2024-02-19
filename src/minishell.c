@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/19 13:21:50 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:17:49 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,23 +153,37 @@ int	main(int ac, char **av, char **envp)
 		}
 		int	fds;
 		fds = -1;
+		int k = 0;
 		while (check_next_operator(pars->next) != 0)
 		{
 			if (check_next_operator(pars->next) == 1)
 			{
 				fds = pipes(&pars->next, all, fds);
+				k = 123;
 				continue ;
 			}
 			else if (check_next_operator(pars->next) == 2)
+			{
 				redirect_input(&pars->next);
+				k = 123;
+				
+			}
 			else if (check_next_operator(pars->next) == 3)
+			{
 				redirect_input_delimitor(&pars->next);
+				k = 123;
+				
+			}
 			else if (check_next_operator(pars->next) == 4)
+			{
 				redirect_output(&pars->next, all, fds);
+				k = 123;
+				
+			}
 		}
 		if (fds != -1)
 			close(fds);
-		if (check_next_operator(pars->next) == 0) //there are no operators
+		if (check_next_operator(pars->next) == 0 && (k != 123)) //there are no operators
 		{
 			if (pars && pars->next && pars->next->cmd->isBuiltin == true)
 				exec_builtin(pars->next, all);

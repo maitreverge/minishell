@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/19 14:41:51 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:19:05 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,11 +245,14 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 		len++;
 	if (i > 0)
 		close(fds[i - 1][0]);
+	// close(fds[0][1]);
     while (len > 0)
 	{
 		wait(NULL);
 		len--;
 	}
-	return (close(fds[0][0]), free(ch_pid), input_fd);
+	// close(fds[0][0]);
+	free(ch_pid);
+	return (input_fd);
 	// return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, i), 0);
 }
