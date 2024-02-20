@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/20 14:20:20 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 14:29:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,5 +218,5 @@ int	main(int ac, char **av, char **envp)
 			add_history(all->readline_line);
 		free(all->readline_line);
 		free_t_pars(&pars);//not sure, but seems right
-	}
+	} 
 }
