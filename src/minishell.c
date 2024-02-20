@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/19 18:56:13 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/20 10:57:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,13 @@ void	exec_external_func(t_pars *lst)
 	ch_pid = fork();
 	if (ch_pid == 0)
 	{
-		if (execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL) < 0)
+		if ( !lst->cmd->command_path)
+		{
+			printf("Command not found");
+			lst->last_exit_status = 127;
+			exit (-127) ;
+		}
+		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL) < 0)
 		{
 			perror("execve");
 			// free_t_pars(&lst);

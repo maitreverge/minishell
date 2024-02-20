@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:28:16 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 13:53:29 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 10:53:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	free_t_pars(t_pars **pars)
 		if (to_free->isCommand && to_free->cmd)
 		{
 			// free(to_free->cmd->command_name);
-			free(to_free->cmd->command_path);
+			if (to_free->cmd->command_path)
+				free(to_free->cmd->command_path);
 			free_split(to_free->cmd->name_options_args);
 			free(to_free->cmd); // free the sub_node
 		}

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/19 15:19:05 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 10:52:10 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,15 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 	if ((*lst)->cmd->isBuiltin == true)
 		exec_builtin(*lst, all);
 	else
-    	execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
+	{
+		if (!(*lst)->cmd->command_path)
+		{
+			printf("Command not found");
+			(*lst)->last_exit_status = 127;
+		}
+		else
+			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
+	}
 }
 
 /*
