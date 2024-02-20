@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/20 14:09:31 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 14:20:20 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,54 +163,60 @@ int	main(int ac, char **av, char **envp)
 			return (exit(0), 1);
 		}
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
-		if (pars->MasterKill == true)
+		// ! In this form, masterkill actually exit minishell, instead of giving back the prompt
+		// ! I need to skip all the execution part, trow a error message, then stay in the loop
+		// if (pars->MasterKill == true)
+		// {
+		// 	free_firstnode_pars(&pars);
+		// 	break ; 
+		// }
+		if (!pars->MasterKill) // if master_kill if false
 		{
-			free_firstnode_pars(&pars);
-			break ;
+			
+			int	fds;
+			fds = -1;
+			int k = 0;
+			while (check_next_operator(pars->next) != 0)
+			{
+				if (check_next_operator(pars->next) == 1)
+				{
+					fds = pipes(&pars->next, all, fds);
+					k = 123;
+					continue ;
+				}
+				else if (check_next_operator(pars->next) == 2)
+				{
+					redirect_input(&pars->next);
+					k = 123;
+					
+				}
+				else if (check_next_operator(pars->next) == 3)
+				{
+					redirect_input_delimitor(&pars->next);
+					k = 123;
+					
+				}
+				else if (check_next_operator(pars->next) == 4)
+				{
+					redirect_output(&pars->next, all, fds);
+					k = 123;
+					
+				}
+			}
+			if (fds != -1)
+				close(fds);
+			if (check_next_operator(pars->next) == 0 && (k != 123)) //there are no operators
+			{
+				if (pars && pars->next && pars->next->cmd->isBuiltin == true)
+					exec_builtin(pars->next, all);
+				else if (pars && pars->next)
+					exec_external_func(pars->next);
+			}
 		}
-		int	fds;
-		fds = -1;
-		int k = 0;
-		while (check_next_operator(pars->next) != 0)
-		{
-			if (check_next_operator(pars->next) == 1)
-			{
-				fds = pipes(&pars->next, all, fds);
-				k = 123;
-				continue ;
-			}
-			else if (check_next_operator(pars->next) == 2)
-			{
-				redirect_input(&pars->next);
-				k = 123;
-				
-			}
-			else if (check_next_operator(pars->next) == 3)
-			{
-				redirect_input_delimitor(&pars->next);
-				k = 123;
-				
-			}
-			else if (check_next_operator(pars->next) == 4)
-			{
-				redirect_output(&pars->next, all, fds);
-				k = 123;
-				
-			}
-		}
-		if (fds != -1)
-			close(fds);
-		if (check_next_operator(pars->next) == 0 && (k != 123)) //there are no operators
-		{
-			if (pars && pars->next && pars->next->cmd->isBuiltin == true)
-				exec_builtin(pars->next, all);
-			else if (pars && pars->next)
-				exec_external_func(pars->next);
-		}
+		// those next 4 lines will execute regardless if master Kill is on 
 		if (pars && pars->next)
 			add_history(all->readline_line);
 		free(all->readline_line);
 		free_t_pars(&pars);//not sure, but seems right
-		// ! need to free cleaned prompt and splitted
 	}
 }

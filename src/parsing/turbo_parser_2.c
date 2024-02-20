@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/19 18:27:31 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 14:13:09 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,5 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 	}
 	last_checker(pars);
 	// ! Turn this comment off to see on stdout what's in the struct
-	print_final_struct(pars);
+	// print_final_struct(pars);
 }
