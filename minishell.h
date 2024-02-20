@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/19 18:56:02 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/20 12:50:50 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,8 @@ t_pars	*lstlast(t_pars *lst);
 void	lstadd_back(t_pars **lst, t_pars *new);
 void	lstadd_front(t_pars **lst, t_pars *new);
 int		lstsize(t_pars *lst);
+t_pars	*lstfirst(t_pars *lst);
+
 
 
 // bools_parsing

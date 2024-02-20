@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/20 10:57:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 14:09:31 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,19 @@ void	exec_builtin(t_pars *pars, t_all *all)
 
 void	exec_external_func(t_pars *lst)
 {
+	t_pars *first_node;
+
+	first_node = lstfirst(lst);
 	pid_t	ch_pid;
 
 	ch_pid = fork();
 	if (ch_pid == 0)
 	{
-		if ( !lst->cmd->command_path)
+		if (!lst->cmd->command_path)
 		{
-			printf("Command not found");
-			lst->last_exit_status = 127;
-			exit (-127) ;
+			printf("Command not found\n");
+			first_node->last_exit_status = 127;
+			return ;
 		}
 		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL) < 0)
 		{

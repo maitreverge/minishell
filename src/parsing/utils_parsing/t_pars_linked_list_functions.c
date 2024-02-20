@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 04:25:36 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 10:03:03 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 11:30:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,20 @@ int	lstsize(t_pars *lst)
 		current = current->next;
 	}
 	return (i);
+}
+
+t_pars	*lstfirst(t_pars *lst)
+{
+	t_pars	*current;
+
+	current = lst;
+	if (!current)
+		return (0);
+	if (!current->prev)
+		return (current);
+	while (current->prev != NULL)
+	{
+		current = current->prev;
+	}
+	return (current);
 }

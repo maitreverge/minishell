@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/20 10:52:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 12:53:24 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,9 @@ int	**create_pipes(t_pars **lst, pid_t **ch_pid)
 
 void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 {
+	t_pars *first_node;
+
+	first_node = lstfirst(*lst);
 	if (input_fd != -1)
     {
 		dup2(input_fd, STDIN_FILENO);
@@ -207,8 +210,8 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 	{
 		if (!(*lst)->cmd->command_path)
 		{
-			printf("Command not found");
-			(*lst)->last_exit_status = 127;
+			printf("Command not found\n");
+			first_node->last_exit_status = 127;
 		}
 		else
 			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);

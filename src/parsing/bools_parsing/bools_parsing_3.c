@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:58:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/20 10:50:41 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/20 11:06:37 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ char	*join_path_cmd(char *cleaned, char **paths)
 	}
 	// need allocating even if path if not found
 	// real_path = ft_strdup(cleaned);
-	real_path = ft_strdup("NULL");
-	// 
+	real_path = NULL;
 	return (real_path);
 }
 
