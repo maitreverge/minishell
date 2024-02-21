@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:46:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/14 19:59:02 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:40:47 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static t_pars	*initialize_new_node(char *cleaned)
 	new_node->here_doc = NULL;
 	new_node->prev = NULL;
 	new_node->next = NULL;
-	new_node->fl->file_name = cleaned;
+	new_node->fl->file_name = ft_strdup(cleaned);
 	new_node->fl->file_exist = false;
 	new_node->fl->auth_r = false;
 	new_node->fl->auth_w = false;

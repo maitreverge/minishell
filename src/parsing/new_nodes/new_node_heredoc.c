@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:53:26 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 19:36:51 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:41:06 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	new_node_here_doc(t_pars **pars, char *cleaned)
 	if (!new_node)
 		return ;
 	new_node->isHereDoc = true;
-	new_node->here_doc = cleaned;
+	new_node->here_doc = ft_strdup(cleaned);
 	new_node->isCommand = false;
 	new_node->cmd = NULL;
 	new_node->isFile = false;
