@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/20 12:53:24 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/21 13:39:47 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ int	redirect_input_delimitor(t_pars **lst)
 	}
 	wait(NULL);
 	return (close(open_fd), unlink("/tmp/a0987654321aaa.tmp"), 0);
-	// close(open_fd);
-	// unlink("/tmp/a0987654321aaa.tmp");
 }
 
 /*
@@ -118,7 +116,6 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 			free_t_pars(lst);
 			exit(EXIT_FAILURE);
 		}
-		close(fd[0]);
 	}
 	close(fd[0]);
 	ch_pid = fork();
