@@ -50,7 +50,7 @@ bash: wjrgberg: command not found...
 
 < 		ex : 	< test ==> ✅ (if file exists (even with chmod 000), does nothing)
 < 		ex : 	< test not_existing_file ==> ✅ (if file exists (even with chmod 000), does nothing)
-< 		ex : 	< test | echo bonjour ==> ✅ (outputs `bonjour`)
+< 		ex : 	> ==> ✅ (outputs `bonjour`)
 < 		ex : 	< not_existing_file ==> 🚫 (fails)
 < 		ex : 	< not_existing_file | echo bonjour ==> 🚫 (fails, openning a waiting prompt)
 < 		ex : 	< test ==> 🚫 (if file DOES NOT EXISTS, command fails)
@@ -75,7 +75,7 @@ echo $0 ==> Outputs `bash`
 echo $SHELL | rev > test test test test ==> creates `test` file with nothing on it. The command erase if `test` exists.
 
 echo $? ==> output last exist_status
-
+ls 
 Check chaotic input like njbhgvfcdxfvghbnjkm8l,
 
 

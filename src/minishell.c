@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 13:51:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/23 21:31:33 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,11 @@ void	exec_external_func(t_pars *lst)
 t_all	*init_t_all_struct(char **envp)
 {
 	t_all		*new_all;
-	t_env_list	*new_list;
 
 	// allocate two nodes for t_all and t_env_list
 	new_all = malloc(sizeof(t_all));
 	if (!new_all)
 		return (NULL);
-	new_list = malloc(sizeof(t_env_list));
-	if (!new_list)
-		return (NULL);
-
-	// connecting node t_all to sub_node t_env_list
-	new_all->env_lst = new_list;
 	
 	// Init sub_node to null
 	new_all->env_lst = NULL;
@@ -120,10 +113,6 @@ t_all	*init_t_all_struct(char **envp)
 	// init env_list nodes from envp
 	copy_env_into_list(&new_all->env_lst, envp);
 	
-
-	// ! IMPORTANT :
-	// both t_all and t_env_list need to be freed when an exit signal occurs
-
 	return (new_all);
 }
 

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 14:18:07 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/23 21:23:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
 	new_node = (t_env_list *)malloc(sizeof(t_env_list));
 	if (!new_node)
 		return (NULL);
-	new_node->original_envp = envp;
-	new_node->key = s_key;
-	new_node->value = s_value;
+	new_node->original_envp = ft_strdup(envp);
+	new_node->key = ft_strdup(s_key);
+	new_node->value = ft_strdup(s_value);
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -63,8 +63,8 @@ void	copy_env_into_list(t_env_list **env, char **envp)
 	while (envp[i])
 	{
 		splitted_value = ft_2_split(envp[i], '=');
-		s_key = ft_strdup(splitted_value[0]);
-		s_value = ft_strdup(splitted_value[1]);
+		s_key = splitted_value[0];
+		s_value = splitted_value[1];
 		if (!current)
 		{
 			current = env_lstnew(s_key, s_value, envp[i]);
@@ -73,6 +73,6 @@ void	copy_env_into_list(t_env_list **env, char **envp)
 		else
 			env_lstadd_back(&current, env_lstnew(s_key, s_value, envp[i]));
 		i++;
-		free(splitted_value);
+		free_split(splitted_value);
 	}
 }
