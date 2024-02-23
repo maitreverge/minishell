@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   copy_envp_into_list.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 22:13:49 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:18:07 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void	copy_env_into_list(t_env_list **env, char **envp)
 	while (envp[i])
 	{
 		splitted_value = ft_2_split(envp[i], '=');
-		s_key = splitted_value[0];
-		s_value = splitted_value[1];
+		s_key = ft_strdup(splitted_value[0]);
+		s_value = ft_strdup(splitted_value[1]);
 		if (!current)
 		{
 			current = env_lstnew(s_key, s_value, envp[i]);
