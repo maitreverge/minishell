@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 12:40:23 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/23 13:31:07 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,38 @@ int	redirect_input(t_pars **lst)
 	return (0);
 }
 
+int	redir_out_child(t_pars **lst, t_all *all, int *fd)
+{
+	int	open_fd;
+	
+	if ((*lst)->next == NULL)
+		return (ft_putendl_fd("Error, next is null.", 2), 1);
+	else if ((*lst)->next->next == NULL)
+		return (ft_putendl_fd("Error, next next is null.", 2), 1);
+	if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out == true)
+		open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
+	else if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out_app == true)
+		open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+	else
+		return (ft_putendl_fd("Error, insufficient permissions.", 2), 1);
+	dup2(open_fd, fd[1]);
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
+	close(open_fd);
+	if ((*lst)->cmd->isBuiltin == true)
+		exec_builtin(*lst, all);//add env_list to t_pars
+	else
+		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
+	exit(0);
+}
+
 /*
 	Handles '>' and '>>' operators.
 	lst->next is the '>'/'>>' operator, and lst->next->next is the file to redirect to.
 */
 int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 {
-	// int		i;
 	int		fd[2];
-	int		open_fd;
 	pid_t	ch_pid;
 
 	if (pipe(fd) < 0)
@@ -117,34 +140,12 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 			exit(EXIT_FAILURE);
 		}
 	}
+	close(input_fd);
 	close(fd[0]);
 	ch_pid = fork();
 	if (ch_pid == 0)
 	{
-		if ((*lst)->next == NULL)
-			return (ft_putendl_fd("Error, next is null.", 2), 1);
-		else if ((*lst)->next->next == NULL)
-			return (ft_putendl_fd("Error, next next is null.", 2), 1);
-		if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out == true)
-			open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
-		else if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out_app == true)
-			open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
-		else
-			return (ft_putendl_fd("Error, insufficient permissions.", 2), 1);
-		dup2(open_fd, fd[1]);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-		close(open_fd);
-		//close(STDOUT_FILENO);
-		if ((*lst)->cmd->isBuiltin == true)
-		{
-			exec_builtin(*lst, all);//add env_list to t_pars
-			ft_putstr_fd("TESTSTRING", 2);////
-			close(fd[1]);
-			close(open_fd);
-		}
-		else
-			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
+		redir_out_child(lst, all, fd);
 	}
 	else if (ch_pid < 0)
 	{
@@ -152,8 +153,6 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
-	// if (input_fd != -1)
-		close(input_fd);
 	close(fd[1]);
 	wait(NULL);
 	return (0);
