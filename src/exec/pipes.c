@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/21 13:39:47 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/23 12:40:23 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,12 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 		close(open_fd);
 		//close(STDOUT_FILENO);
 		if ((*lst)->cmd->isBuiltin == true)
+		{
 			exec_builtin(*lst, all);//add env_list to t_pars
+			ft_putstr_fd("TESTSTRING", 2);////
+			close(fd[1]);
+			close(open_fd);
+		}
 		else
 			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
 	}
@@ -147,7 +152,7 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
-	if (input_fd != -1)
+	// if (input_fd != -1)
 		close(input_fd);
 	close(fd[1]);
 	wait(NULL);

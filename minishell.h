@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/20 12:50:50 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/22 16:05:12 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ int		ft_exit(t_pars *pars, t_all *all, char *readline_return);
 int		signals(t_pars *all);
 
 /*Pipes, redirections*/
-void	exec_builtin(t_pars *pars, t_all *all);
+void		exec_builtin(t_pars *pars, t_all *all);
 int		pipes(t_pars **lst, t_all *all, int fd_stdin);
 int		redirect_input_delimitor(t_pars **lst);
 int		redirect_input(t_pars **lst);
