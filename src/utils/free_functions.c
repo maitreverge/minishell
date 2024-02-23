@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/21 15:28:35 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/23 13:57:07 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,19 @@ void	free_t_pars(t_pars **pars)
 		to_free = to_free->next;
 		free(temp);
 	}
+}
+
+void	free_all(t_all **all)
+{
+	t_all *current;
+
+	current = *all;
+
+	free_s_env(&current->env_lst); // free the struct itself
+	free(&current->env_lst); // free the node which have been allocated
+
+	if (current->readline_line != NULL)
+		free(current->readline_line);
+	
 }
 

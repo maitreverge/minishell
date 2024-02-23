@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/22 16:43:18 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/23 13:51:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,10 +157,11 @@ int	main(int ac, char **av, char **envp)
 		{
 			//there are certainly things here that i forgot to free
 			printf("exit\r");
-			free_s_env(&all->env_lst);
+			free_all(&all); // free all node + s_env nodes
+			// free_s_env(&all->env_lst);
 			free_firstnode_pars(&pars);
-			if (all->readline_line != NULL)
-				free(all->readline_line);
+			// if (all->readline_line != NULL)
+			// 	free(all->readline_line);
 			return (exit(0), 1);
 		}
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
