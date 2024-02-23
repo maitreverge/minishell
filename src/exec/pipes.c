@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 13:31:07 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:32:15 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ int	redirect_input_delimitor(t_pars **lst)
 	pid_t	ch_pid;
 	char	*rl_buff;
 
-	//check_masterkill(lst); UNCOMMENT
 	if (access("/tmp/a0987654321aaa.tmp", F_OK) == 0)
 		unlink("/tmp/a0987654321aaa.tmp");
-	open_fd = open("/tmp/a0987654321aaa.tmp", O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+	open_fd = open("/tmp/a0987654321aaa.tmp", O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);//don't think we need S_IWUSR | S_IRUSR since it's just a temp file
 	ch_pid = fork();
 	if (ch_pid == -1)
 		return (perror("fork"), exit(EXIT_FAILURE), 1);
@@ -47,14 +46,17 @@ int	redirect_input_delimitor(t_pars **lst)
 		free(rl_buff);
 		close(open_fd);
 		(*lst)->next->next->isFile = true;
+		(*lst)->next->next->fl = ft_calloc(sizeof(t_file), 1);
 		(*lst)->next->next->fl->file_exist = true;
-		(*lst)->next->next->fl->file_name = "/tmp/a0987654321aaa.tmp";
+		(*lst)->next->next->fl->file_name = ft_strdup("/tmp/a0987654321aaa.tmp");
 		(*lst)->next->next->fl->auth_r = true;
 		redirect_input(lst);
-		close(open_fd);
+		free((*lst)->next->next->fl);
+		free((*lst)->next->next->fl->file_name);
+		// close(open_fd);
 	}
 	wait(NULL);
-	return (close(open_fd), unlink("/tmp/a0987654321aaa.tmp"), 0);
+	return (0);//close(open_fd), unlink("/tmp/a0987654321aaa.tmp"), 
 }
 
 /*
@@ -65,7 +67,6 @@ int	redirect_input(t_pars **lst)
 {
 	int		open_fd;
 	pid_t	ch_pid;
-	//int		fds[2];
 
 	if ((*lst)->next->next->fl->file_exist == false)
 		return (ft_putendl_fd("Error: redirect input: nonexistant file.", 2), 1);
@@ -90,7 +91,7 @@ int	redirect_input(t_pars **lst)
 	return (0);
 }
 
-int	redir_out_child(t_pars **lst, t_all *all, int *fd)
+static int	redir_out_child(t_pars **lst, t_all *all, int *fd)
 {
 	int	open_fd;
 	
@@ -98,9 +99,11 @@ int	redir_out_child(t_pars **lst, t_all *all, int *fd)
 		return (ft_putendl_fd("Error, next is null.", 2), 1);
 	else if ((*lst)->next->next == NULL)
 		return (ft_putendl_fd("Error, next next is null.", 2), 1);
-	if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out == true)
+	if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true
+			&& (*lst)->next->operator->redir_out == true)
 		open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
-	else if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true && (*lst)->next->operator->redir_out_app == true)
+	else if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true
+			&& (*lst)->next->operator->redir_out_app == true)
 		open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 	else
 		return (ft_putendl_fd("Error, insufficient permissions.", 2), 1);
@@ -217,6 +220,7 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 		else
 			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
 	}
+	exit(0);
 }
 
 /*

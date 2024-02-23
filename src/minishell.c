@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/22 16:43:18 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:11:14 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,11 +189,13 @@ int	main(int ac, char **av, char **envp)
 				{
 					redirect_input(&pars->next);
 					k = 123;
+					all->readline_line = ft_strdup("");
 					break ;
 				}
 				else if (check_next_operator(pars->next) == 3)
 				{
 					redirect_input_delimitor(&pars->next);
+					all->readline_line = ft_strdup("");
 					k = 123;
 					break ;
 				}
