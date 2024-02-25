@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 20:55:59 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 21:21:15 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,21 +127,21 @@ void	reset_t_pars(t_pars **pars)
 
 char **convert_env_list_to_array(t_env_list **list)
 {
-	t_env_list *current;
-	char **result;
-	int size;
-	int j; // buffer index
-	current = *list;
+	t_env_list	*current;
+	char		**result;
+	int			size;
+	int			j; // buffer index
 
+	current = *list;
+	size = 0;
 	j = 0;
-	
+	// result = NULL;
 	while (current)
 	{
 		size++;
 		current = current->next;
 	}
 	current = *list;
-	
 	result = ft_calloc(size + 1, sizeof(char *));
 	while (current)
 	{
@@ -149,6 +149,7 @@ char **convert_env_list_to_array(t_env_list **list)
 		current = current->next;
 		j++;
 	}
+	// result[j] = NULL;
 	return (result);
 }
 
@@ -158,22 +159,10 @@ void	refresh_envp(t_all **all)
 
 	current = *all;
 	
-	if (current->copy_envp)
-		free_split(current->copy_envp);
+	// if (current->copy_envp)
+	free_split(current->copy_envp);
 	current->copy_envp = convert_env_list_to_array(&current->env_lst);
 }
-
-void	print_envp(t_all **all)
-{
-	t_all *current;
-
-	current = *all;
-
-	for (int i = 0; current->copy_envp[i]; i++)
-	{
-		printf("Current malloced node = %s\n", current->copy_envp[i]);	
-	}
-} 
 
 int	main(int ac, char **av, char **envp)
 {
@@ -194,7 +183,6 @@ int	main(int ac, char **av, char **envp)
 	{
 		reset_t_pars(&pars);
 		refresh_envp(&all);
-		// print_envp(&all);
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
