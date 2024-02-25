@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 14:11:14 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/25 14:55:54 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,38 +173,30 @@ int	main(int ac, char **av, char **envp)
 		// }
 		if (!pars->MasterKill) // if master_kill if false
 		{
-			
 			int	fds;
 			fds = -1;
 			int k = 0;
-			while (check_next_operator(pars->next) != 0)
+			if (check_next_operator(pars->next) == 1)
 			{
-				if (check_next_operator(pars->next) == 1)
-				{
-					fds = pipes(&pars->next, all, fds);
-					k = 123;
-					continue ;
-				}
-				else if (check_next_operator(pars->next) == 2)
-				{
-					redirect_input(&pars->next);
-					k = 123;
-					all->readline_line = ft_strdup("");
-					break ;
-				}
-				else if (check_next_operator(pars->next) == 3)
-				{
-					redirect_input_delimitor(&pars->next);
-					all->readline_line = ft_strdup("");
-					k = 123;
-					break ;
-				}
-				else if (check_next_operator(pars->next) == 4)
-				{
-					redirect_output(&pars->next, all, fds);
-					k = 123;
-					break ;
-				}
+				fds = pipes(&pars->next, all, fds);
+				k = 123;
+			}
+			else if (check_next_operator(pars->next) == 2)
+			{
+				redirect_input(&pars->next);
+				k = 123;
+				all->readline_line = ft_strdup("");
+			}
+			else if (check_next_operator(pars->next) == 3)
+			{
+				redirect_input_delimitor(&pars->next);
+				all->readline_line = ft_strdup("");
+				k = 123;
+			}
+			else if (check_next_operator(pars->next) == 4)
+			{
+				redirect_output(&pars->next, all, fds);
+				k = 123;
 			}
 			if (fds != -1)
 				close(fds);

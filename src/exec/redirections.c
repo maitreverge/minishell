@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:19:29 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 15:21:17 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/25 15:36:03 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	redirect_input(t_pars **lst)
 	return (0);
 }
 
-static int	redir_out_child(t_pars **lst, t_all *all, int *fd)
+static int	redir_out_child(t_pars **lst, t_all *all, int *fd, int input_fd)
 {
 	int	open_fd;
 	
@@ -111,9 +111,9 @@ static int	redir_out_child(t_pars **lst, t_all *all, int *fd)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
 	close(open_fd);
-	if ((*lst)->cmd->isBuiltin == true)
-		exec_builtin(*lst, all);//add env_list to t_pars
-	else
+	if ((*lst)->cmd->isBuiltin == true && input_fd == -1)
+		exec_builtin(*lst, all);
+	else if (input_fd == -1)
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
 	exit(0);
 }
@@ -135,9 +135,10 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 	}
 	if (input_fd >= 0)
 	{
-		if (dup2(input_fd, fd[0]) < 0)
+		////
+		if (dup2(STDIN_FILENO, fd[0]) < 0)
 		{
-			perror("dup2");
+			perror("dup2 redir output");
 			close(fd[0]);
 			free_t_pars(lst);
 			exit(EXIT_FAILURE);
@@ -148,7 +149,7 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 	ch_pid = fork();
 	if (ch_pid == 0)
 	{
-		redir_out_child(lst, all, fd);
+		redir_out_child(lst, all, fd, input_fd);
 	}
 	else if (ch_pid < 0)
 	{
@@ -156,7 +157,8 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
-	close(fd[1]);
+	else if (ch_pid > 0)
+		close(fd[1]);
 	wait(NULL);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/22 16:05:12 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/25 14:58:20 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,9 @@ int		ft_exit(t_pars *pars, t_all *all, char *readline_return);
 int		signals(t_pars *all);
 
 /*Pipes, redirections*/
-void		exec_builtin(t_pars *pars, t_all *all);
+
+int		check_next_operator(t_pars *lst);
+void	exec_builtin(t_pars *pars, t_all *all);
 int		pipes(t_pars **lst, t_all *all, int fd_stdin);
 int		redirect_input_delimitor(t_pars **lst);
 int		redirect_input(t_pars **lst);

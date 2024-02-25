@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 15:20:59 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/25 15:10:39 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,12 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 		dup2(input_fd, STDIN_FILENO);
         close(input_fd);
     }
-	// && (*lst)->next->next != NULL && (*lst)->next->next->isCommand == true
     if ((*lst)->next != NULL)//If it's not the last node, we redirect STDOUT
 	{
 		dup2(fds[i][1], STDOUT_FILENO);
 		close(fds[i][1]);
 	}
     close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
-    // if (i != 0)	//Closes the Write end of the previous pipe, if it exists
 	if ((*lst)->cmd->isBuiltin == true)
 		exec_builtin(*lst, all);
 	else
@@ -77,7 +75,7 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 /*
 	Handles the pipe '|' operator.
 	Input_fd is -1 when pipes() called for the first time,
-		meaning we don't redirect input this iteration.
+		meaning we don't redirect STDIN this iteration.
 */
 int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
@@ -100,26 +98,26 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
     	close(fds[i][1]);
         input_fd = fds[i++][0];
 		if ((*lst)->next && (*lst)->next->isOperator == true && (*lst)->next->operator->pipe == true && (*lst)->next->next)
-        {
-        	// close(fds[i][1]);
 			(*lst) = (*lst)->next->next;	//to skip the pipe operator and go to the next cmd
-		}
 		else
+		{
+			if (check_next_operator(*lst) == 2)
+				redirect_input(lst);
+			else if (check_next_operator(*lst) == 3)
+				redirect_input_delimitor(lst);
+			else if (check_next_operator(*lst) == 4)
+				redirect_output(lst, all, input_fd);
 			break ;
+		}
     }
 	len = 0;
 	while (ch_pid[len])
 		len++;
-	if (i > 0)
-		close(fds[i - 1][0]);
-	// close(fds[0][1]);
     while (len > 0)
 	{
 		wait(NULL);
 		len--;
 	}
-	// close(fds[0][0]);
 	free(ch_pid);
 	return (input_fd);
-	// return (close(fds[0][0]), free(ch_pid), free_arr((void **)fds, i), 0);
 }
