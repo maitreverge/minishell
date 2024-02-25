@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 18:24:55 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 21:33:29 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
+t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
 {
 	t_env_list	*new_node;
 
@@ -26,7 +26,7 @@ static t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
 	return (new_node);
 }
 
-static t_env_list	*env_lstlast(t_env_list *lst)
+t_env_list	*env_lstlast(t_env_list *lst)
 {
 	t_env_list	*current;
 
@@ -42,7 +42,7 @@ static t_env_list	*env_lstlast(t_env_list *lst)
 	return (current);
 }
 
-static void	env_lstadd_back(t_env_list **lst, t_env_list *new)
+void	env_lstadd_back(t_env_list **lst, t_env_list *new)
 {
 	t_env_list	*tail;
 

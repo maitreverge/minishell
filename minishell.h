@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 19:14:58 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 21:33:53 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,11 @@ void	print_final_struct(t_pars **pars);
 bool	is_operator_char(char c);
 
 void	free_t_alloc(t_alloc *alloc);
+
+t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp);
+t_env_list	*env_lstlast(t_env_list *lst);
+void	env_lstadd_back(t_env_list **lst, t_env_list *new);
+
 
 
 

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 21:21:15 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 22:06:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ char **convert_env_list_to_array(t_env_list **list)
 	current = *list;
 	size = 0;
 	j = 0;
-	// result = NULL;
 	while (current)
 	{
 		size++;
@@ -149,7 +148,6 @@ char **convert_env_list_to_array(t_env_list **list)
 		current = current->next;
 		j++;
 	}
-	// result[j] = NULL;
 	return (result);
 }
 
@@ -159,7 +157,6 @@ void	refresh_envp(t_all **all)
 
 	current = *all;
 	
-	// if (current->copy_envp)
 	free_split(current->copy_envp);
 	current->copy_envp = convert_env_list_to_array(&current->env_lst);
 }
