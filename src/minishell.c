@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 18:44:53 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 19:06:39 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	exec_builtin(t_pars *pars, t_all *all)
 	return ;
 }
 
-void	exec_external_func(t_pars *lst)
+void	exec_external_func(t_pars *lst, t_all *all)
 {
 	t_pars *first_node;
 
@@ -79,7 +79,7 @@ void	exec_external_func(t_pars *lst)
 			first_node->last_exit_status = 127;
 			return ;
 		}
-		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL) < 0)
+		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, all->copy_envp) < 0)
 		{
 			perror("execve");
 			// free_t_pars(&lst);
@@ -132,6 +132,8 @@ char **convert_env_list_to_array(t_env_list **list)
 	int size;
 	int j; // buffer index
 	current = *list;
+
+	j = 0;
 	
 	while (current)
 	{
@@ -215,13 +217,13 @@ int	main(int ac, char **av, char **envp)
 				}
 				else if (check_next_operator(pars->next) == 2)
 				{
-					redirect_input(&pars->next);
+					redirect_input(&pars->next, all);
 					k = 123;
 					break ;
 				}
 				else if (check_next_operator(pars->next) == 3)
 				{
-					redirect_input_delimitor(&pars->next);
+					redirect_input_delimitor(&pars->next, all);
 					k = 123;
 					break ;
 				}
@@ -239,7 +241,7 @@ int	main(int ac, char **av, char **envp)
 				if (pars && pars->next && pars->next->cmd->isBuiltin == true)
 					exec_builtin(pars->next, all);
 				else if (pars && pars->next)
-					exec_external_func(pars->next);
+					exec_external_func(pars->next, all);
 			}
 		}
 		// those next 4 lines will execute regardless if master Kill is on 

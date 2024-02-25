@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 18:28:54 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 19:06:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,8 +290,8 @@ int		signals(t_pars *all);
 /*Pipes, redirections*/
 void		exec_builtin(t_pars *pars, t_all *all);
 int		pipes(t_pars **lst, t_all *all, int fd_stdin);
-int		redirect_input_delimitor(t_pars **lst);
-int		redirect_input(t_pars **lst);
+int		redirect_input_delimitor(t_pars **lst, t_all *all);
+int		redirect_input(t_pars **lst, t_all *all);
 int		redirect_output(t_pars **lst, t_all *all, int input_fd);
 
 /*Utils*/
