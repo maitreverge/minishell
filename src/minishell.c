@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 20:50:13 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 20:55:59 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void	print_envp(t_all **all)
 	{
 		printf("Current malloced node = %s\n", current->copy_envp[i]);	
 	}
-}
+} 
 
 int	main(int ac, char **av, char **envp)
 {
