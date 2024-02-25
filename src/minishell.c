@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 19:15:47 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 20:50:13 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ char **convert_env_list_to_array(t_env_list **list)
 	{
 		result[j] = ft_strdup(current->original_envp);
 		current = current->next;
+		j++;
 	}
 	return (result);
 }
@@ -160,6 +161,18 @@ void	refresh_envp(t_all **all)
 	if (current->copy_envp)
 		free_split(current->copy_envp);
 	current->copy_envp = convert_env_list_to_array(&current->env_lst);
+}
+
+void	print_envp(t_all **all)
+{
+	t_all *current;
+
+	current = *all;
+
+	for (int i = 0; current->copy_envp[i]; i++)
+	{
+		printf("Current malloced node = %s\n", current->copy_envp[i]);	
+	}
 }
 
 int	main(int ac, char **av, char **envp)
@@ -181,6 +194,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		reset_t_pars(&pars);
 		refresh_envp(&all);
+		// print_envp(&all);
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
