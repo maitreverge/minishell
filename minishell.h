@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 14:58:20 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/25 19:14:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,11 +253,13 @@ void	free_t_alloc(t_alloc *alloc);
 
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // * .h George
 
 typedef struct s_all
 {
+	char	**copy_envp;
 	t_env_list	*env_lst;
 	char		*readline_line;
 }	t_all;
@@ -290,8 +292,8 @@ int		signals(t_pars *all);
 int		check_next_operator(t_pars *lst);
 void	exec_builtin(t_pars *pars, t_all *all);
 int		pipes(t_pars **lst, t_all *all, int fd_stdin);
-int		redirect_input_delimitor(t_pars **lst);
-int		redirect_input(t_pars **lst);
+int		redirect_input_delimitor(t_pars **lst, t_all *all);
+int		redirect_input(t_pars **lst, t_all *all);
 int		redirect_output(t_pars **lst, t_all *all, int input_fd);
 
 /*Utils*/
@@ -305,5 +307,7 @@ size_t	num_of_pipes(t_pars *lst);
 /*Flo, but i don't want to touch his part of this .h*/
 t_pars	*init_1st_node_pars(void);
 void	free_firstnode_pars(t_pars **pars);
+
+void	free_all(t_all **all);
 
 #endif
