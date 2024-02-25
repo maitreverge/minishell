@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 13:55:11 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 18:28:54 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,7 @@ void	free_t_alloc(t_alloc *alloc);
 
 typedef struct s_all
 {
+	char	**copy_envp;
 	t_env_list	*env_lst;
 	char		*readline_line;
 }	t_all;

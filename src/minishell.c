@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/23 21:31:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/25 18:44:53 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ t_all	*init_t_all_struct(char **envp)
 
 	// init env_list nodes from envp
 	copy_env_into_list(&new_all->env_lst, envp);
+
+	new_all->copy_envp = NULL; // ! NEW ALLOCATED STUFF
 	
 	return (new_all);
 }
@@ -121,6 +123,41 @@ void	reset_t_pars(t_pars **pars)
 	(*pars)->MasterKill = false;
 	(*pars)->isRedirIn = false; // reseting this one when search_redir_in turn it on
 	(*pars)->error_message = 0;	
+}
+
+char **convert_env_list_to_array(t_env_list **list)
+{
+	t_env_list *current;
+	char **result;
+	int size;
+	int j; // buffer index
+	current = *list;
+	
+	while (current)
+	{
+		size++;
+		current = current->next;
+	}
+	current = *list;
+	
+	result = ft_calloc(size + 1, sizeof(char *));
+	while (current)
+	{
+		result[j] = ft_strdup(current->original_envp);
+		current = current->next;
+	}
+	return (result);
+}
+
+void	refresh_envp(t_all **all)
+{
+	t_all *current;
+
+	current = *all;
+	
+	if (current->copy_envp)
+		free_split(current->copy_envp);
+	current->copy_envp = convert_env_list_to_array(&current->env_lst);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -141,6 +178,7 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		reset_t_pars(&pars);
+		refresh_envp(&all);
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
