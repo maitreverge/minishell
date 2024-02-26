@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 11:06:27 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 14:32:02 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 	fds = create_pipes(lst, &ch_pid);
     while ((*lst) != NULL && (*lst)->isCommand == true)
 	{
+		if (check_next_operator(*lst) == 4)
+		{
+				redirect_output(lst, all, input_fd);
+				break ;
+		}
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
 			pipes_child_func(lst, all, input_fd, fds, i);
@@ -105,8 +110,8 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 				redirect_input(lst);
 			else if (check_next_operator(*lst) == 3)
 				redirect_input_delimitor(lst);
-			else if (check_next_operator(*lst) == 4)
-				redirect_output(lst, all, input_fd);
+			// else if (check_next_operator(*lst) == 4)
+			// 	redirect_output(lst, all, input_fd);
 			break ;
 		}
     }

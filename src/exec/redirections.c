@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:19:29 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 13:22:56 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 14:37:56 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,11 @@ static int	redir_out_child(t_pars **lst, t_all *all, int input_fd)
 {
 	int	open_fd;
 	
+	if (input_fd != -1)
+    {
+		dup2(input_fd, STDIN_FILENO);
+        close(input_fd);
+    }
 	if ((*lst)->next == NULL)
 		return (ft_putendl_fd("Error, next is null.", 2), 1);
 	else if ((*lst)->next->next == NULL)
@@ -116,9 +121,9 @@ static int	redir_out_child(t_pars **lst, t_all *all, int input_fd)
 		return (ft_putendl_fd("Error, insufficient permissions.", 2), 1);
 	dup2(open_fd, STDOUT_FILENO);
 	close(open_fd);
-	if ((*lst)->cmd->isBuiltin == true && input_fd == -1)
+	if ((*lst)->cmd->isBuiltin == true)
 		exec_builtin(*lst, all);
-	else if (input_fd == -1)
+	else
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
 	exit(0);//
 	return (0);
