@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:58:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/20 11:06:37 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 16:20:09 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ char	*join_path_cmd(char *cleaned, char **paths)
 
 	j = 0;
 	real_path = NULL;
+	if (!access(cleaned, F_OK))
+		return (ft_strdup(cleaned));
 	while (paths[j])
 	{
 		real_path = ft_strjoin(paths[j], cleaned);
