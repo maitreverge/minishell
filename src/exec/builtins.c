@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 15:04:27 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 10:24:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,9 @@ int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
 	}
 	if (readline_return != NULL)
 		free(readline_return);
-	free_s_env(&all->env_lst);
+	// free_s_env(&all->env_lst);
+	free_all(&all); // free all node + s_env nodes
+	free_firstnode_pars(&pars);
 	exit(pars->prev->last_exit_status);
 }
 
