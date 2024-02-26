@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 22:07:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 14:12:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,34 @@
 /*Removes 'line' from the list of environment variables*/
 void	ft_unset(t_env_list **envp, char *line)
 {
-	t_env_list *temp;
-	t_env_list *prev;
+	t_env_list *current;
+	t_env_list *first_node;
+	t_env_list *last_node;
+	t_env_list *previous_node;
+	t_env_list *next_node;
+	
+	current = *envp;
+	first_node = *envp;
+	last_node = env_lstlast(*envp);
 
-	temp = *envp;
-	prev = temp;////
-	if (line == NULL)
+	while (current)
 	{
-		free_s_env(envp);
-		perror("ft_unset error: line == NULL");
-		exit(EXIT_FAILURE);
+		// ! EDGE CASE 1 : target is on the first node
+		if (!ft_strcmp(first_node->key, line))
+		{
+			(*envp) = (*envp)->next; // move the head to the next
+			free(first_node);
+		}
+		// ! EDGE CASE 2 : target is on the last node
+		else if (!ft_strcmp(last_node->key, line))
+		{
+			
+		}
+		current = current->next;
 	}
-	while (temp->next != NULL && ft_strncmp(temp->original_envp, line, ft_strlen(line)) != 0)
-	{
-		prev = temp;
-		temp = temp->next;
-	}
-	if (temp != NULL)
-	{
-		prev->next = temp->next;
-		// free(temp->original_envp);
-		// free(temp->key);
-		// free(temp->value);
-		// free(temp);
-	}	
+	
+	// char *line = KEY
+		
 }
 
 /*Adds 'line' to the list of environment variables*/
