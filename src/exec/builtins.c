@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 10:24:42 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 10:49:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,9 @@ int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
 		// ft_putstr_fd("exit: too many arguments\n", fd);
 		return (0);
 	}
-	if (readline_return != NULL)
-		free(readline_return);
-	// free_s_env(&all->env_lst);
 	free_all(&all); // free all node + s_env nodes
-	free_firstnode_pars(&pars);
+	free_full_t_pars(&pars);
+	free_split(s);
 	exit(pars->prev->last_exit_status);
 }
 

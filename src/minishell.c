@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 10:10:45 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 10:42:01 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,9 +184,10 @@ int	main(int ac, char **av, char **envp)
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
 			//there are certainly things here that i forgot to free
-			printf("exit\r");
+			printf("exit\r"); // ! is this really usefull, knowing that the program will instantly quit ?
 			free_all(&all); // free all node + s_env nodes
 			// free_s_env(&all->env_lst);
+			// free_t_pars(&pars);
 			free_firstnode_pars(&pars);
 			// if (all->readline_line != NULL)
 			// 	free(all->readline_line);

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/25 20:58:06 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 10:55:30 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,38 @@ void	free_all(t_all **all)
 	
 	free(*all); // free the t_all node
 	
+}
+
+void	free_full_t_pars(t_pars **pars)
+{
+	t_pars	*to_free;
+	t_pars *temp; // for freeing the node itself
+
+	to_free = *pars;
+
+	while (to_free)
+	{
+		temp = to_free;
+		if (to_free->isCommand && to_free->cmd)
+		{
+			free(to_free->cmd->command_name);
+			if (to_free->cmd->command_path)
+				free(to_free->cmd->command_path);
+			free_split(to_free->cmd->name_options_args);
+			free(to_free->cmd); // free the sub_node
+		}
+		else if (to_free->isFile)
+		{
+			free(to_free->fl->file_name);
+			free(to_free->fl);
+		}
+		if (to_free->isOperator && to_free->operator)
+			free(to_free->operator);
+		
+		if (to_free->isHereDoc) // only need to free the node
+			free(to_free->here_doc); // newly allocated node
+		to_free = to_free->next;
+		free(temp);
+	}
 }
 
