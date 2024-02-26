@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 15:04:27 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:06:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ int	ft_env(t_all *all)//, int fd
 /*Remember to also free all!!!*/
 int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
 {
+	t_pars *first_node;
+	
+	first_node = lstfirst(pars);
 	char				**s;
 	int					i;
 
@@ -113,10 +116,10 @@ int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
 		// ft_putstr_fd("exit: too many arguments\n", fd);
 		return (0);
 	}
-	if (readline_return != NULL)
-		free(readline_return);
-	free_s_env(&all->env_lst);
-	exit(pars->prev->last_exit_status);
+	free_all(&all); // free all node + s_env nodes
+	free_full_t_pars(&first_node);
+	free_split(s);
+	exit(-1);
 }
 
 // int main(int ac, char **av, char **envp)

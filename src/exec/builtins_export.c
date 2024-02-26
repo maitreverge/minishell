@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/14 14:48:59 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/25 22:07:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,46 +53,21 @@ void	ft_unset(t_env_list **envp, char *line)
 	}	
 }
 
-/* Inserts a new node with the given environment variable into the list */
-t_env_list *insert_node_env(char *env_var)
-{
-	t_env_list	*new_node;
-	char		**spl;
-	
-	new_node = malloc(sizeof(t_env_list));
-	spl = ft_split(env_var, '=');
-	if (new_node == NULL)
-	{
-		perror("Failed to allocate memory for new node");
-		exit(EXIT_FAILURE);
-	}
-	new_node->key = spl[0];
-	new_node->value = spl[1];
-	new_node->original_envp = env_var;
-	new_node->next = NULL;
-	return (new_node);
-}
-
 /*Adds 'line' to the list of environment variables*/
 void	ft_export(t_env_list **envp, char *line)
 {
-	t_env_list 	*temp;
-	char 		**s;
-	// int 		i;
+	char 		**new_envp;
+	char		**split_value;
+	char		*key;
+	char		*value;
 
-	temp = *envp;
-	s = ft_split(line, ' ');	//otherwise we literally get "export FLO=BG" as the env var
-	if (*envp == NULL)
-		*envp = insert_node_env(s[1]);
-	else
-	{
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = insert_node_env(s[1]);
-	}
-	// i = 0;
-	// while (s[i])
-	// 	free(s[i++]);
-	// free(s);
+	new_envp = ft_split(line, ' ');
+	split_value = ft_2_split(new_envp[1], '='); // allows me to extract key and value
+	key = split_value[0];
+	value = split_value[1];
+	env_lstadd_back(envp, env_lstnew(key, value, new_envp[1]));
+	
+	free_split(new_envp);
+	free_split(split_value);
 }
 

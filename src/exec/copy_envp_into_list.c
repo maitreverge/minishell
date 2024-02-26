@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   copy_envp_into_list.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:39:27 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 22:13:49 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/25 21:33:29 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
+t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp)
 {
 	t_env_list	*new_node;
 
 	new_node = (t_env_list *)malloc(sizeof(t_env_list));
 	if (!new_node)
 		return (NULL);
-	new_node->original_envp = envp;
-	new_node->key = s_key;
-	new_node->value = s_value;
+	new_node->original_envp = ft_strdup(envp);
+	new_node->key = ft_strdup(s_key);
+	new_node->value = ft_strdup(s_value);
 	new_node->next = NULL;
 	return (new_node);
 }
 
-static t_env_list	*env_lstlast(t_env_list *lst)
+t_env_list	*env_lstlast(t_env_list *lst)
 {
 	t_env_list	*current;
 
@@ -42,7 +42,7 @@ static t_env_list	*env_lstlast(t_env_list *lst)
 	return (current);
 }
 
-static void	env_lstadd_back(t_env_list **lst, t_env_list *new)
+void	env_lstadd_back(t_env_list **lst, t_env_list *new)
 {
 	t_env_list	*tail;
 
@@ -73,6 +73,6 @@ void	copy_env_into_list(t_env_list **env, char **envp)
 		else
 			env_lstadd_back(&current, env_lstnew(s_key, s_value, envp[i]));
 		i++;
-		free(splitted_value);
+		free_split(splitted_value);
 	}
 }

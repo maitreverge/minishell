@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:19:29 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 13:22:56 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:33:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	Handles '<<' operator.
 	lst->next is the '<<' op., and lst->next->next is the file to redirect from.
 */
-int	redirect_input_delimitor(t_pars **lst)
+int	redirect_input_delimitor(t_pars **lst, t_all *all)
 {
 	int		open_fd;
 	pid_t	ch_pid;
@@ -50,7 +50,7 @@ int	redirect_input_delimitor(t_pars **lst)
 		(*lst)->next->next->fl->file_exist = true;
 		(*lst)->next->next->fl->file_name = ft_strdup("/tmp/a0987654321aaa.tmp");
 		(*lst)->next->next->fl->auth_r = true;
-		redirect_input(lst);
+		redirect_input(lst, all);
 		free((*lst)->next->next->fl);
 		free((*lst)->next->next->fl->file_name);
 		// close(open_fd);
@@ -63,7 +63,7 @@ int	redirect_input_delimitor(t_pars **lst)
 	Handles '<' operator.
 	lst->next is the '<' op., and lst->next->next is the file to redirect from.
 */
-int	redirect_input(t_pars **lst)
+int	redirect_input(t_pars **lst, t_all *all)
 {
 	int		open_fd;
 	pid_t	ch_pid;
@@ -80,7 +80,7 @@ int	redirect_input(t_pars **lst)
 		return (perror("close"), 1);
 	ch_pid = fork();
 	if (ch_pid == 0)
-		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
+		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, all->copy_envp);
 	else if (ch_pid < 0)
 	{
 		perror("fork");
@@ -119,9 +119,8 @@ static int	redir_out_child(t_pars **lst, t_all *all, int input_fd)
 	if ((*lst)->cmd->isBuiltin == true && input_fd == -1)
 		exec_builtin(*lst, all);
 	else if (input_fd == -1)
-		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
-	exit(0);//
-	return (0);
+		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, all->copy_envp);
+	exit(0);
 }
 
 /*

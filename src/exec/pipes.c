@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 11:06:27 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:34:38 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 			first_node->last_exit_status = 127;
 		}
 		else
-			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
+			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, all->copy_envp);
 	}
 	exit(0);
 }
@@ -95,16 +95,16 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 			fork_error(fds, &ch_pid);
         if (ch_pid[i] > 0 && i > 0)
             close(fds[i - 1][0]);
-    	close(fds[i][1]);
+		close(fds[i][1]);
         input_fd = fds[i++][0];
 		if ((*lst)->next && (*lst)->next->isOperator == true && (*lst)->next->operator->pipe == true && (*lst)->next->next)
 			(*lst) = (*lst)->next->next;	//to skip the pipe operator and go to the next cmd
 		else
 		{
 			if (check_next_operator(*lst) == 2)
-				redirect_input(lst);
+				redirect_input(lst, all);
 			else if (check_next_operator(*lst) == 3)
-				redirect_input_delimitor(lst);
+				redirect_input_delimitor(lst, all);
 			else if (check_next_operator(*lst) == 4)
 				redirect_output(lst, all, input_fd);
 			break ;

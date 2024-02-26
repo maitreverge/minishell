@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 14:55:54 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 10:42:01 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	exec_builtin(t_pars *pars, t_all *all)
 	return ;
 }
 
-void	exec_external_func(t_pars *lst)
+void	exec_external_func(t_pars *lst, t_all *all)
 {
 	t_pars *first_node;
 
@@ -79,7 +79,7 @@ void	exec_external_func(t_pars *lst)
 			first_node->last_exit_status = 127;
 			return ;
 		}
-		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, NULL) < 0)
+		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, all->copy_envp) < 0)
 		{
 			perror("execve");
 			// free_t_pars(&lst);
@@ -98,18 +98,11 @@ void	exec_external_func(t_pars *lst)
 t_all	*init_t_all_struct(char **envp)
 {
 	t_all		*new_all;
-	t_env_list	*new_list;
 
 	// allocate two nodes for t_all and t_env_list
 	new_all = malloc(sizeof(t_all));
 	if (!new_all)
 		return (NULL);
-	new_list = malloc(sizeof(t_env_list));
-	if (!new_list)
-		return (NULL);
-
-	// connecting node t_all to sub_node t_env_list
-	new_all->env_lst = new_list;
 	
 	// Init sub_node to null
 	new_all->env_lst = NULL;
@@ -119,11 +112,9 @@ t_all	*init_t_all_struct(char **envp)
 
 	// init env_list nodes from envp
 	copy_env_into_list(&new_all->env_lst, envp);
+
+	new_all->copy_envp = NULL; // ! NEW ALLOCATED STUFF
 	
-
-	// ! IMPORTANT :
-	// both t_all and t_env_list need to be freed when an exit signal occurs
-
 	return (new_all);
 }
 
@@ -132,6 +123,42 @@ void	reset_t_pars(t_pars **pars)
 	(*pars)->MasterKill = false;
 	(*pars)->isRedirIn = false; // reseting this one when search_redir_in turn it on
 	(*pars)->error_message = 0;	
+}
+
+char **convert_env_list_to_array(t_env_list **list)
+{
+	t_env_list	*current;
+	char		**result;
+	int			size;
+	int			j; // buffer index
+
+	current = *list;
+	size = 0;
+	j = 0;
+	while (current)
+	{
+		size++;
+		current = current->next;
+	}
+	current = *list;
+	result = ft_calloc(size + 1, sizeof(char *));
+	while (current)
+	{
+		result[j] = ft_strdup(current->original_envp);
+		current = current->next;
+		j++;
+	}
+	return (result);
+}
+
+void	refresh_envp(t_all **all)
+{
+	t_all *current;
+
+	current = *all;
+	
+	free_split(current->copy_envp);
+	current->copy_envp = convert_env_list_to_array(&current->env_lst);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -152,15 +179,18 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		reset_t_pars(&pars);
+		refresh_envp(&all);
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
 			//there are certainly things here that i forgot to free
-			printf("exit\r");
-			free_s_env(&all->env_lst);
+			printf("exit\r"); // ! is this really usefull, knowing that the program will instantly quit ?
+			free_all(&all); // free all node + s_env nodes
+			// free_s_env(&all->env_lst);
+			// free_t_pars(&pars);
 			free_firstnode_pars(&pars);
-			if (all->readline_line != NULL)
-				free(all->readline_line);
+			// if (all->readline_line != NULL)
+			// 	free(all->readline_line);
 			return (exit(0), 1);
 		}
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
@@ -178,25 +208,30 @@ int	main(int ac, char **av, char **envp)
 			int k = 0;
 			if (check_next_operator(pars->next) == 1)
 			{
-				fds = pipes(&pars->next, all, fds);
-				k = 123;
-			}
-			else if (check_next_operator(pars->next) == 2)
-			{
-				redirect_input(&pars->next);
-				k = 123;
-				all->readline_line = ft_strdup("");
-			}
-			else if (check_next_operator(pars->next) == 3)
-			{
-				redirect_input_delimitor(&pars->next);
-				all->readline_line = ft_strdup("");
-				k = 123;
-			}
-			else if (check_next_operator(pars->next) == 4)
-			{
-				redirect_output(&pars->next, all, fds);
-				k = 123;
+				if (check_next_operator(pars->next) == 1)
+				{
+					fds = pipes(&pars->next, all, fds);
+					k = 123;
+					continue ;
+				}
+				else if (check_next_operator(pars->next) == 2)
+				{
+					redirect_input(&pars->next, all);
+					k = 123;
+					break ;
+				}
+				else if (check_next_operator(pars->next) == 3)
+				{
+					redirect_input_delimitor(&pars->next, all);
+					k = 123;
+					break ;
+				}
+				else if (check_next_operator(pars->next) == 4)
+				{
+					redirect_output(&pars->next, all, fds);
+					k = 123;
+					break ;
+				}
 			}
 			if (fds != -1)
 				close(fds);
@@ -205,7 +240,7 @@ int	main(int ac, char **av, char **envp)
 				if (pars && pars->next && pars->next->cmd->isBuiltin == true)
 					exec_builtin(pars->next, all);
 				else if (pars && pars->next)
-					exec_external_func(pars->next);
+					exec_external_func(pars->next, all);
 			}
 		}
 		// those next 4 lines will execute regardless if master Kill is on 
