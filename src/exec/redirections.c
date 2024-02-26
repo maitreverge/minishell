@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:19:29 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/25 15:36:03 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:22:56 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,14 @@ int	redirect_input(t_pars **lst)
 	return (0);
 }
 
-static int	redir_out_child(t_pars **lst, t_all *all, int *fd, int input_fd)
+/*
+	input_fd determins whether we execute a command or not.
+	Ex.
+		"ls > file" will execute ls
+		"ls | rev > file" won't, since ls and rev have already been exec'd
+			by pipes()
+*/
+static int	redir_out_child(t_pars **lst, t_all *all, int input_fd)
 {
 	int	open_fd;
 	
@@ -99,23 +106,22 @@ static int	redir_out_child(t_pars **lst, t_all *all, int *fd, int input_fd)
 		return (ft_putendl_fd("Error, next is null.", 2), 1);
 	else if ((*lst)->next->next == NULL)
 		return (ft_putendl_fd("Error, next next is null.", 2), 1);
-	if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true
+	if ((*lst)->next->next->fl->auth_w == true
 			&& (*lst)->next->operator->redir_out == true)
 		open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
-	else if ((*lst)->next && (*lst)->next->next && (*lst)->next->next->fl->auth_w == true
+	else if ((*lst)->next->next->fl->auth_w == true
 			&& (*lst)->next->operator->redir_out_app == true)
 		open_fd = open((*lst)->next->next->fl->file_name, O_WRONLY | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 	else
 		return (ft_putendl_fd("Error, insufficient permissions.", 2), 1);
-	dup2(open_fd, fd[1]);
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[1]);
+	dup2(open_fd, STDOUT_FILENO);
 	close(open_fd);
 	if ((*lst)->cmd->isBuiltin == true && input_fd == -1)
 		exec_builtin(*lst, all);
 	else if (input_fd == -1)
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, NULL);
-	exit(0);
+	exit(0);//
+	return (0);
 }
 
 /*
@@ -124,41 +130,18 @@ static int	redir_out_child(t_pars **lst, t_all *all, int *fd, int input_fd)
 */
 int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 {
-	int		fd[2];
 	pid_t	ch_pid;
 
-	if (pipe(fd) < 0)
-    {
-		perror("pipe");
-		free_t_pars(lst);
-		exit(EXIT_FAILURE);
-	}
-	if (input_fd >= 0)
-	{
-		////
-		if (dup2(STDIN_FILENO, fd[0]) < 0)
-		{
-			perror("dup2 redir output");
-			close(fd[0]);
-			free_t_pars(lst);
-			exit(EXIT_FAILURE);
-		}
-	}
-	close(input_fd);
-	close(fd[0]);
 	ch_pid = fork();
 	if (ch_pid == 0)
-	{
-		redir_out_child(lst, all, fd, input_fd);
-	}
+		redir_out_child(lst, all, input_fd);
 	else if (ch_pid < 0)
 	{
 		perror("fork");
 		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
-	else if (ch_pid > 0)
-		close(fd[1]);
+	close(input_fd);
 	wait(NULL);
 	return (0);
 }
