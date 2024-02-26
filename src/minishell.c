@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 13:51:34 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 15:11:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,26 +208,23 @@ int	main(int ac, char **av, char **envp)
 			int k = 0;
 			if (check_next_operator(pars->next) == 1)
 			{
-				if (check_next_operator(pars->next) == 1)
-				{
-					fds = pipes(&pars->next, all, fds);
-					k = 123;
-				}
-				else if (check_next_operator(pars->next) == 2)
-				{
-					redirect_input(&pars->next, all);
-					k = 123;
-				}
-				else if (check_next_operator(pars->next) == 3)
-				{
-					redirect_input_delimitor(&pars->next, all);
-					k = 123;
-				}
-				else if (check_next_operator(pars->next) == 4)
-				{
-					redirect_output(&pars->next, all, fds);
-					k = 123;
-				}
+				fds = pipes(&pars->next, all, fds);
+				k = 123;
+			}
+			else if (check_next_operator(pars->next) == 2)
+			{
+				redirect_input(&pars->next, all);
+				k = 123;
+			}
+			else if (check_next_operator(pars->next) == 3)
+			{
+				redirect_input_delimitor(&pars->next, all);
+				k = 123;
+			}
+			else if (check_next_operator(pars->next) == 4)
+			{
+				redirect_output(&pars->next, all, fds);
+				k = 123;
 			}
 			if (fds != -1)
 				close(fds);
