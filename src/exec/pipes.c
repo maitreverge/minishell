@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 13:34:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 15:21:31 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 	fds = create_pipes(lst, &ch_pid);
     while ((*lst) != NULL && (*lst)->isCommand == true)
 	{
+		if (check_next_operator(*lst) == 4)
+		{
+				redirect_output(lst, all, input_fd);
+				break ;
+		}
         ch_pid[i] = fork();
         if (ch_pid[i] == 0)
 			pipes_child_func(lst, all, input_fd, fds, i);
@@ -104,9 +109,9 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 			if (check_next_operator(*lst) == 2)
 				redirect_input(lst, all);
 			else if (check_next_operator(*lst) == 3)
-				redirect_input_delimitor(lst, all);
-			else if (check_next_operator(*lst) == 4)
-				redirect_output(lst, all, input_fd);
+				redirect_input_delimitor(lst);
+			// else if (check_next_operator(*lst) == 4)
+			// 	redirect_output(lst, all, input_fd);
 			break ;
 		}
     }
