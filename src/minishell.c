@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 15:11:08 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 16:24:57 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,15 @@ void	exec_external_func(t_pars *lst, t_all *all)
 		{
 			printf("Command not found\n");
 			first_node->last_exit_status = 127;
-			return ;
+			// return ;
+			exit (1);
 		}
 		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, all->copy_envp) < 0)
 		{
 			perror("execve");
 			// free_t_pars(&lst);
-			return ;
+			// return ;
+			exit (1);
 		}
 	}
 	else if (ch_pid < 0)
