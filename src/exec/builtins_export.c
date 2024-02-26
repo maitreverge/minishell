@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 20:16:00 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/26 20:30:20 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,24 @@ void	ft_unset(t_env_list **envp, char *line, t_pars **parsing)
 }
 
 /*Adds 'line' to the list of environment variables*/
-void	ft_export(t_env_list **envp, char *line)
+void	ft_export(t_env_list **envp, char *line, t_all *all)
 {
 	char 		**new_envp;
 	char		**split_value;
 	char		*key;
 	char		*value;
 
+	
+	if (!line)
+		ft_env(all); // fuck this shit seriously
+	
+		
+
+	// ! CHECK IF EXPORT FOLLOW THE ___=___ 
+	// ! CHECK IS THE VALUE ALREADY EXISTS
+	// * THE KEY EXISTS = MODIFY THE KEY
+	// * THE KEY DOESN'T EXISTS => ENV_LSTADD_BACK
+	
 	new_envp = ft_split(line, ' ');
 	split_value = ft_2_split(new_envp[1], '='); // allows me to extract key and value
 	key = split_value[0];
@@ -83,4 +94,7 @@ void	ft_export(t_env_list **envp, char *line)
 	free_split(new_envp);
 	free_split(split_value);
 }
+
+// export edge cases :
+// need to check
 
