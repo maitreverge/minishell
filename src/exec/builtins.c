@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 14:25:23 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 14:44:11 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,24 +99,50 @@ void	ft_env(char **args, t_all *all, t_pars **pars)
 }
 
 /*Remember to also free all!!!*/
+// void	ft_exit(char **name_option, t_all *all, t_pars **pars)
+// {
+// 	t_pars *first_node;
+// 	bool error;
+
+// 	first_node = lstfirst(*pars);
+
+// 	if (!name_option[1])
+// 		error = false;
+// 	else
+// 		error = true;
+// 	printf("exit\n");
+// 	if (error)
+// 		printf("exit : %s : unknown argument\n", name_option[1]);
+// 	free_all(&all); // free all node + s_env nodes
+// 	free_full_t_pars(&first_node);
+	
+// 	exit(-1);
+// }
+
 void	ft_exit(char **name_option, t_all *all, t_pars **pars)
 {
 	t_pars *first_node;
-	bool error;
-
+	
 	first_node = lstfirst(*pars);
+	// char				**s;
+	int					i;
 
-	if (!name_option[1])
-		error = false;
-	else
-		error = true;
-	printf("exit\n");
-	if (error)
-		printf("exit : %s : unknown argument\n", name_option[1]);
+	// s = ft_split(readline_return, ' ');
+	i = 0;
+	while (name_option[i])
+		i++;
+	if (i > 2)
+	{
+		ft_putendl_fd("exit\nexit: too many arguments", 2);
+		return ;
+	}
 	free_all(&all); // free all node + s_env nodes
 	free_full_t_pars(&first_node);
-	
-	exit(-1);
+	ft_putendl_fd("exit", 2);
+	if (name_option[1] && ft_are_nums(name_option[1]) == false)
+		printf("exit: %s: numeric argument required\n", name_option[1]);
+	// free_split(s);
+	exit(EXIT_SUCCESS);
 }
 
 // int main(int ac, char **av, char **envp)
