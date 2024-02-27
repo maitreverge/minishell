@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 12:19:14 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 12:39:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,15 +114,20 @@ void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
 	char		**split_tokens;
 	char *s_trimmed_export;
 	char *s_final_trim;
+	char *trim_line;
 
 	current_env = *envp;
+	trim_line = ft_strtrim(line, " ");
+	if (!ft_strcmp(trim_line, "export"))
+	{
+		ft_env(all); // fuck this shit seriously
+		return ;
+	}
 
 	s_trimmed_export = ft_strtrim(line, "export"); // trim export from the argument, because idk what's supposed to land on the function
 	s_final_trim = ft_strtrim(s_trimmed_export, " "); // trim whitespaces
 	
-	if (!s_final_trim)
-		ft_env(all); // fuck this shit seriously
-	else if (!correct_export_format(s_final_trim)) // ! CHECK IF EXPORT FOLLOW THE ___= format (at least)
+	if (!correct_export_format(s_final_trim)) // ! CHECK IF EXPORT FOLLOW THE ___= format (at least)
 	{
 		lstfirst(*pars)->last_exit_status = 1;
 		printf("Wrong export format\n");
@@ -146,6 +151,7 @@ void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
 	free_split(split_tokens);
 	free(s_trimmed_export);
 	free(s_final_trim);
+	free(trim_line);
 }
 
 // export edge cases :
