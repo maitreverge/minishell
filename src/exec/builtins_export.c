@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 12:12:11 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 12:19:14 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,21 +112,23 @@ void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
 {
 	t_env_list *current_env;
 	char		**split_tokens;
-	char *s_trimmed;
+	char *s_trimmed_export;
+	char *s_final_trim;
 
 	current_env = *envp;
 
-	s_trimmed = ft_strtrim(line, "export"); // trim export from the argument, because idk what's supposed to land on the function
+	s_trimmed_export = ft_strtrim(line, "export"); // trim export from the argument, because idk what's supposed to land on the function
+	s_final_trim = ft_strtrim(s_trimmed_export, " "); // trim whitespaces
 	
-	if (!s_trimmed)
+	if (!s_final_trim)
 		ft_env(all); // fuck this shit seriously
-	else if (!correct_export_format(s_trimmed)) // ! CHECK IF EXPORT FOLLOW THE ___= format (at least)
+	else if (!correct_export_format(s_final_trim)) // ! CHECK IF EXPORT FOLLOW THE ___= format (at least)
 	{
 		lstfirst(*pars)->last_exit_status = 1;
 		printf("Wrong export format\n");
 		return ;
 	}
-	split_tokens = ft_2_split(s_trimmed, '='); // allows me to extract key and value
+	split_tokens = ft_2_split(s_final_trim, '='); // allows me to extract key and value
 	
 	if (env_key_exist(envp, split_tokens[0]))
 	{
@@ -138,11 +140,12 @@ void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
 	else
 	{
 	// * THE KEY DOESN'T EXISTS => NEW_NODE
-		env_lstadd_back(envp, env_lstnew(split_tokens[0], split_tokens[1], s_trimmed));
+		env_lstadd_back(envp, env_lstnew(split_tokens[0], split_tokens[1], s_final_trim));
 	}
 	lstfirst(*pars)->last_exit_status = 0;
 	free_split(split_tokens);
-	free(s_trimmed);
+	free(s_trimmed_export);
+	free(s_final_trim);
 }
 
 // export edge cases :
