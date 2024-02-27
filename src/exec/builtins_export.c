@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 10:54:08 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 12:07:29 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,51 +73,76 @@ static bool correct_export_format(char *str)
 
 	i = 0;
 	equal_sign = false;
+	if (str[0] == '=')
+		return (false);
 	while (str[i])
 	{
 		if (is_whitespace(str[i]))
 			return (false);
 		if (str[i] == '=')
 		{
-			if (equal_sign)
+			if (str[i + 1] == '=')
 				return (false);
 			equal_sign = true;
 		}
 		i++;
 	}
-	return (true);
+	if (equal_sign)
+		return (true);
+	return (false);
+}
+
+static t_env_list *env_key_exist(t_env_list **envp, char *key)
+{
+	t_env_list *current;
+
+	current = *envp;
+
+	while (current)
+	{
+		if (!ft_strcmp(current->key, key))
+			return (current);
+		current = current->next;
+	}
+	return (NULL);
 }
 
 /*Adds 'line' to the list of environment variables*/
-void	ft_export(t_env_list **envp, char *line, t_all *all)
+void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
 {
+	t_env_list *current_env;
 	char 		**new_envp;
-	char		**split_value;
-	char		*key;
-	char		*value;
-	char *s;
+	char		**split_tokens;
+	char *s_trimmed;
 
-	s = ft_strtrim(line, "export");
-	if (!s)
+	current_env = *envp;
+
+	s_trimmed = ft_strtrim(line, "export"); // trim export from the argument, because idk what's supposed to land on the function
+	if (!s_trimmed)
 		ft_env(all); // fuck this shit seriously
-	// ! CHECK IF EXPORT FOLLOW THE ___=___ 
-	else if (!correct_export_format(s))
+	else if (!correct_export_format(s_trimmed)) // ! CHECK IF EXPORT FOLLOW THE ___= format (at least)
+	{
+		lstfirst(*pars)->last_exit_status = 1;
+		printf("Wrong export format\n");
+		return ;
+	}
+	split_tokens = ft_2_split(s_trimmed, '='); // allows me to extract key and value
 	
-		
-
-	// ! CHECK IS THE VALUE ALREADY EXISTS
-	// * THE KEY EXISTS = MODIFY THE KEY
+	if (env_key_exist(envp, split_tokens[0]))
+	{
+		// * THE KEY EXISTS => LOAD THE NEW VALUE
+		current_env = env_key_exist(envp, split_tokens[0]);
+		free(current_env->value); // free the current value
+		current_env->value = ft_strdup(split_tokens[1]); // load the new value
+	}
+	else
+	{
 	// * THE KEY DOESN'T EXISTS => ENV_LSTADD_BACK
-	
-	new_envp = ft_split(line, ' ');
-	split_value = ft_2_split(new_envp[1], '='); // allows me to extract key and value
-	key = split_value[0];
-	value = split_value[1];
-	env_lstadd_back(envp, env_lstnew(key, value, new_envp[1]));
-	
-	free_split(new_envp);
-	free_split(split_value);
-	free(s); // free the trimed string
+		env_lstadd_back(envp, env_lstnew(split_tokens[0], split_tokens[1], s_trimmed));
+	}
+	lstfirst(*pars)->last_exit_status = 0;
+	free_split(split_tokens);
+	free(s_trimmed);
 }
 
 // export edge cases :
