@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 14:44:11 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 14:45:54 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,27 +97,6 @@ void	ft_env(char **args, t_all *all, t_pars **pars)
 	all->env_lst = temp;
 	// return (0);
 }
-
-/*Remember to also free all!!!*/
-// void	ft_exit(char **name_option, t_all *all, t_pars **pars)
-// {
-// 	t_pars *first_node;
-// 	bool error;
-
-// 	first_node = lstfirst(*pars);
-
-// 	if (!name_option[1])
-// 		error = false;
-// 	else
-// 		error = true;
-// 	printf("exit\n");
-// 	if (error)
-// 		printf("exit : %s : unknown argument\n", name_option[1]);
-// 	free_all(&all); // free all node + s_env nodes
-// 	free_full_t_pars(&first_node);
-	
-// 	exit(-1);
-// }
 
 void	ft_exit(char **name_option, t_all *all, t_pars **pars)
 {
