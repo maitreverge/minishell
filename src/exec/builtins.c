@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 13:06:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 13:13:28 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,18 @@ void	ft_pwd(t_env_list **envp, bool print)
 
 /*Displays a list of the environment variables for the
 	current terminal session.*/
-int	ft_env(t_all *all)//, int fd
+void	ft_env(char **args, t_all *all, t_pars **pars)
 {
 	t_env_list *temp;
 
+	if (args[1]) // if there is an argument to env
+	{
+		ft_putendl_fd("env builtin does not take any argument\n", 2);
+		lstfirst(*pars)->last_exit_status = 127; // error code if env fails
+		return ;
+	} 
 	temp = all->env_lst;
-	// if (fd < 0)
-	// {
-	// 	free_s_env(&all->env_lst);
-	// 	perror("ft_env: fd < 0");
-	// 	return (exit(EXIT_FAILURE), 1);
-	// }
+
 	while (all->env_lst != NULL)
 	{
 		printf("%s\n", all->env_lst->original_envp);
@@ -94,7 +95,7 @@ int	ft_env(t_all *all)//, int fd
 		all->env_lst = all->env_lst->next;
 	}
 	all->env_lst = temp;
-	return (0);
+	// return (0);
 }
 
 /*Remember to also free all!!!*/

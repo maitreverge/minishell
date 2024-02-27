@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 12:39:42 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 13:18:05 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
 	trim_line = ft_strtrim(line, " ");
 	if (!ft_strcmp(trim_line, "export"))
 	{
-		ft_env(all); // fuck this shit seriously
+		ft_env((*pars)->cmd->name_options_args, all, pars);
 		return ;
 	}
 
