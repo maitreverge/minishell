@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/16 17:55:15 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 14:53:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,6 +346,7 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 		(*pars)->MasterKill = true;
 		(*pars)->last_exit_status = 1;
 		free(utils_alloc);
+		ft_putendl_fd("error : unclosed quotes detected\n", 2);
 		return ;
 	}
 	len_splited_prompt = parsing_countwords(prompt);
