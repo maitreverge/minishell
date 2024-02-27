@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/25 20:51:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 14:52:24 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static void	last_checker(t_pars **pars)
 	if (last->isOperator)
 	{
 		first_node->MasterKill = true;
-		printf("Last token is an operator\n");
+		ft_putendl_fd("Last token is an operator\n", 2);
 	}
 	else if (first_node->isOperator && first_node->operator->redir_in && first_node->next->isFile && !first_node->next->fl->file_exist)
 	{
 		first_node->MasterKill = true;
-		printf("File does not exists\n");
+		ft_putendl_fd("File does not exists\n", 2);
 	}
 	
 	/*
@@ -56,7 +56,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			if (is_token_pipe(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
 			{
 				(*pars)->MasterKill = true;
-				printf("First Token is a Pipe\n");
+				ft_putendl_fd("First Token is a Pipe\n", 2);
 				break ;
 			}
 			else if (is_token_opr(cur->splitted_prompt[i], cur->cleaned_prompt[i]))
@@ -71,7 +71,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			else
 			{
 				(*pars)->MasterKill = true;
-				printf("Token following a command isn't a operator\n");
+				ft_putendl_fd("Token following a command isn't a operator\n", 2);
 				break ;
 			}
 		}
@@ -82,7 +82,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			else
 			{
 				(*pars)->MasterKill = true;
-				printf("Token following a file isn't a PIPE or RED_OUT operator\n");
+				ft_putendl_fd("Token following a file isn't a PIPE or RED_OUT operator\n", 2);
 				break ;
 			}
 		}
@@ -94,7 +94,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			else
 			{
 				(*pars)->MasterKill = true;
-				printf("Token following a HERE_DOC isn't a PIPE or RED_OUT operator\n");
+				ft_putendl_fd("Token following a HERE_DOC isn't a PIPE or RED_OUT operator\n", 2);
 				break ;
 			}
 		}
@@ -109,7 +109,7 @@ void	pars_alloc(t_pars **pars, t_alloc **u_alloc)
 			else
 			{
 				(*pars)->MasterKill = true;
-				printf("TWO CONSECUTIVE OPERATORS\n\n");
+				ft_putendl_fd("Two consecutives operators\n", 2);
 				break ;
 			}
 		}

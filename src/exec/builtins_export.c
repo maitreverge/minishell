@@ -6,72 +6,154 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 14:12:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 13:18:05 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// void	print_list(t_env_list *envp)
-// {
-// 	t_env_list * temp = envp;
-
-// 	while (envp != NULL)
-// 	{
-// 		printf("%s\n", envp->original_envp);
-// 		envp = envp->next;
-// 	}
-// 	envp = temp;
-// }
+static void	find_middle_node(t_env_list **envp, char *line)
+{
+	t_env_list *current;
+	t_env_list *previous_node;
+	t_env_list *next_node;
+	t_env_list *temp;
+	
+	temp = *envp;
+	
+	while (temp)
+	{
+		if (!ft_strcmp(temp->key, line))
+			break;
+		previous_node = temp;
+		temp = temp->next;
+	}
+	if (!temp) // if variable not found, exit function to avoid segfault
+		return;
+	current = previous_node->next;
+	next_node = current->next;
+	previous_node->next = next_node;
+	free(current);
+}
 
 /*Removes 'line' from the list of environment variables*/
-void	ft_unset(t_env_list **envp, char *line)
+void	ft_unset(t_env_list **envp, char *line, t_pars **parsing)
 {
 	t_env_list *current;
 	t_env_list *first_node;
 	t_env_list *last_node;
-	t_env_list *previous_node;
-	t_env_list *next_node;
 	
 	current = *envp;
 	first_node = *envp;
 	last_node = env_lstlast(*envp);
 
+	// ! CASE 1 : target is on the first node
+	if (!ft_strcmp(first_node->key, line))
+	{
+		(*envp) = (*envp)->next; // move the head of the struct itself to the next node
+		free(first_node);
+	}
+	// ! CASE 2 : target is on the last node
+	else if (!ft_strcmp(last_node->key, line))
+	{
+		while (ft_strcmp(current->next->key, line))
+			current = current->next;
+		current->next = NULL;
+		free(last_node);
+	}
+	else // ! CASE 3 : the target node is in the middle
+		find_middle_node(envp, line);
+	lstfirst(*parsing)->last_exit_status = 0; // unset last_exit_status ==> 0 in every case !
+}
+
+static bool correct_export_format(char *str)
+{
+	int	i;
+	bool equal_sign;
+
+	i = 0;
+	equal_sign = false;
+	if (str[0] == '=')
+		return (false);
+	while (str[i])
+	{
+		if (is_whitespace(str[i]))
+			return (false);
+		if (str[i] == '=')
+		{
+			if (str[i + 1] == '=')
+				return (false);
+			equal_sign = true;
+		}
+		i++;
+	}
+	if (equal_sign)
+		return (true);
+	return (false);
+}
+
+static t_env_list *env_key_exist(t_env_list **envp, char *key)
+{
+	t_env_list *current;
+
+	current = *envp;
+
 	while (current)
 	{
-		// ! EDGE CASE 1 : target is on the first node
-		if (!ft_strcmp(first_node->key, line))
-		{
-			(*envp) = (*envp)->next; // move the head to the next
-			free(first_node);
-		}
-		// ! EDGE CASE 2 : target is on the last node
-		else if (!ft_strcmp(last_node->key, line))
-		{
-			
-		}
+		if (!ft_strcmp(current->key, key))
+			break ; // return the current pointer to the targeted node
 		current = current->next;
 	}
-	
-	// char *line = KEY
-		
+	return (current); // can return NULL if node has not been found
 }
 
 /*Adds 'line' to the list of environment variables*/
-void	ft_export(t_env_list **envp, char *line)
+void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
 {
-	char 		**new_envp;
-	char		**split_value;
-	char		*key;
-	char		*value;
+	t_env_list *current_env;
+	char		**split_tokens;
+	char *s_trimmed_export;
+	char *s_final_trim;
+	char *trim_line;
 
-	new_envp = ft_split(line, ' ');
-	split_value = ft_2_split(new_envp[1], '='); // allows me to extract key and value
-	key = split_value[0];
-	value = split_value[1];
-	env_lstadd_back(envp, env_lstnew(key, value, new_envp[1]));
+	current_env = *envp;
+	trim_line = ft_strtrim(line, " ");
+	if (!ft_strcmp(trim_line, "export"))
+	{
+		ft_env((*pars)->cmd->name_options_args, all, pars);
+		return ;
+	}
+
+	s_trimmed_export = ft_strtrim(line, "export"); // trim export from the argument, because idk what's supposed to land on the function
+	s_final_trim = ft_strtrim(s_trimmed_export, " "); // trim whitespaces
 	
-	free_split(new_envp);
-	free_split(split_value);
+	if (!correct_export_format(s_final_trim)) // ! CHECK IF EXPORT FOLLOW THE ___= format (at least)
+	{
+		lstfirst(*pars)->last_exit_status = 1;
+		printf("Wrong export format\n");
+		return ;
+	}
+	split_tokens = ft_2_split(s_final_trim, '='); // allows me to extract key and value
+	
+	if (env_key_exist(envp, split_tokens[0]))
+	{
+		// * THE KEY EXISTS => LOAD THE NEW VALUE
+		current_env = env_key_exist(envp, split_tokens[0]);
+		free(current_env->value); // free the current value
+		current_env->value = ft_strdup(split_tokens[1]); // load the new value in the heap
+	}
+	else
+	{
+	// * THE KEY DOESN'T EXISTS => NEW_NODE
+		env_lstadd_back(envp, env_lstnew(split_tokens[0], split_tokens[1], s_final_trim));
+	}
+	lstfirst(*pars)->last_exit_status = 0;
+	free_split(split_tokens);
+	free(s_trimmed_export);
+	free(s_final_trim);
+	free(trim_line);
 }
+
+// export edge cases :
+// need to check
 

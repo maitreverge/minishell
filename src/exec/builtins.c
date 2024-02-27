@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 14:26:29 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:59:59 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,18 @@ void	ft_pwd(t_env_list **envp, bool print)
 
 /*Displays a list of the environment variables for the
 	current terminal session.*/
-int	ft_env(t_all *all)//, int fd
+void	ft_env(char **args, t_all *all, t_pars **pars)
 {
 	t_env_list *temp;
 
+	if (args[1]) // if there is an argument to env
+	{
+		ft_putendl_fd("env builtin does not take any argument\n", 2);
+		lstfirst(*pars)->last_exit_status = 127; // error code if env fails
+		return ;
+	} 
 	temp = all->env_lst;
-	// if (fd < 0)
-	// {
-	// 	free_s_env(&all->env_lst);
-	// 	perror("ft_env: fd < 0");
-	// 	return (exit(EXIT_FAILURE), 1);
-	// }
+
 	while (all->env_lst != NULL)
 	{
 		printf("%s\n", all->env_lst->original_envp);
@@ -94,33 +95,32 @@ int	ft_env(t_all *all)//, int fd
 		all->env_lst = all->env_lst->next;
 	}
 	all->env_lst = temp;
-	return (0);
+	// return (0);
 }
 
-/*Remember to also free all!!!*/
-int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
+void	ft_exit(char **name_option, t_all *all, t_pars **pars)
 {
 	t_pars *first_node;
 	
-	first_node = lstfirst(pars);
-	char				**s;
+	first_node = lstfirst(*pars);
+	// char				**s;
 	int					i;
 
-	s = ft_split(readline_return, ' ');
+	// s = ft_split(readline_return, ' ');
 	i = 0;
-	while (s[i])
+	while (name_option[i])
 		i++;
 	if (i > 2)
 	{
 		ft_putendl_fd("exit\nexit: too many arguments", 2);
-		return (0);
+		return ;
 	}
 	free_all(&all); // free all node + s_env nodes
 	free_full_t_pars(&first_node);
 	ft_putendl_fd("exit", 2);
-	if (s[1] && ft_are_nums(s[1]) == false)
-		printf("exit: %s: numeric argument required\n", s[1]);
-	free_split(s);
+	if (name_option[1] && ft_are_nums(name_option[1]) == false)
+		printf("exit: %s: numeric argument required\n", name_option[1]);
+	// free_split(s);
 	exit(EXIT_SUCCESS);
 }
 
