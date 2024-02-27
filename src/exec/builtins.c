@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 13:13:28 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 14:25:23 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,27 +99,23 @@ void	ft_env(char **args, t_all *all, t_pars **pars)
 }
 
 /*Remember to also free all!!!*/
-int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
+void	ft_exit(char **name_option, t_all *all, t_pars **pars)
 {
 	t_pars *first_node;
-	
-	first_node = lstfirst(pars);
-	char				**s;
-	int					i;
+	bool error;
 
-	s = ft_split(readline_return, ' ');
-	i = 0;
-	while (s[i])
-		i++;
-	if (i > 2)
-	{
-		printf("exit: too many arguments\n");
-		// ft_putstr_fd("exit: too many arguments\n", fd);
-		return (0);
-	}
+	first_node = lstfirst(*pars);
+
+	if (!name_option[1])
+		error = false;
+	else
+		error = true;
+	printf("exit\n");
+	if (error)
+		printf("exit : %s : unknown argument\n", name_option[1]);
 	free_all(&all); // free all node + s_env nodes
 	free_full_t_pars(&first_node);
-	free_split(s);
+	
 	exit(-1);
 }
 
