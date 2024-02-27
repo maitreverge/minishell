@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 15:50:31 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 20:30:20 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 10:54:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,28 @@ void	ft_unset(t_env_list **envp, char *line, t_pars **parsing)
 	lstfirst(*parsing)->last_exit_status = 0; // unset last_exit_status ==> 0 in every case !
 }
 
+static bool correct_export_format(char *str)
+{
+	int	i;
+	bool equal_sign;
+
+	i = 0;
+	equal_sign = false;
+	while (str[i])
+	{
+		if (is_whitespace(str[i]))
+			return (false);
+		if (str[i] == '=')
+		{
+			if (equal_sign)
+				return (false);
+			equal_sign = true;
+		}
+		i++;
+	}
+	return (true);
+}
+
 /*Adds 'line' to the list of environment variables*/
 void	ft_export(t_env_list **envp, char *line, t_all *all)
 {
@@ -73,14 +95,16 @@ void	ft_export(t_env_list **envp, char *line, t_all *all)
 	char		**split_value;
 	char		*key;
 	char		*value;
+	char *s;
 
-	
-	if (!line)
+	s = ft_strtrim(line, "export");
+	if (!s)
 		ft_env(all); // fuck this shit seriously
+	// ! CHECK IF EXPORT FOLLOW THE ___=___ 
+	else if (!correct_export_format(s))
 	
 		
 
-	// ! CHECK IF EXPORT FOLLOW THE ___=___ 
 	// ! CHECK IS THE VALUE ALREADY EXISTS
 	// * THE KEY EXISTS = MODIFY THE KEY
 	// * THE KEY DOESN'T EXISTS => ENV_LSTADD_BACK
@@ -93,6 +117,7 @@ void	ft_export(t_env_list **envp, char *line, t_all *all)
 	
 	free_split(new_envp);
 	free_split(split_value);
+	free(s); // free the trimed string
 }
 
 // export edge cases :
