@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 16:24:57 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 13:59:27 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,6 @@ void	exec_builtin(t_pars *pars, t_all *all)
 
 void	exec_external_func(t_pars *lst, t_all *all)
 {
-	t_pars *first_node;
-
-	first_node = lstfirst(lst);
 	pid_t	ch_pid;
 
 	ch_pid = fork();
@@ -76,25 +73,25 @@ void	exec_external_func(t_pars *lst, t_all *all)
 		if (!lst->cmd->command_path)
 		{
 			printf("Command not found\n");
-			first_node->last_exit_status = 127;
-			// return ;
-			exit (1);
+			lstfirst(lst)->last_exit_status = 127;
+			exit(127);
 		}
 		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args, all->copy_envp) < 0)
 		{
 			perror("execve");
 			// free_t_pars(&lst);
-			// return ;
-			exit (1);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else if (ch_pid < 0)
 	{
 		perror("fork");
+		lstfirst(lst)->last_exit_status = errno;
 		// free_t_pars(&lst);
 		return ;
 	}
-	wait(NULL);
+	wait(&lstfirst(lst)->last_exit_status);
+	lstfirst(lst)->last_exit_status = WEXITSTATUS(lstfirst(lst)->last_exit_status);
 }
 
 t_all	*init_t_all_struct(char **envp)
@@ -186,7 +183,7 @@ int	main(int ac, char **av, char **envp)
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
 			//there are certainly things here that i forgot to free
-			printf("exit\r"); // ! is this really usefull, knowing that the program will instantly quit ?
+			ft_putendl_fd("exit", 2);
 			free_all(&all); // free all node + s_env nodes
 			// free_s_env(&all->env_lst);
 			// free_t_pars(&pars);
@@ -197,7 +194,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
 		// ! In this form, masterkill actually exit minishell, instead of giving back the prompt
-		// ! I need to skip all the execution part, trow a error message, then stay in the loop
+		// ! I need to skip all the execution part, throw an error message, then stay in the loop
 		// if (pars->MasterKill == true)
 		// {
 		// 	free_firstnode_pars(&pars);

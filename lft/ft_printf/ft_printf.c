@@ -56,7 +56,7 @@ int	check_char(const char *str, int i, va_list list)
 	else if (str[i] == 'X')
 		return (put_big_x(va_arg(list, long long int)));
 	else if (str[i] == '%')
-	{	
+	{
 		write(1, "%", 1);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 14:35:15 by glambrig          #+#    #+#             */
-/*   Updated: 2023/05/17 16:56:21 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:14:43 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
+# include <stdbool.h>
 
 typedef struct s_list
 {
@@ -23,6 +24,7 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+bool	ft_are_nums(char *s);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 15:29:32 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 20:14:51 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	**create_pipes(t_pars **lst, pid_t **ch_pid)
 
 	len = lstlen(*lst) - num_of_pipes(*lst);
 	*ch_pid = ft_calloc(sizeof(pid_t), len);
-	fds = ft_calloc(sizeof(int *), len);
+	fds = ft_calloc(sizeof(int *), len + 1);
+	fds[len] = NULL;
 	i = 0;
     while (i < len)
     {
@@ -80,7 +81,7 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
     int 	i;
-    int 	len;
+    // int 	len;
     int 	**fds;
     pid_t 	*ch_pid;
 
@@ -113,14 +114,9 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 			break ;
 		}
     }
-	len = 0;
-	while (ch_pid[len])
-		len++;
-    while (len > 0)
-	{
+	free_arr((void **)fds, i);
+	while (i-- > 0)
 		wait(NULL);
-		len--;
-	}
 	free(ch_pid);
 	return (input_fd);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 13:51:37 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 13:06:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/27 14:26:29 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,14 +112,16 @@ int	ft_exit(t_pars *pars, t_all *all, char *readline_return)//, int fd
 		i++;
 	if (i > 2)
 	{
-		printf("exit: too many arguments\n");
-		// ft_putstr_fd("exit: too many arguments\n", fd);
+		ft_putendl_fd("exit\nexit: too many arguments", 2);
 		return (0);
 	}
 	free_all(&all); // free all node + s_env nodes
 	free_full_t_pars(&first_node);
+	ft_putendl_fd("exit", 2);
+	if (s[1] && ft_are_nums(s[1]) == false)
+		printf("exit: %s: numeric argument required\n", s[1]);
 	free_split(s);
-	exit(-1);
+	exit(EXIT_SUCCESS);
 }
 
 // int main(int ac, char **av, char **envp)

@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:34:17 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/15 11:26:33 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/26 20:14:12 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	free_arr(void **array, int size)
 	if (array == NULL)
 		return ;
 	i = 0;
-	while (i < size)
+	while (i < size && array[size] != NULL)
 	{
 		free(array[i]);
 		i++;

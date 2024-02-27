@@ -27,7 +27,8 @@ YELLOW = \033[33m
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = ft_memset.c \
+SRC = ft_are_nums.c \
+	  ft_memset.c \
       ft_bzero.c \
       ft_memcpy.c \
       ft_memmove.c \
