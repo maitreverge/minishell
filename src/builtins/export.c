@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/28 13:36:42 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 18:07:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,27 +75,30 @@ static void	ft_export_2(t_env_list **e, char **s, t_env_list *cur, char *trim)
 		env_lstadd_back(e, env_lstnew(s[0], s[1], trim));
 }
 
-void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars)
+void	ft_export(t_env_list **envp, char **name_args, t_all *all, t_pars **pars)
 {
 	t_env_list	*current_env;
 	char		**split_t;
-	char		*s_trimmed_export;
-	char		*s_final_trim;
-	char		*trim_line;
+	// char		*s_trimmed_export;
+	// char		*s_final_trim;
+	// char		*trim_line;
 
 	current_env = *envp;
-	trim_line = ft_strtrim(line, " ");
-	if (!ft_strcmp(trim_line, "export"))
+	// trim_line = ft_strtrim(line, " ");
+
+	
+	if (!name_args[1])
 	{
-		ft_env((*pars)->cmd->name_options_args, all, pars);
+		ft_env(name_args, all, pars);
 		return ;
 	}
-	s_trimmed_export = ft_strtrim(line, "export");
-	s_final_trim = ft_strtrim(s_trimmed_export, " ");
-	if (!right_format(s_final_trim, pars))
+	// s_trimmed_export = ft_strtrim(line, "export");
+	// s_final_trim = ft_strtrim(s_trimmed_export, " ");
+	if (!right_format(name_args[1], pars))
 		return ;
-	split_t = ft_2_split(s_final_trim, '=');
-	ft_export_2(envp, split_t, current_env, s_final_trim);
+	split_t = ft_2_split(name_args[1], '=');
+	ft_export_2(envp, split_t, current_env, name_args[1]);
 	lstfirst(*pars)->last_exit_status = 0;
-	free_export(split_t, s_trimmed_export, s_final_trim, trim_line);
+	// free_export(split_t, s_final_trim, trim_line);
+	free_split(split_t);
 }

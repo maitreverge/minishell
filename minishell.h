@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 17:48:11 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 18:06:59 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,8 +290,6 @@ void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars);
 void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
 void	ft_env(char **args, t_all *all, t_pars **pars);
 void	ft_exit(char **name_option, t_all *all, t_pars **pars);
-
-void	free_export(char **split, char *s1, char *s2, char *s3); // export_2.c
 
 
 
