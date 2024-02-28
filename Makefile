@@ -6,7 +6,7 @@
 #    By: flverge <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 13:10:05 by glambrig          #+#    #+#              #
-#    Updated: 2024/02/27 12:35:56 by flverge          ###   ########.fr        #
+#    Updated: 2024/02/28 11:57:24 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ CFLAGS = -Wall -Wextra -Werror -g # delete the -g flag
 SRC = $(wildcard src/exec/*.c) \
     $(wildcard src/utils/*.c) \
     $(wildcard src/parsing/*.c) \
+    $(wildcard src/builtins/*.c) \
     $(wildcard src/parsing/bools_parsing/*.c) \
     $(wildcard src/parsing/new_nodes/*.c) \
     $(wildcard src/parsing/splitted_prompt/*.c) \
