@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 14:36:29 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:49:35 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	exec_builtin(t_pars *pars, t_all *all)
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "export"))
 		ft_export(&all->env_lst, all->readline_line, all, &pars);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "unset"))
-		ft_unset(&all->env_lst, all->readline_line, &pars);
+		ft_unset(&all->env_lst, pars->cmd->name_options_args, &pars);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "exit"))
 		ft_exit(pars->cmd->name_options_args, all, &pars);
 	return ;

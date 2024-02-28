@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:58:42 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/28 11:59:00 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 13:00:31 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,60 @@
 
 static void	find_middle_node(t_env_list **envp, char *line)
 {
-	t_env_list *current;
-	t_env_list *previous_node;
-	t_env_list *next_node;
-	t_env_list *temp;
-	
+	t_env_list	*current;
+	t_env_list	*previous_node;
+	t_env_list	*next_node;
+	t_env_list	*temp;
+
 	temp = *envp;
-	
 	while (temp)
 	{
 		if (!ft_strcmp(temp->key, line))
-			break;
+			break ;
 		previous_node = temp;
 		temp = temp->next;
 	}
-	if (!temp) // if variable not found, exit function to avoid segfault
-		return;
+	if (!temp)
+		return ;
 	current = previous_node->next;
 	next_node = current->next;
 	previous_node->next = next_node;
 	free(current);
 }
 
-/*Removes 'line' from the list of environment variables*/
-void	ft_unset(t_env_list **envp, char *line, t_pars **parsing)
+static void	del_last_node(t_env_list *cur, char *e_key, t_env_list *last_node)
 {
-	t_env_list *current;
-	t_env_list *first_node;
-	t_env_list *last_node;
-	
+	while (ft_strcmp(cur->next->key, e_key))
+		cur = cur->next;
+	cur->next = NULL;
+	free(last_node);
+}
+
+void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing)
+{
+	t_env_list	*current;
+	t_env_list	*first_node;
+	t_env_list	*last_node;
+	char		*extracted_key;
+
 	current = *envp;
 	first_node = *envp;
 	last_node = env_lstlast(*envp);
-
-	// ! CASE 1 : target is on the first node
-	if (!ft_strcmp(first_node->key, line))
+	if (!name_args[1])
 	{
-		(*envp) = (*envp)->next; // move the head of the struct itself to the next node
+		ft_putendl_fd("unset : not enough arguments\n", 2);
+		lstfirst(*parsing)->last_exit_status = 1;
+	}
+	extracted_key = ft_strdup((*parsing)->cmd->name_options_args[1]);
+	if (!ft_strcmp(first_node->key, extracted_key))
+	{
+		(*envp) = (*envp)->next;
 		free(first_node);
 	}
-	// ! CASE 2 : target is on the last node
-	else if (!ft_strcmp(last_node->key, line))
-	{
-		while (ft_strcmp(current->next->key, line))
-			current = current->next;
-		current->next = NULL;
-		free(last_node);
-	}
-	else // ! CASE 3 : the target node is in the middle
-		find_middle_node(envp, line);
-	lstfirst(*parsing)->last_exit_status = 0; // unset last_exit_status ==> 0 in every case !
+	else if (!ft_strcmp(last_node->key, extracted_key))
+		del_last_node(current, extracted_key, last_node);
+	else
+		find_middle_node(envp, extracted_key);
+	lstfirst(*parsing)->last_exit_status = 0;
+	free(extracted_key);
 }
