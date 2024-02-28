@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:19:29 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/26 15:22:34 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 13:59:09 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,17 @@ int	redirect_input_delimitor(t_pars **lst, t_all *all)
 	{
 		signal(SIGINT, (sighandler_t)SIGINT);
 		rl_buff = ft_strdup("");
-		while (ft_strncmp(rl_buff, (*lst)->next->next->here_doc,
-				ft_strlen((*lst)->next->next->here_doc)) != 0)
+		while ((*lst)->next->next == NULL)	//Handles "<< EOF" edge case
+		{
+			free(rl_buff);
+			rl_buff = readline("> ");
+			if (rl_buff == NULL)
+				exit(EXIT_SUCCESS);
+			if (ft_strncmp(rl_buff, (*lst)->next->here_doc,
+					ft_strlen((*lst)->next->here_doc)) == 0)
+				exit(EXIT_SUCCESS);
+		}
+		while (ft_strncmp(rl_buff, (*lst)->next->next->here_doc, ft_strlen((*lst)->next->next->here_doc)) != 0)
 		{
 			free(rl_buff);
 			rl_buff = readline("> ");
@@ -68,19 +77,21 @@ int	redirect_input(t_pars **lst, t_all *all)
 	int		open_fd;
 	pid_t	ch_pid;
 
-	if ((*lst)->next->next->fl->file_exist == false)
-		return (ft_putendl_fd("Error: redirect input: nonexistant file.", 2), 1);
 	if ((*lst)->isCommand == false)
 		return (ft_putendl_fd("Error: redirect input: redir to file.", 2), 1);
+	if ((*lst)->next->next->fl->file_exist == false)
+		return (ft_putendl_fd("Error: redirect input: nonexistant file.", 2), 1);
 	open_fd = open((*lst)->next->next->fl->file_name, O_RDONLY, S_IRUSR);
 	if (open_fd == -1)
 		return (perror("open"), 1);
-	dup2(open_fd, STDIN_FILENO);
-	if (close(open_fd) == -1)
-		return (perror("close"), 1);
 	ch_pid = fork();
 	if (ch_pid == 0)
+	{
+		dup2(open_fd, STDIN_FILENO);
+		if (close(open_fd) == -1)
+			return (perror("close"), 1);
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, all->copy_envp);
+	}
 	else if (ch_pid < 0)
 	{
 		perror("fork");

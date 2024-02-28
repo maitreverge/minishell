@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 15:00:31 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 14:08:23 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,24 @@ void	exec_builtin(t_pars *pars, t_all *all)
 	return ;
 }
 
+int g_ext;
+
+void	asdf(int sig)
+{
+	(void)sig;
+	kill(g_ext, SIGINT);
+}
+
 void	exec_external_func(t_pars *lst, t_all *all)
 {
 	pid_t	ch_pid;
 
 	ch_pid = fork();
+	if (ch_pid > 0)
+	{
+		g_ext = ch_pid;
+		signal(SIGINT, &asdf);
+	}
 	if (ch_pid == 0)
 	{
 		if (!lst->cmd->command_path)
