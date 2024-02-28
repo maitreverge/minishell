@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:41 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/28 21:52:49 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 21:54:27 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,10 @@ static void	regular_cd(t_env_list **envp, char **name_args, char *current_path)
 	char	*regular_path;
 
 	regular_path = name_args[1];
-	printf("\nPWD BEFORE CHDIR = %s\n", regular_path);
 	chdir(regular_path);
 	update_pwd(envp, current_path, "OLDPWD");
 	free(current_path);
 	current_path = ft_strdup(getcwd(NULL, 0));
-	printf("\nPWD AFTER CHDIR = %s\n", current_path);
 	update_pwd(envp, current_path, "PWD");
 }
 

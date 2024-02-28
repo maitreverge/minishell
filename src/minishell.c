@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 21:21:51 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 21:56:32 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ t_all	*init_t_all_struct(char **envp)
 void	reset_t_pars(t_pars **pars)
 {
 	(*pars)->MasterKill = false;
-	(*pars)->isRedirIn = false; // reseting this one when search_redir_in turn it on
+	(*pars)->isRedirIn = false;
 	(*pars)->error_message = 0;	
 }
 
@@ -150,7 +150,7 @@ char **convert_env_list_to_array(t_env_list **list)
 	return (result);
 }
 
-void	refresh_envp(t_all **all)
+void	refresh_envp(t_all **all) // ? really usefull
 {
 	t_all *current;
 
@@ -177,34 +177,17 @@ int	main(int ac, char **av, char **envp)
 	signals(pars); // calling 
 	while (1)
 	{
-		printf("-----------------\n");
-		print_env(&all->env_lst, "OLDPWD", "ENV_START");
-		print_env(&all->env_lst, "PWD", "ENV_START");
-		// reset_t_pars(&pars);
-		// refresh_envp(&all); // probably fuck up CD
-		printf("-----------------\n");
+		reset_t_pars(&pars);
+		// refresh_envp(&all); // ! probably fuck up CD, to check
 		all->readline_line = readline("minishell$ ");
-		// printf("-----------------\n");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
-			//there are certainly things here that i forgot to free
 			ft_putendl_fd("exit", 2);
 			free_all(&all); // free all node + s_env nodes
-			// free_s_env(&all->env_lst);
-			// free_t_pars(&pars);
 			free_firstnode_pars(&pars);
-			// if (all->readline_line != NULL)
-			// 	free(all->readline_line);
 			return (exit(0), 1);
 		}
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
-		// ! In this form, masterkill actually exit minishell, instead of giving back the prompt
-		// ! I need to skip all the execution part, throw an error message, then stay in the loop
-		// if (pars->MasterKill == true)
-		// {
-		// 	free_firstnode_pars(&pars);
-		// 	break ; 
-		// }
 		if (!pars->MasterKill) // if master_kill if false
 		{
 			int	fds;
@@ -244,9 +227,6 @@ int	main(int ac, char **av, char **envp)
 		if (pars && pars->next)
 			add_history(all->readline_line);
 		free(all->readline_line);
-		free_t_pars(&pars);//not sure, but seems right
-		printf("-----------------\n");
-		print_env(&all->env_lst, "OLDPWD", "ENV_END");
-		print_env(&all->env_lst, "PWD", "ENV_END");
+		free_t_pars(&pars);
 	} 
 }
