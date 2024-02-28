@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 13:04:04 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 17:48:33 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,19 @@ static char	**target_print_args(char **args)
 	return (NULL);
 }
 
-int	ft_echo(t_pars *pars)
+int	ft_echo(char **args, t_pars *pars)
 {
 	char	**start_printing;
 	int		i;
 	bool	new_line;
 
 	i = 0;
-	if (!pars->cmd->name_options_args[1])
+	if (!args[1])
 		return (printf("\n"), lstfirst(pars)->last_exit_status = 0, 0);
-	if (echo_full_minus_n(&pars->cmd->name_options_args[1]))
+	if (echo_full_minus_n(&args[1]))
 		return (lstfirst(pars)->last_exit_status = 0, 0);
-	start_printing = target_print_args(&pars->cmd->name_options_args[1]);
-	if (start_printing == &pars->cmd->name_options_args[1])
+	start_printing = target_print_args(&args[1]);
+	if (start_printing == &args[1])
 		new_line = false;
 	else
 		new_line = true;
