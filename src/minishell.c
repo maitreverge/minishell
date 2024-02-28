@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 12:18:18 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 18:53:38 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ int	check_next_operator(t_pars *lst)
 void	exec_builtin(t_pars *pars, t_all *all)
 {
 	if (!ft_strcmp(pars->cmd->name_options_args[0], "echo"))
-		ft_echo(pars);	//all->readline_line, all, 
+		ft_echo(pars->cmd->name_options_args, pars);	//all->readline_line, all, 
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "cd"))
-		ft_cd(all->readline_line, all->env_lst);
+		ft_cd(&pars, &all->env_lst);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "pwd"))
 		ft_pwd(&all->env_lst, true);	//replace 1 with fd
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "env"))
 		ft_env(pars->cmd->name_options_args, all, &pars);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "export"))
-		ft_export(&all->env_lst, all->readline_line, all, &pars);
+		ft_export(&all->env_lst, pars->cmd->name_options_args, all, &pars);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "unset"))
 		ft_unset(&all->env_lst, pars->cmd->name_options_args, &pars);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "exit"))
@@ -178,7 +178,7 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		reset_t_pars(&pars);
-		refresh_envp(&all);
+		// refresh_envp(&all); // probably fuck up CD
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
