@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 14:08:23 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:36:29 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ void	exec_builtin(t_pars *pars, t_all *all)
 	return ;
 }
 
-int g_ext;
+int g_pid;
 
 void	asdf(int sig)
 {
 	(void)sig;
-	kill(g_ext, SIGINT);
+	kill(g_pid, SIGINT);
 }
 
 void	exec_external_func(t_pars *lst, t_all *all)
@@ -78,7 +78,7 @@ void	exec_external_func(t_pars *lst, t_all *all)
 	ch_pid = fork();
 	if (ch_pid > 0)
 	{
-		g_ext = ch_pid;
+		g_pid = ch_pid;
 		signal(SIGINT, &asdf);
 	}
 	if (ch_pid == 0)
@@ -187,9 +187,9 @@ int	main(int ac, char **av, char **envp)
 	// Nodes all and node t_env_list are create and init here
 	all = init_t_all_struct(envp);
 	pars = init_1st_node_pars();
-	signals(pars); // calling 
 	while (1)
 	{
+		signals(pars);
 		reset_t_pars(&pars);
 		refresh_envp(&all);
 		all->readline_line = readline("minishell$ ");
