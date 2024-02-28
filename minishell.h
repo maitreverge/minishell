@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 18:44:23 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 20:41:52 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,7 @@ void	env_lstadd_back(t_env_list **lst, t_env_list *new);
 
 void	free_full_t_pars(t_pars **pars);
 
+void	print_env(t_env_list **envp, char *target, char *message);
 
 
 

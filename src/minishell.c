@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 18:53:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 21:21:51 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,14 @@ int	main(int ac, char **av, char **envp)
 	signals(pars); // calling 
 	while (1)
 	{
-		reset_t_pars(&pars);
+		printf("-----------------\n");
+		print_env(&all->env_lst, "OLDPWD", "ENV_START");
+		print_env(&all->env_lst, "PWD", "ENV_START");
+		// reset_t_pars(&pars);
 		// refresh_envp(&all); // probably fuck up CD
+		printf("-----------------\n");
 		all->readline_line = readline("minishell$ ");
+		// printf("-----------------\n");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
 			//there are certainly things here that i forgot to free
@@ -240,5 +245,8 @@ int	main(int ac, char **av, char **envp)
 			add_history(all->readline_line);
 		free(all->readline_line);
 		free_t_pars(&pars);//not sure, but seems right
+		printf("-----------------\n");
+		print_env(&all->env_lst, "OLDPWD", "ENV_END");
+		print_env(&all->env_lst, "PWD", "ENV_END");
 	} 
 }
