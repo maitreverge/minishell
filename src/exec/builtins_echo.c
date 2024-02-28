@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_echo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/22 14:41:12 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/28 10:24:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ static void	echo_helper(char **s)
 		else if (toggle == true)
 			printf("%s", s[i]);
 	}
-	if (toggle == false)
-		printf("\n");
+	// if (toggle == false)
+	// 	printf("\n");
 }
 
 int	ft_echo(t_pars *pars)//char *s, t_all *all, 
@@ -61,12 +61,12 @@ int	ft_echo(t_pars *pars)//char *s, t_all *all,
 	int	len;
 
 	len = 0;
+	if (!pars->cmd->name_options_args[1])
+		return(printf("\n"), lstfirst(pars)->last_exit_status = 0, 0);
 	while (pars->cmd->name_options_args[len])
 		len++;
-	if (!pars->cmd->name_options_args[1])
-		return(printf("\n"), pars->prev->last_exit_status = 0, 0);
-	if (ft_strncmp(pars->cmd->name_options_args[1], "-n", 2) == 0)
-		return (echo_helper(pars->cmd->name_options_args), pars->prev->last_exit_status = 0, 0);
+	if (!ft_strcmp(pars->cmd->name_options_args[1], "-n"))
+		return (echo_helper(pars->cmd->name_options_args), lstfirst(pars)->last_exit_status = 0, 0);
 	i = 1;
 	while (i < len)
 	{
@@ -79,6 +79,7 @@ int	ft_echo(t_pars *pars)//char *s, t_all *all,
 		i++;
 	}
 	printf("\n");
-	pars->prev->last_exit_status = 0;
+	lstfirst(pars)->last_exit_status = 0;
 	return (0);
 }
+
