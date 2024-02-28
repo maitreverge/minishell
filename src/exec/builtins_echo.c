@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 10:49:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 11:10:02 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ echo -nnnnnnnnnnnnnnn -nnnnnnnnnnnnnnnnnn -n hello
 // 	// 	printf("\n");
 // }
 
-static bool echo_full_minus_n(char **args) // when args are strictly -n or -nnnnnnnn
+static bool echo_full_minus_n(char **args) // detects when args are strictly -n or -nnnnnnnn
 {
 	int i; // index buffer
 	int j; // index char
@@ -82,18 +82,66 @@ static bool echo_full_minus_n(char **args) // when args are strictly -n or -nnnn
 	return (true);
 }
 
+static char **target_print_args(char **args)
+{
+	int i; // index buffer
+	int j; // index char
+
+	i = 0;
+	
+	while (args[i])
+	{
+		j = 0;
+		if (args[i][j] == '-')
+		{
+			j++;
+			while (args[i][j])
+			{
+				if (args[i][j] != 'n')
+					return (&args[i]);
+				j++;
+			}
+		}
+		else
+			return (&args[i]);
+		i++;
+	}
+	return (NULL); // ? is this edge case correct ?
+}
+
 int	ft_echo(t_pars *pars)//char *s, t_all *all, 
 {
-	int	i;
-	int	len;
+	char **start_printing;
+	int	i; // index buffer
+	// int	len;
 
-	len = 0;
-	if (!pars->cmd->name_options_args[1]) // prompt == 'echo'
+
+	i = 0;
+	// len = 0;
+	if (!pars->cmd->name_options_args[1]) // prompt == 'echo' without any args
 		return(printf("\n"), lstfirst(pars)->last_exit_status = 0, 0);
-	// ! Handle edge case where prompt == 'echo -n' 'echo -nnnnnnnn' 'echo -nnnn -nnnnn'
 
+	/*
+	! Handle edge case where prompt contains only -n or -nnn arguments like :
+	! 'echo -n'   /   'echo -nnnnnnnn'   /    'echo -nnnn -nnnnn'
+	*/
 	if (echo_full_minus_n(&pars->cmd->name_options_args[1]))
 		return (lstfirst(pars)->last_exit_status = 0, 0);
+	
+	start_printing = target_print_args(&pars->cmd->name_options_args[1]);
+
+	while (start_printing[i])
+	{
+		printf("%s", start_printing[i]);
+		i++;
+		if (start_printing[i])
+			printf(" ");
+	}
+	printf("\n");
+	lstfirst(pars)->last_exit_status = 0;
+	return (0);
+	
+	/*
 	
 	while (pars->cmd->name_options_args[len])
 		len++;
@@ -101,6 +149,8 @@ int	ft_echo(t_pars *pars)//char *s, t_all *all,
 	// if (!ft_strcmp(pars->cmd->name_options_args[1], "-n"))
 	// 	return (echo_helper(pars->cmd->name_options_args), lstfirst(pars)->last_exit_status = 0, 0);
 	i = 1;
+	
+	// ? next loop potentially fucks up the operator parsing
 	while (i < len)
 	{
 		if (i == len - 1 && ft_strncmp(pars->cmd->name_options_args[i], "|", 1) != 0)
@@ -111,8 +161,6 @@ int	ft_echo(t_pars *pars)//char *s, t_all *all,
 			break ;
 		i++;
 	}
-	printf("\n");
-	lstfirst(pars)->last_exit_status = 0;
-	return (0);
+	*/
 }
 
