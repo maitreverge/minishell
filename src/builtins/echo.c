@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_echo.c                                    :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 11:23:22 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 13:04:04 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static bool echo_full_minus_n(char **args) // detects when args are strictly -n or -nnnnnnnn
+// detects when args are strictly -n or -nnnnnnnn
+static	bool	echo_full_minus_n(char **args)
 {
-	int i; // index buffer
-	int j; // index char
+	int	i;
+	int	j;
 
 	i = 0;
-	
 	while (args[i])
 	{
 		j = 0;
@@ -39,13 +39,13 @@ static bool echo_full_minus_n(char **args) // detects when args are strictly -n 
 	return (true);
 }
 
-static char **target_print_args(char **args) // detects from which arguments to print
+// detects from which arguments to print
+static char	**target_print_args(char **args)
 {
-	int i; // index buffer
-	int j; // index char
+	int	i;
+	int	j;
 
 	i = 0;
-	
 	while (args[i])
 	{
 		j = 0;
@@ -73,12 +73,12 @@ int	ft_echo(t_pars *pars)
 	bool	new_line;
 
 	i = 0;
-	if (!pars->cmd->name_options_args[1]) // prompt == 'echo' without any args
-		return(printf("\n"), lstfirst(pars)->last_exit_status = 0, 0);
-	if (echo_full_minus_n(&pars->cmd->name_options_args[1])) // ! Handle edge case where prompt contains only -n or -nnn arguments
+	if (!pars->cmd->name_options_args[1])
+		return (printf("\n"), lstfirst(pars)->last_exit_status = 0, 0);
+	if (echo_full_minus_n(&pars->cmd->name_options_args[1]))
 		return (lstfirst(pars)->last_exit_status = 0, 0);
-	start_printing = target_print_args(&pars->cmd->name_options_args[1]); // detect from which arg to print
-	if (start_printing == &pars->cmd->name_options_args[1]) // detecs if the first argument is a -n or -nnnnn
+	start_printing = target_print_args(&pars->cmd->name_options_args[1]);
+	if (start_printing == &pars->cmd->name_options_args[1])
 		new_line = false;
 	else
 		new_line = true;
@@ -94,4 +94,3 @@ int	ft_echo(t_pars *pars)
 	lstfirst(pars)->last_exit_status = 0;
 	return (0);
 }
-
