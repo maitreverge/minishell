@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 20:41:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:48:55 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,7 @@ void	free_tokens(char **t);
 int		ft_echo(char **args, t_pars *pars);//char *s, t_all *all, 
 void	ft_cd(t_pars **pars, t_env_list **envp);
 void	ft_pwd(t_env_list **envp, bool print);// int fd,
-void	ft_export(t_env_list **envp, char **name_args, t_all *all, t_pars **pars);
+void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars);
 void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
 void	ft_env(char **args, t_all *all, t_pars **pars);
 void	ft_exit(char **name_option, t_all *all, t_pars **pars);
