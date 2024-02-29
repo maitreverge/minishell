@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/28 18:07:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:45:32 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,26 +79,23 @@ void	ft_export(t_env_list **envp, char **name_args, t_all *all, t_pars **pars)
 {
 	t_env_list	*current_env;
 	char		**split_t;
-	// char		*s_trimmed_export;
-	// char		*s_final_trim;
-	// char		*trim_line;
 
 	current_env = *envp;
-	// trim_line = ft_strtrim(line, " ");
-
-	
 	if (!name_args[1])
 	{
 		ft_env(name_args, all, pars);
 		return ;
 	}
-	// s_trimmed_export = ft_strtrim(line, "export");
-	// s_final_trim = ft_strtrim(s_trimmed_export, " ");
+	if (ft_isdigit(name_args[1][0]))
+	{
+		ft_putendl_fd("export : environment variable can't start with a number", 2);
+		lstfirst(*pars)->last_exit_status = 1;
+		return;
+	}
 	if (!right_format(name_args[1], pars))
 		return ;
 	split_t = ft_2_split(name_args[1], '=');
 	ft_export_2(envp, split_t, current_env, name_args[1]);
 	lstfirst(*pars)->last_exit_status = 0;
-	// free_export(split_t, s_final_trim, trim_line);
 	free_split(split_t);
 }
