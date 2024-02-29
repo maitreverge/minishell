@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/26 10:55:30 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 10:58:02 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,19 @@ void	free_t_pars(t_pars **pars)
 			free_split(to_free->cmd->name_options_args);
 			free(to_free->cmd); // free the sub_node
 		}
-		else if (to_free->isFile)
+		else if (to_free->isFile && to_free->fl)
 		{
 			free(to_free->fl->file_name);
 			free(to_free->fl);
 		}
-		if (to_free->isOperator && to_free->operator)
+		else if (to_free->isOperator && to_free->operator)
 			free(to_free->operator);
 		
-		if (to_free->isHereDoc) // only need to free the node
-			free(to_free->here_doc); // newly allocated node
+		else if (to_free->isHereDoc) // only need to free the node
+		{
+			if (to_free->here_doc)
+				free(to_free->here_doc); // newly allocated node
+		}
 		to_free = to_free->next;
 		free(temp);
 	}
@@ -127,7 +130,7 @@ void	free_all(t_all **all)
 	current = *all;
 
 	free_s_env(&current->env_lst); // free the struct content + the node itself
-
+	
 	if (current->copy_envp)
 		free_split(current->copy_envp);
 
@@ -169,5 +172,6 @@ void	free_full_t_pars(t_pars **pars)
 		to_free = to_free->next;
 		free(temp);
 	}
+	// free(pars); // ! recently added
 }
 
