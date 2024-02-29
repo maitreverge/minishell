@@ -6,42 +6,100 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:41 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/28 12:02:28 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/28 21:54:27 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-/*
-	cd MUST be called with the full line received from readline(),
-	otherwise it (probably) won't work.
-	This should update the env PWD var (using ft_pwd()).
-	
-	IMPORTANT: env variables should also work, e.g. cd $HOME
-*/
-int	ft_cd(char *s, t_env_list *envp)
+static char	*get_home_path(t_env_list **envp)
 {
-	char 	**tokens;
-	char	*homepath;
+	t_env_list	*current;
+	char		*result;
 
-	tokens = NULL;
-	if (ft_strchr(s, ' ') != NULL)
-		tokens = ft_split(s, ' ');
-	/*cd with no parameters changes to home directory*/
-	if ((tokens != NULL && tokens[1] == NULL) || tokens == NULL)
+	current = *envp;
+	result = NULL;
+	while (current)
 	{
-		homepath = ft_strjoin("/home/", getenv("USER"));
+		if (!ft_strcmp(current->key, "HOME"))
+			result = current->value;
+		current = current->next;
+	}
+	return (result);
+}
+
+static char	*get_current_path(t_env_list **envp)
+{
+	t_env_list	*current;
+	char		*result;
+
+	current = *envp;
+	result = NULL;
+	while (current)
+	{
+		if (!ft_strcmp(current->key, "PWD"))
+			result = current->value;
+		current = current->next;
+	}
+	return (result);
+}
+
+static void	update_pwd(t_env_list **envp, char *new_value, char *target)
+{
+	t_env_list	*current;
+	char		*before_equal;
+	char		*join_new_full_envp;
+
+	current = *envp;
+	while (current)
+	{
+		if (!ft_strcmp(current->key, target))
+		{
+			free(current->original_envp);
+			before_equal = ft_strjoin(target, "=");
+			join_new_full_envp = ft_strjoin(before_equal, new_value);
+			current->original_envp = ft_strdup(join_new_full_envp);
+			free(current->value);
+			current->value = ft_strdup(new_value);
+			free(join_new_full_envp);
+			free(before_equal);
+			return ;
+		}
+		current = current->next;
+	}
+}
+
+static void	regular_cd(t_env_list **envp, char **name_args, char *current_path)
+{
+	char	*regular_path;
+
+	regular_path = name_args[1];
+	chdir(regular_path);
+	update_pwd(envp, current_path, "OLDPWD");
+	free(current_path);
+	current_path = ft_strdup(getcwd(NULL, 0));
+	update_pwd(envp, current_path, "PWD");
+}
+
+void	ft_cd(t_pars **pars, t_env_list **envp)
+{
+	char	**name_args;
+	char	*homepath;
+	char	*current_path;
+
+	name_args = (*pars)->cmd->name_options_args;
+	homepath = ft_strdup(get_home_path(envp));
+	current_path = ft_strdup(get_current_path(envp));
+	if (!name_args[1] || !ft_strcmp(name_args[1], "~"))
+	{
 		chdir(homepath);
-		free(homepath);
-		free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
-		ft_pwd(&envp, false);
-		return (0);
+		update_pwd(envp, current_path, "OLDPWD");
+		update_pwd(envp, homepath, "PWD");
 	}
-	else if (tokens != NULL)
-	{
-		chdir(tokens[1]);
-		ft_pwd(&envp, false);
-	}
-	free_arr((void **)tokens, size_of_ptr_ptr((void **)tokens));
-	return (0);
+	else if (name_args[2])
+		ft_putendl_fd("cd : too may arguments\n", 2);
+	else
+		regular_cd(envp, name_args, current_path);
+	free(homepath);
+	free(current_path);
 }

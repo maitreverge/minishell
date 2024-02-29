@@ -57,3 +57,23 @@ void	print_final_struct(t_pars **pars)
 		cur = cur->next;
 	}
 }
+
+void	print_env(t_env_list **envp, char *target, char *message)
+{
+	t_env_list *current;
+
+	current = *envp;
+
+	printf("%s\n", message);
+	while (current)
+	{
+		if (!ft_strcmp(current->key, target))
+		{
+			printf("Original envp = %s\n", current->original_envp);
+			printf("Key = %s\n", current->key);
+			printf("Value = %s\n", current->value);
+			printf("\n");
+		}
+		current = current->next;
+	}
+}

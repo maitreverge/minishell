@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 12:47:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:48:55 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,7 @@ void	env_lstadd_back(t_env_list **lst, t_env_list *new);
 
 void	free_full_t_pars(t_pars **pars);
 
+void	print_env(t_env_list **envp, char *target, char *message);
 
 
 
@@ -283,13 +284,14 @@ void	copy_env_into_list(t_env_list **env, char **envp);
 
 /*Builtins*/
 void	free_tokens(char **t);
-int		ft_echo(t_pars *pars);//char *s, t_all *all, 
-int		ft_cd(char *path, t_env_list *envp);
+int		ft_echo(char **args, t_pars *pars);//char *s, t_all *all, 
+void	ft_cd(t_pars **pars, t_env_list **envp);
 void	ft_pwd(t_env_list **envp, bool print);// int fd,
-void	ft_export(t_env_list **envp, char *line, t_all *all, t_pars **pars);
+void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars);
 void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
 void	ft_env(char **args, t_all *all, t_pars **pars);
 void	ft_exit(char **name_option, t_all *all, t_pars **pars);
+
 
 
 /*Signal handler*/

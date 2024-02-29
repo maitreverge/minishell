@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/15 13:41:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:56:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	new_node_cmd_2(t_pars *new_node, t_alloc *u, int start, int *i)
 
 	j = 0;
 	len = (*i) - start + 2;
-	new_node->cmd->name_options_args = (char **)ft_calloc(len, sizeof(char *));
+	new_node->cmd->name_options_args = (char **)ft_calloc(len, sizeof(char *)); // ! LEAK
 	if (!new_node->cmd->name_options_args)
 		exit (-1);
 	// new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
