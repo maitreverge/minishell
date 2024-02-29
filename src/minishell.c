@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 12:44:29 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 15:14:56 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,23 @@ int	check_next_operator(t_pars *lst)
 
 void	exec_builtin(t_pars *pars, t_all *all)
 {
-	if (!ft_strcmp(pars->cmd->name_options_args[0], "echo"))
-		ft_echo(pars->cmd->name_options_args, pars);	//all->readline_line, all, 
-	else if (!ft_strcmp(pars->cmd->name_options_args[0], "cd"))
+	char **name_args;
+
+	name_args = pars->cmd->name_options_args;
+	if (!ft_strcmp(name_args[0], "echo"))
+		ft_echo(name_args, pars);
+	else if (!ft_strcmp(name_args[0], "cd"))
 		ft_cd(&pars, &all->env_lst);
-	else if (!ft_strcmp(pars->cmd->name_options_args[0], "pwd"))
-		ft_pwd(&all->env_lst, true);	//replace 1 with fd
-	else if (!ft_strcmp(pars->cmd->name_options_args[0], "env"))
-		ft_env(pars->cmd->name_options_args, all, &pars);
-	else if (!ft_strcmp(pars->cmd->name_options_args[0], "export"))
-		ft_export(&all->env_lst, pars->cmd->name_options_args, all, &pars);
-	else if (!ft_strcmp(pars->cmd->name_options_args[0], "unset"))
-		ft_unset(&all->env_lst, pars->cmd->name_options_args, &pars);
-	else if (!ft_strcmp(pars->cmd->name_options_args[0], "exit"))
-		ft_exit(pars->cmd->name_options_args, all, &pars);
+	else if (!ft_strcmp(name_args[0], "pwd"))
+		ft_pwd(name_args, &pars);
+	else if (!ft_strcmp(name_args[0], "env"))
+		ft_env(name_args, all, &pars);
+	else if (!ft_strcmp(name_args[0], "export"))
+		ft_export(&all->env_lst, name_args, all, &pars);
+	else if (!ft_strcmp(name_args[0], "unset"))
+		ft_unset(&all->env_lst, name_args, &pars);
+	else if (!ft_strcmp(name_args[0], "exit"))
+		ft_exit(name_args, all, &pars);
 	return ;
 }
 
