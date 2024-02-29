@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:14:45 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/29 09:56:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 18:34:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,22 @@ static t_pars	*initialize_new_node(t_alloc *u, int i)
 	return (new_node);
 }
 
-static void	new_node_cmd_2(t_pars *new_node, t_alloc *u, int start, int *i)
+static void	new_node_cmd_2(t_pars *node, t_alloc *u, int start, int *i)
 {
 	int	j;
 	int	len;
 
 	j = 0;
 	len = (*i) - start + 2;
-	new_node->cmd->name_options_args = (char **)ft_calloc(len, sizeof(char *)); // ! LEAK
-	if (!new_node->cmd->name_options_args)
+	node->cmd->name_options_args = (char **)ft_calloc(len, sizeof(char *));
+	if (!node->cmd->name_options_args)
 		exit (-1);
-	// new_node->cmd->name_options_args[j] = new_node->cmd->command_path;
-	new_node->cmd->name_options_args[j] = ft_strdup(new_node->cmd->command_path);
+	node->cmd->name_options_args[j] = ft_strdup(node->cmd->command_path);
 	j++;
 	start++;
 	while (j < len - 1)
 	{
-		new_node->cmd->name_options_args[j] = ft_strdup(u->cleaned_prompt[start]);
+		node->cmd->name_options_args[j] = ft_strdup(u->cleaned_prompt[start]);
 		j++;
 		start++;
 	}
@@ -68,7 +67,6 @@ void	new_node_command(t_pars **pars, t_alloc **utils, int *i)
 	if (testing_builtin(u->cleaned_prompt[*i]))
 	{
 		nde->cmd->isBuiltin = true;
-		// nde->cmd->command_path = u->cleaned_prompt[*i];
 		nde->cmd->command_path = ft_strdup(u->cleaned_prompt[*i]);
 	}
 	else
