@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 11:39:25 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 12:44:29 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		signals(pars);
 		reset_t_pars(&pars);
-		// refresh_envp(&all); // ! probably fuck up CD, to check
+		refresh_envp(&all); // ! probably fuck up CD, to check
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
