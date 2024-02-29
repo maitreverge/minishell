@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/27 15:10:42 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:23:00 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 		close(fds[i][1]);
 	}
     close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
+	free_arr((void **)fds, size_of_ptr_ptr((void **)fds));
 	if ((*lst)->cmd->isBuiltin == true)
-		exec_builtin(*lst, all);
+		exec_builtin(*lst, all, 0);
 	else
 	{
 		if (!(*lst)->cmd->command_path)
@@ -68,6 +69,7 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 		else
 			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, all->copy_envp);
 	}
+	free_full_t_pars(lst);
 	exit(0);
 }
 
@@ -110,8 +112,9 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 			break ;
 		}
     }
-	free_arr((void **)fds, i);
+	free_arr((void **)fds, size_of_ptr_ptr((void **)fds));
 	while (i-- > 0)
 		wait(NULL);
-	return (free(ch_pid), input_fd);
+	free(ch_pid);
+	return (input_fd);
 }

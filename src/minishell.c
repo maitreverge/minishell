@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 11:39:25 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 15:37:37 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ int	check_next_operator(t_pars *lst)
 	return (0);
 }
 
-void	exec_builtin(t_pars *pars, t_all *all)
+/*
+	If pid == 0, we free the pars structure.
+*/
+void	exec_builtin(t_pars *pars, t_all *all, int pid)
 {
 	if (!ft_strcmp(pars->cmd->name_options_args[0], "echo"))
 		ft_echo(pars->cmd->name_options_args, pars);	//all->readline_line, all, 
@@ -60,6 +63,8 @@ void	exec_builtin(t_pars *pars, t_all *all)
 		ft_unset(&all->env_lst, pars->cmd->name_options_args, &pars);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "exit"))
 		ft_exit(pars->cmd->name_options_args, all, &pars);
+	if (pid == 0)
+		free_t_pars(&pars);//try other t_pars free if this doesn't work
 	return ;
 }
 
@@ -191,7 +196,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		signals(pars);
 		reset_t_pars(&pars);
-		// refresh_envp(&all); // ! probably fuck up CD, to check
+		refresh_envp(&all); // ! probably fuck up CD, to check
 		all->readline_line = readline("minishell$ ");
 		if (all->readline_line == NULL)	//checks for ctrl+d
 		{
@@ -223,7 +228,9 @@ int	main(int ac, char **av, char **envp)
 			}
 			else if (check_next_operator(pars->next) == 4)
 			{
-				redirect_output(&pars->next, all, fds);
+				int i = num_of_out_redirs(pars->next);
+				while (--i > -1)
+					redirect_output(&pars->next, all, fds);
 				k = 123;
 			}
 			if (fds != -1)
@@ -231,7 +238,7 @@ int	main(int ac, char **av, char **envp)
 			if (check_next_operator(pars->next) == 0 && (k != 123)) //there are no operators
 			{
 				if (pars && pars->next && pars->next->cmd->isBuiltin == true)
-					exec_builtin(pars->next, all);
+					exec_builtin(pars->next, all, 1);
 				else if (pars && pars->next)
 					exec_external_func(pars->next, all);
 			}

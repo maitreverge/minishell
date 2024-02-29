@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:19:29 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 13:59:09 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:23:58 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,10 @@ static int	redir_out_child(t_pars **lst, t_all *all, int input_fd)
 	dup2(open_fd, STDOUT_FILENO);
 	close(open_fd);
 	if ((*lst)->cmd->isBuiltin == true)
-		exec_builtin(*lst, all);
+		exec_builtin(*lst, all, 0);
 	else
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, all->copy_envp);
+	free_full_t_pars(lst);
 	exit(0);
 }
 
@@ -156,7 +157,13 @@ int	redirect_output(t_pars **lst, t_all *all, int input_fd)
 		free_t_pars(lst);
 		exit(EXIT_FAILURE);
 	}
-	close(input_fd);
+	if (input_fd != -1)//new
+		close(input_fd);
 	wait(NULL);
+	if ((*lst)->next->next && check_next_operator((*lst)->next->next->next) == 4)
+	{
+		del_t_pars_node((*lst)->next->next);
+		del_t_pars_node((*lst)->next);
+	}
 	return (0);
 }

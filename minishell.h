@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 09:48:55 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 15:30:21 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,7 @@ int		signals(t_pars *all);
 /*Pipes, redirections*/
 
 int		check_next_operator(t_pars *lst);
-void	exec_builtin(t_pars *pars, t_all *all);
+void	exec_builtin(t_pars *pars, t_all *all, int pid);
 int		pipes(t_pars **lst, t_all *all, int fd_stdin);
 int		redirect_input_delimitor(t_pars **lst, t_all *all);
 int		redirect_input(t_pars **lst, t_all *all);
@@ -313,6 +313,8 @@ void	free_t_pars(t_pars **lst);
 size_t	lstlen(t_pars *lst);
 void	fork_error(int **fds, pid_t **ch_pid);
 size_t	num_of_pipes(t_pars *lst);
+int		num_of_out_redirs(t_pars *lst);
+void	del_t_pars_node(t_pars *lst);
 
 /*Flo, but i don't want to touch his part of this .h*/
 t_pars	*init_1st_node_pars(void);
