@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 16:04:41 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:21:41 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,6 +323,10 @@ int		pipes_helper_1(t_pars **lst, t_all *all, int input_fd);
 void	pipes_helper_2(t_pars **lst, t_all *all, t_pipe pippy, int ifd);
 int		pipes_helper_3(t_pars **lst, t_all *all);
 int		redirect_input_delimitor(t_pars **lst, t_all *all);
+void	heredoc_helper_1(t_hrdoc *doc);
+void	set_temp_perms(t_pars **lst);
+void	handle_eof_edgecase(t_pars **lst, char **rl_buff);
+void	heredoc_helper_2(t_pars **lst, t_all *all, char **rl, int open_fd);
 int		redirect_input(t_pars **lst, t_all *all);
 int		redirect_output(t_pars **lst, t_all *all, int input_fd);
 
