@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:20:18 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 16:25:58 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:05:53 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	heredoc_helper_2(t_pars **lst, t_all *all, char **rl, int open_fd)
 	close(open_fd);
 	set_temp_perms(lst);
 	redirect_input(lst, all);
-	free((*lst)->next->next->fl);
 	free((*lst)->next->next->fl->file_name);
+	free((*lst)->next->next->fl);
 }
 
 void	heredoc_helper_1(t_hrdoc *doc)
