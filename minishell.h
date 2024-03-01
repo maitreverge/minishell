@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 15:30:21 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:24:10 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,6 +278,13 @@ typedef struct s_exit_status_list
 	int							status;
 	struct s_exit_status_list	*next;
 }	t_exit_status_list;
+
+typedef struct s_pipe
+{
+	int	in_fd;
+	int	i;
+	int	**fds;
+} t_pipe;
 
 /*Env*/
 void	copy_env_into_list(t_env_list **env, char **envp);

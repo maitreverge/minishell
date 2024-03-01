@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 15:37:37 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:11:56 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,10 @@ void	exec_builtin(t_pars *pars, t_all *all, int pid)
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "exit"))
 		ft_exit(pars->cmd->name_options_args, all, &pars);
 	if (pid == 0)
+	{
 		free_t_pars(&pars);//try other t_pars free if this doesn't work
+		free_all(&all);
+	}
 	return ;
 }
 

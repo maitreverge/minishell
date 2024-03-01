@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 13:23:00 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:39:00 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 */
 int	**create_pipes(t_pars **lst, pid_t **ch_pid, int *main_i)
 {
-    int		len;
-    int		i;
-    int 	**fds;
+	int		len;
+	int		i;
+	int		**fds;
 
 	len = lstlen(*lst) - num_of_pipes(*lst);
 	*ch_pid = ft_calloc(sizeof(pid_t), len);
@@ -28,35 +28,35 @@ int	**create_pipes(t_pars **lst, pid_t **ch_pid, int *main_i)
 	fds[len] = NULL;
 	i = 0;
 	*main_i = 0;
-    while (i < len)
-    {
-        fds[i] = ft_calloc(sizeof(int), 2);
-        if (pipe(fds[i]) == -1)
-        {
-            perror("pipe");
+	while (i < len)
+	{
+		fds[i] = ft_calloc(sizeof(int), 2);
+		if (pipe(fds[i]) == -1)
+		{
+			perror("pipe");
 			free_t_pars(lst);
 			free_arr((void **)fds, size_of_ptr_ptr((void **)fds));
-            exit(EXIT_FAILURE);
-        }
+			exit(EXIT_FAILURE);
+		}
 		i++;
-    }
-    return (fds);
+	}
+	return (fds);
 }
 
-void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
+int	pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy)
 {
 	if (input_fd != -1)
-    {
-		dup2(input_fd, STDIN_FILENO);
-        close(input_fd);
-    }
-    if ((*lst)->next != NULL)//If it's not the last node, we redirect STDOUT
 	{
-		dup2(fds[i][1], STDOUT_FILENO);
-		close(fds[i][1]);
+		dup2(input_fd, STDIN_FILENO);
+		close(input_fd);
 	}
-    close(fds[i][0]);	//We close Read end of pipe because we never use it. We only use input_fd/STDIN.
-	free_arr((void **)fds, size_of_ptr_ptr((void **)fds));
+	if ((*lst)->next != NULL)
+	{
+		dup2(pippy.fds[pippy.i][1], STDOUT_FILENO);
+		close(pippy.fds[pippy.i][1]);
+	}
+	close(pippy.fds[pippy.i][0]);
+	free_arr((void **)pippy.fds, size_of_ptr_ptr((void **)pippy.fds));
 	if ((*lst)->cmd->isBuiltin == true)
 		exec_builtin(*lst, all, 0);
 	else
@@ -64,13 +64,12 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 		if (!(*lst)->cmd->command_path)
 		{
 			printf("Command not found\n");
-			lstfirst(*lst)->last_exit_status = 127;
+			return (lstfirst(*lst)->last_exit_status = 127, 0);
 		}
-		else
-			execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args, all->copy_envp);
+		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args,
+			all->copy_envp);
 	}
-	free_full_t_pars(lst);
-	exit(0);
+	return (free_full_t_pars(lst), exit(0), 0);
 }
 
 /*
@@ -80,27 +79,26 @@ void	pipes_child_func(t_pars **lst, t_all *all, int input_fd, int **fds, int i)
 */
 int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
-    int 	i;
-    int 	**fds;
-    pid_t 	*ch_pid;
+	pid_t	*ch_pid;
+	t_pipe	pippy;
 
-	fds = create_pipes(lst, &ch_pid, &i);
-    while ((*lst) != NULL && (*lst)->isCommand == true)
+	pippy.fds = create_pipes(lst, &ch_pid, &pippy.i);
+	while ((*lst) != NULL && (*lst)->isCommand == true)
 	{
 		if (check_next_operator(*lst) == 4)
 		{
-				redirect_output(lst, all, input_fd);
-				break ;
+			redirect_output(lst, all, input_fd);
+			break ;
 		}
-        ch_pid[i] = fork();
-        if (ch_pid[i] == 0)
-			pipes_child_func(lst, all, input_fd, fds, i);
-        else if (ch_pid[i] < 0)
-			fork_error(fds, &ch_pid);
-        if (ch_pid[i] > 0 && i > 0)
-            close(fds[i - 1][0]);
-		close(fds[i][1]);
-        input_fd = fds[i++][0];
+		ch_pid[pippy.i] = fork();
+		if (ch_pid[pippy.i] == 0)
+			pipes_child_func(lst, all, input_fd, pippy);
+		else if (ch_pid[pippy.i] < 0)
+			fork_error(pippy.fds, &ch_pid);
+		if (ch_pid[pippy.i] > 0 && pippy.i > 0)
+			close(pippy.fds[(pippy.i) - 1][0]);
+		close(pippy.fds[pippy.i][1]);
+		input_fd = pippy.fds[pippy.i++][0];
 		if ((*lst)->next && (*lst)->next->isOperator == true && (*lst)->next->operator->pipe == true)
 			(*lst) = (*lst)->next->next;	//to skip the pipe operator and go to the next cmd
 		else
@@ -111,10 +109,8 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 				redirect_input_delimitor(lst, all);
 			break ;
 		}
-    }
-	free_arr((void **)fds, size_of_ptr_ptr((void **)fds));
-	while (i-- > 0)
+	}
+	while (pippy.i-- > 0)
 		wait(NULL);
-	free(ch_pid);
-	return (input_fd);
+	return (free_arr((void **)pippy.fds, size_of_ptr_ptr((void **)pippy.fds)), free(ch_pid), input_fd);
 }
