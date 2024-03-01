@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 12:08:43 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 12:56:01 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,97 +168,6 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars
 	}
 	u->j += i;
 	free(temp_str);
-}
-
-void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **pars)
-{
-	t_utils	*u;
-	bool	expansion;
-
-	u = *utils;
-	expansion = true;
-	while (buff[u->j])
-	{
-		while (!is_any_quote(buff[u->j]) && buff[u->j])
-		{
-			expansion = true;
-			if (buff[u->j] == DOLL_ENV && expansion)
-			{
-				u->j++;
-				calculate_len_doll(&buff[u->j], &u, s_env, pars);
-			}
-			else
-			{
-				u->j++;
-				u->real_len++;
-			}
-		}
-		if (is_any_quote(buff[u->j]))
-		{
-			u->starting_quote = buff[u->j];
-			u->j++;
-			if (u->starting_quote == S_QUOTE)
-				expansion = false;
-			while (buff[u->j] && buff[u->j] != u->starting_quote)
-			{
-				if (buff[u->j] == DOLL_ENV && expansion)
-				{
-					u->j++;
-					calculate_len_doll(&buff[u->j], &u, s_env, pars);
-				}
-				else
-				{
-					u->j++;
-					u->real_len++;
-				}
-			}
-			u->j++;
-		}
-	}
-	u->j = 0;
-	u->k = 0;
-	u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
-	while (buff[u->j])
-	{
-		while (!is_any_quote(buff[u->j]) && buff[u->j])
-		{
-			expansion = true;
-			if (buff[u->j] == DOLL_ENV && expansion)
-			{
-				u->j++;
-				copying_doll(&buff[u->j], &u, s_env, pars);
-			}
-			else
-			{
-				u->result[u->i][u->k] = buff[u->j];
-				u->j++;
-				u->k++;
-			}
-
-		}
-		if (is_any_quote(buff[u->j]))
-		{
-			u->starting_quote = buff[u->j];
-			u->j++;
-			if (u->starting_quote == S_QUOTE)
-				expansion = false;
-			while (buff[u->j] && buff[u->j] != u->starting_quote)
-			{
-				if (buff[u->j] == DOLL_ENV && expansion)
-				{
-					u->j++;
-					copying_doll(&buff[u->j], &u, s_env, pars);
-				}
-				else
-				{
-					u->result[u->i][u->k] = buff[u->j];
-					u->j++;
-					u->k++;
-				}
-			}
-			u->j++;
-		}
-	}
 }
 
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils)

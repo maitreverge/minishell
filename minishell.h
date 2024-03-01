@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 12:50:24 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 13:04:01 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef	struct	s_utils
 	char	starting_quote;
 	char	end_quote;
 	int		real_len;
+	bool	expansion;
 	
 }	t_utils;
 
@@ -267,6 +268,12 @@ char	**ft_clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
 
 bool	is_buff_valid_doll(char *str);
 void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **pars);
+
+void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env, t_pars **pars);
+
+void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars);
+
+
 
 
 
