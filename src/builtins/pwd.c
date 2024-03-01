@@ -6,29 +6,26 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:11 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/29 09:52:15 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 15:15:48 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_pwd(t_env_list **envp, bool print)
+void	ft_pwd(char **name_args, t_pars **pars)
 {
-	t_env_list	*temp;
 	char		*cwd;
-	char		*new_pwd_env;
 
-	cwd = NULL;
-	cwd = getcwd(cwd, 0);
-	if (print == true)
+	if (!name_args[1])
+	{
+		cwd = getcwd(NULL, 0);
 		printf("%s\n", cwd);
-	new_pwd_env = ft_strjoin("PWD=", cwd);
-	temp = *envp;
-	while (ft_strncmp((*envp)->original_envp, "PWD", 3) != 0)
-		*envp = (*envp)->next;
-	if (*envp != NULL)
-		(*envp)->original_envp = new_pwd_env;
-	if (cwd != NULL)
 		free(cwd);
-	*envp = temp;
+		lstfirst(*pars)->last_exit_status = 0;
+	}
+	else
+	{
+		ft_putendl_fd("pwd : too many arguments\n", 2);
+		lstfirst(*pars)->last_exit_status = 1;
+	}
 }

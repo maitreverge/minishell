@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:48:33 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 20:25:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 11:05:55 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 static void	split_2_allocation(char **buffer, char const *s, char c)
 {

@@ -1,27 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_parsing.c                                    :+:      :+:    :+:   */
+/*   allocation_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/30 11:57:43 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/29 18:52:35 by flverge          ###   ########.fr       */
+/*   Created: 2024/02/29 18:47:41 by flverge           #+#    #+#             */
+/*   Updated: 2024/02/29 18:48:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-bool	is_any_quote(char c)
+void	alloc_pars(char *str, t_split_utils *u)
 {
-	if (c == S_QUOTE || c == D_QUOTE)
-		return (true);
-	return (false);
+	u->start = u->i;
+	if ((str[u->i] == '<' && str[u->i + 1] == '<')
+		|| (str[u->i] == '>' && str[u->i + 1] == '>'))
+		u->i += 2;
+	else
+		u->i++;
 }
 
-bool	is_operator_char(char c)
+void	loop_sub_quote(char *str, t_split_utils *u)
 {
-	if (c == '<' || c == '>' || c == '|')
-		return (true);
-	return (false);
+	while (str[u->i] && u->start_quote != u->end_quote)
+	{
+		u->i++;
+		if (str[u->i] == u->start_quote)
+		{
+			u->end_quote = u->start_quote;
+			u->i++;
+			break ;
+		}
+	}
 }

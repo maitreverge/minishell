@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 17:24:28 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:26:08 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef	struct	s_utils
 	char	starting_quote;
 	char	end_quote;
 	int		real_len;
+	bool	expansion;
 	
 }	t_utils;
 
@@ -173,7 +174,8 @@ void	allocation(char **buffer, char *str, size_t len_s);
 
 
 // turbo_parser
-void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
+void	turbo_parser(char *p, t_pars **pars, t_env_list **env, t_utils **s_u);
+
 
 // turbo_parser_2
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
@@ -259,6 +261,29 @@ void	free_full_t_pars(t_pars **pars);
 
 void	print_env(t_env_list **envp, char *target, char *message);
 
+void	alloc_pars(char *str, t_split_utils *u);
+void	loop_sub_quote(char *str, t_split_utils *u);
+
+char	**clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
+
+
+bool	is_buff_valid_doll(char *str);
+void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **pars);
+
+void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env, t_pars **pars);
+
+void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars);
+
+bool	unclosed_quotes(char *str);
+
+
+bool alloc_part_1(t_alloc *cur, int *i, t_pars **pars, t_alloc **u_alloc);
+bool alloc_part_2(t_alloc *cur, int *i, t_pars **pars);
+bool alloc_part_3(t_alloc *cur, int *i, t_pars **pars);
+bool alloc_part_4(t_alloc *cur, int *i, t_pars **pars);
+bool alloc_part_5(t_alloc *cur, int *i, t_pars **pars, t_alloc **u_alloc);
+
+
 
 
 
@@ -302,7 +327,7 @@ void	copy_env_into_list(t_env_list **env, char **envp);
 void	free_tokens(char **t);
 int		ft_echo(char **args, t_pars *pars);//char *s, t_all *all, 
 void	ft_cd(t_pars **pars, t_env_list **envp);
-void	ft_pwd(t_env_list **envp, bool print);// int fd,
+void	ft_pwd(char **name_args, t_pars **pars);
 void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars);
 void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
 void	ft_env(char **args, t_all *all, t_pars **pars);

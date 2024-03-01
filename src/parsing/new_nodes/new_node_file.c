@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:46:46 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/26 11:58:04 by flverge          ###   ########.fr       */
+/*   Updated: 2024/02/29 18:32:50 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	new_node_file(t_pars **pars, char *cleaned)
 	{
 		new_node->fl->auth_r = true;
 		new_node->fl->auth_w = true;
-		new_node->fl->auth_x = true; // recently added
+		new_node->fl->auth_x = true;
 	}
 	lstadd_back(pars, new_node);
 }

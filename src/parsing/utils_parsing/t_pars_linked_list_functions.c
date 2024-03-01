@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 04:25:36 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/20 11:30:08 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 10:58:34 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_pars	*lstnew(int exit_status) // ! maybe useless
 	new_node = (t_pars *)malloc(sizeof(t_pars));
 	if (!new_node)
 		return (NULL);
-	// new_node->isExitStatus = true;
 	new_node->last_exit_status = exit_status;
 	new_node->prev = NULL;
 	new_node->next = NULL;
@@ -78,20 +77,4 @@ int	lstsize(t_pars *lst)
 		current = current->next;
 	}
 	return (i);
-}
-
-t_pars	*lstfirst(t_pars *lst)
-{
-	t_pars	*current;
-
-	current = lst;
-	if (!current)
-		return (0);
-	if (!current->prev)
-		return (current);
-	while (current->prev != NULL)
-	{
-		current = current->prev;
-	}
-	return (current);
 }
