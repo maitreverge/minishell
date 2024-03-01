@@ -6,16 +6,16 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 18:26:08 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 18:44:23 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define _GNU_SOURCE //NO idea why this needs to be here or wtf it does, but sigaction doesn't work otherwise
+# define _GNU_SOURCE
 
-# include "lft/libft.h" // libft george
+# include "lft/libft.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <readline/readline.h>
@@ -25,7 +25,7 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <string.h>
-# include <stdbool.h> // library for handling bool
+# include <stdbool.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <termios.h>
@@ -41,7 +41,7 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>
 
-# define S_QUOTE '\'' // backslack for making it a char
+# define S_QUOTE '\'' 
 # define D_QUOTE '\"'
 # define PIPE "|"
 # define RED_IN "<"
@@ -49,39 +49,24 @@
 # define RED_OUT ">"
 # define RED_OUT_APP ">>"
 # define DOLL_ENV '$'
-# define EMPTY_EXIT_LIST -999	//Glambrig
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// * .h Florian
-
+# define EMPTY_EXIT_LIST -999
 
 typedef	struct	s_pars
 {
-	// only the first node
-	bool MasterKill;
-	bool isRedirIn; // does the whole input contains at least one redir_in > OR >>
-	int	error_message;
-	int		last_exit_status; // variable of $?
-
-	// Node Command
-	bool	isCommand;
+	struct s_operator	*operator;
 	struct s_command	*cmd;
-	
-	// Node File
-	bool isFile;
-	struct s_file *fl;
-	
-	// Node Operator
-	bool isOperator;
-	struct s_operator *operator;
-
-	// Node here_doc
-	bool isHereDoc;
-	char *here_doc;
-	
-	// adresses
-	struct s_pars *prev;
-	struct s_pars *next;
+	struct s_pars		*prev;
+	struct s_pars		*next;
+	struct s_file		*fl;
+	bool				MasterKill;
+	bool				isRedirIn;
+	int					error_message;
+	int					last_exit_status;
+	bool				isCommand;
+	bool				isFile;
+	bool				isOperator;
+	bool				isHereDoc;
+	char				*here_doc;
 }	t_pars;
 
 // ! Parsing Substructures
@@ -90,8 +75,8 @@ typedef	struct	s_command
 {
 	bool isBuiltin;
 	char *command_name;
-	char *command_path; // full valid path
-	char **name_options_args; //Split ' '
+	char *command_path;
+	char **name_options_args;
 }	t_command;
 
 typedef	struct	s_file
