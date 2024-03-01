@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 12:56:01 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 14:01:52 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,56 +119,7 @@ void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env, t_pars **pa
 	free(temp_str);
 }
 
-void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars)
-{
-	t_env_list	*current_env;
-	t_utils		*u;
-	char		*temp_str;
-	char		*nbr;
-	int			i;
-	int			start; 
 
-	current_env = *s_env;
-	u = *utils;
-	i = 0;
-	start = 0;
-
-	while (!is_any_quote(buff[i]) && buff[i] != DOLL_ENV
-		&& !is_whitespace(buff[i]) && buff[i])
-		i++;
-	temp_str = (char *)ft_calloc(sizeof(char), i + 1);
-	if (!temp_str)
-		exit(-1);
-	ft_strncpy(temp_str, &buff[start], i);
-	while (current_env)
-	{
-		if (!ft_strcmp(temp_str, "?"))
-		{
-			nbr = ft_itoa((*pars)->last_exit_status);
-			while (nbr[start])
-			{
-				u->result[u->i][u->k] = nbr[start];
-				u->k++;
-				start++;
-			}
-			free(nbr);
-			break ;
-		}
-		else if (!ft_strcmp(temp_str, current_env->key))
-		{
-			while (current_env->value[start])
-			{
-				u->result[u->i][u->k] = current_env->value[start];
-				u->k++;
-				start++;
-			}
-			break ;
-		}
-		current_env = current_env->next;
-	}
-	u->j += i;
-	free(temp_str);
-}
 
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils)
 {
