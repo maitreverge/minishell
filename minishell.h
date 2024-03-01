@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 13:04:01 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 15:10:12 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,7 @@ void	calculate_len_doll(char *buff, t_utils **u, t_env_list **s_env, t_pars **pa
 
 void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars);
 
+bool	unclosed_quotes(char *str);
 
 
 

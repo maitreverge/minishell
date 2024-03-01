@@ -6,48 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 14:43:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 14:51:34 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-bool	unclosed_quotes(char *str)
-{
-	char	starting_quote;
-	char	closing_quote;
-	size_t	i;
-
-	i = 0;
-	if (!str)
-		return (true);
-	while (str[i])
-	{
-		starting_quote = 0;
-		closing_quote = 0;
-		while (str[i] != D_QUOTE && str[i] != S_QUOTE && str[i])
-			i++;
-		if (str[i] == D_QUOTE || str[i] == S_QUOTE)
-		{
-			starting_quote = str[i];
-			i++;
-			while (str[i] && starting_quote != closing_quote)
-			{
-				if (str[i] == starting_quote)
-				{
-					closing_quote = starting_quote;
-					break ;
-				}
-				i++;
-			}
-		}
-		if (str[i])
-			i++;
-	}
-	if (starting_quote != closing_quote)
-		return (true);
-	return (false);
-}
 
 bool	is_buff_valid_doll(char *str)
 {
