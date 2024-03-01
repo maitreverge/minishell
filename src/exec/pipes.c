@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 14:39:00 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:44:22 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,38 +79,27 @@ int	pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy)
 */
 int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
-	pid_t	*ch_pid;
 	t_pipe	pippy;
 
-	pippy.fds = create_pipes(lst, &ch_pid, &pippy.i);
+	pippy.fds = create_pipes(lst, &pippy.ch_pid, &pippy.i);
 	while ((*lst) != NULL && (*lst)->isCommand == true)
 	{
-		if (check_next_operator(*lst) == 4)
-		{
-			redirect_output(lst, all, input_fd);
+		if (pipes_helper_1(lst, all, input_fd) == 1)
 			break ;
-		}
-		ch_pid[pippy.i] = fork();
-		if (ch_pid[pippy.i] == 0)
-			pipes_child_func(lst, all, input_fd, pippy);
-		else if (ch_pid[pippy.i] < 0)
-			fork_error(pippy.fds, &ch_pid);
-		if (ch_pid[pippy.i] > 0 && pippy.i > 0)
-			close(pippy.fds[(pippy.i) - 1][0]);
-		close(pippy.fds[pippy.i][1]);
+		pippy.ch_pid[pippy.i] = fork();
+		pipes_helper_2(lst, all, pippy, input_fd);
 		input_fd = pippy.fds[pippy.i++][0];
-		if ((*lst)->next && (*lst)->next->isOperator == true && (*lst)->next->operator->pipe == true)
-			(*lst) = (*lst)->next->next;	//to skip the pipe operator and go to the next cmd
+		if ((*lst)->next && (*lst)->next->isOperator == true
+			&& (*lst)->next->operator->pipe == true)
+			(*lst) = (*lst)->next->next;
 		else
 		{
-			if (check_next_operator(*lst) == 2)
-				redirect_input(lst, all);
-			else if (check_next_operator(*lst) == 3)
-				redirect_input_delimitor(lst, all);
+			pipes_helper_3(lst, all);
 			break ;
 		}
 	}
 	while (pippy.i-- > 0)
 		wait(NULL);
-	return (free_arr((void **)pippy.fds, size_of_ptr_ptr((void **)pippy.fds)), free(ch_pid), input_fd);
+	return (free_arr((void **)pippy.fds, size_of_ptr_ptr((void **)pippy.fds)),
+		free(pippy.ch_pid), input_fd);
 }

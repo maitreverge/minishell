@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 14:24:10 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:45:33 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,6 +284,7 @@ typedef struct s_pipe
 	int	in_fd;
 	int	i;
 	int	**fds;
+	pid_t	*ch_pid;
 } t_pipe;
 
 /*Env*/
@@ -309,6 +310,10 @@ int		signals(t_pars *all);
 int		check_next_operator(t_pars *lst);
 void	exec_builtin(t_pars *pars, t_all *all, int pid);
 int		pipes(t_pars **lst, t_all *all, int fd_stdin);
+int		pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy);
+int		pipes_helper_1(t_pars **lst, t_all *all, int input_fd);
+void	pipes_helper_2(t_pars **lst, t_all *all, t_pipe pippy, int ifd);
+int		pipes_helper_3(t_pars **lst, t_all *all);
 int		redirect_input_delimitor(t_pars **lst, t_all *all);
 int		redirect_input(t_pars **lst, t_all *all);
 int		redirect_output(t_pars **lst, t_all *all, int input_fd);
