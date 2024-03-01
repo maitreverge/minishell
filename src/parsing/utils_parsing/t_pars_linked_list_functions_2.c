@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 11:28:41 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/16 15:24:30 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 10:58:13 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,20 @@ t_pars	*init_1st_node_pars(void)
 	new->prev = NULL;
 	new->next = NULL;
 	return (new);
+}
+
+t_pars	*lstfirst(t_pars *lst)
+{
+	t_pars	*current;
+
+	current = lst;
+	if (!current)
+		return (0);
+	if (!current->prev)
+		return (current);
+	while (current->prev != NULL)
+	{
+		current = current->prev;
+	}
+	return (current);
 }
