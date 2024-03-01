@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:07:25 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 12:49:29 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 18:09:39 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	part_3(t_utils *u, char **buff)
 	}
 }
 
-char	**ft_clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p)
+char	**clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p)
 {
 	t_utils	*u;
 

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 17:59:24 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 18:09:54 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,8 @@ void	allocation(char **buffer, char *str, size_t len_s);
 
 
 // turbo_parser
-void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils);
+void	turbo_parser(char *p, t_pars **pars, t_env_list **env, t_utils **s_u);
+
 
 // turbo_parser_2
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
@@ -263,7 +264,7 @@ void	print_env(t_env_list **envp, char *target, char *message);
 void	alloc_pars(char *str, t_split_utils *u);
 void	loop_sub_quote(char *str, t_split_utils *u);
 
-char	**ft_clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
+char	**clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
 
 
 bool	is_buff_valid_doll(char *str);

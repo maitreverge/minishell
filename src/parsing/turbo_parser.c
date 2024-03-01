@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 15:53:39 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 18:09:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,30 +54,30 @@ bool	is_buff_valid_doll(char *str)
 	return (false);
 }
 
-void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils)
+void	turbo_parser(char *p, t_pars **pars, t_env_list **env, t_utils **s_u)
 {
 	t_utils	*u;
-	t_alloc	*utils_alloc;
+	t_alloc	*utils;
 	int		len_splited_prompt;
 
-	utils_alloc = malloc(sizeof(t_alloc));
-	if (!utils_alloc)
+	utils = malloc(sizeof(t_alloc));
+	if (!utils)
 		exit (-1);
-	u = *s_utils;
-	if (unclosed_quotes(prompt))
+	u = *s_u;
+	if (unclosed_quotes(p))
 	{
 		(*pars)->MasterKill = true;
 		(*pars)->last_exit_status = 1;
-		free(utils_alloc);
+		free(utils);
 		ft_putendl_fd("error : unclosed quotes detected\n", 2);
 		return ;
 	}
-	len_splited_prompt = parsing_countwords(prompt);
+	len_splited_prompt = parsing_countwords(p);
 	u = utils_init_struct(len_splited_prompt);
-	utils_alloc->splitted_prompt = parsing_split(prompt);
-	utils_alloc->cleaned_prompt = ft_clean_prompt(utils_alloc->splitted_prompt, &u, s_env, pars);
-	utils_alloc->paths = extract_paths(s_env);
-	pars_alloc(pars, &utils_alloc);
+	utils->splitted_prompt = parsing_split(p);
+	utils->cleaned_prompt = clean_prompt(utils->splitted_prompt, &u, env, pars);
+	utils->paths = extract_paths(env);
+	pars_alloc(pars, &utils);
 	free_s_utils(&u);
-	free_t_alloc(utils_alloc);
+	free_t_alloc(utils);
 }
