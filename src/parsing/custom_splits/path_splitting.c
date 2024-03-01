@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 09:51:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/09 09:56:13 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 11:05:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 static void	p_sub_check(char const *s, char c, size_t *i, size_t *start)
 {
