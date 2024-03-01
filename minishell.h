@@ -6,7 +6,7 @@
 /*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 16:21:41 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:24:28 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,9 +340,21 @@ size_t	num_of_pipes(t_pars *lst);
 int		num_of_out_redirs(t_pars *lst);
 void	del_t_pars_node(t_pars *lst);
 
+/*Main helpers*/
+void	check_ops(t_pars **pars, t_all *all, int *k);
+void	main_init(t_all **all, t_pars **pars, t_utils **u, char **envp);
+void	check_ctrl_d(t_all *all, t_pars *pars);
+void	masterkill_false(t_pars *pars, t_all *all, int *k);
+int		exec_external_func(t_pars *lst, t_all *all);
+void	exec_builtin(t_pars *pars, t_all *all, int pid);
+
 /*Flo, but i don't want to touch his part of this .h*/
 t_pars	*init_1st_node_pars(void);
 void	free_firstnode_pars(t_pars **pars);
+t_all	*init_t_all_struct(char **envp);
+void	reset_t_pars(t_pars **pars);
+char	**convert_env_list_to_array(t_env_list **list);
+void	refresh_envp(t_all **all);
 
 void	free_all(t_all **all);
 
