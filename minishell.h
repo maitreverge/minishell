@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 15:10:12 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 17:59:24 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,12 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars
 
 bool	unclosed_quotes(char *str);
 
+
+bool alloc_part_1(t_alloc *cur, int *i, t_pars **pars, t_alloc **u_alloc);
+bool alloc_part_2(t_alloc *cur, int *i, t_pars **pars);
+bool alloc_part_3(t_alloc *cur, int *i, t_pars **pars);
+bool alloc_part_4(t_alloc *cur, int *i, t_pars **pars);
+bool alloc_part_5(t_alloc *cur, int *i, t_pars **pars, t_alloc **u_alloc);
 
 
 
