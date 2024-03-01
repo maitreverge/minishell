@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/29 18:49:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 12:50:24 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,12 @@ void	print_env(t_env_list **envp, char *target, char *message);
 
 void	alloc_pars(char *str, t_split_utils *u);
 void	loop_sub_quote(char *str, t_split_utils *u);
+
+char	**ft_clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
+
+
+bool	is_buff_valid_doll(char *str);
+void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **pars);
 
 
 

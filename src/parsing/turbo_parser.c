@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/27 14:53:21 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/01 12:08:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ bool	unclosed_quotes(char *str)
 		return (true);
 	return (false);
 }
-
 
 bool	is_buff_valid_doll(char *str)
 {
@@ -127,7 +126,7 @@ void	copying_doll(char *buff, t_utils **utils, t_env_list **s_env, t_pars **pars
 	char		*temp_str;
 	char		*nbr;
 	int			i;
-	int		start;
+	int			start; 
 
 	current_env = *s_env;
 	u = *utils;
@@ -262,74 +261,6 @@ void	parsing_doll_var(t_utils **utils, char *buff, t_env_list **s_env, t_pars **
 	}
 }
 
-char	**ft_clean_prompt(char **buff, t_utils **utils, t_env_list **s_env, t_pars **pars)
-{
-	t_utils	*u;
-
-	u = *utils;
-	while (buff[u->i])
-	{
-		while (is_buff_valid_doll(buff[u->i]))
-		{
-			u->j = 0;
-			u->real_len = 0;
-			parsing_doll_var(&u, buff[u->i], s_env, pars);
-			u->i++;
-		}
-		if (!buff[u->i])
-			break ;
-		u->j = 0;
-		u->real_len = 0;
-		while (buff[u->i][u->j] != 0)
-		{
-			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j] != 0)
-			{
-				u->j++;
-				u->real_len++;
-			}
-			if (is_any_quote(buff[u->i][u->j]))
-			{
-				u->starting_quote = buff[u->i][u->j];
-				u->j++;
-				while (buff[u->i][u->j]
-					&& buff[u->i][u->j] != u->starting_quote)
-				{
-					u->j++;
-					u->real_len++;
-				}
-				u->j++;
-			}
-		}
-		u->j = 0;
-		u->k = 0;
-		u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
-		while (buff[u->i][u->j] != 0)
-		{
-			while (!is_any_quote(buff[u->i][u->j]) && buff[u->i][u->j])
-			{
-				u->result[u->i][u->k] = buff[u->i][u->j];
-				u->j++;
-				u->k++;
-			}
-			if (is_any_quote(buff[u->i][u->j]))
-			{
-				u->starting_quote = buff[u->i][u->j];
-				u->j++;
-				while (buff[u->i][u->j]
-					&& buff[u->i][u->j] != u->starting_quote)
-				{
-					u->result[u->i][u->k] = buff[u->i][u->j];
-					u->j++;
-					u->k++;
-				}
-				u->j++;
-			}
-		}
-		u->i++;
-	}
-	return (u->result);
-}
-
 void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_utils)
 {
 	t_utils	*u;
@@ -340,7 +271,6 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 	if (!utils_alloc)
 		exit (-1);
 	u = *s_utils;
-	
 	if (unclosed_quotes(prompt))
 	{
 		(*pars)->MasterKill = true;
@@ -350,20 +280,9 @@ void	turbo_parser(char *prompt, t_pars **pars, t_env_list **s_env, t_utils **s_u
 		return ;
 	}
 	len_splited_prompt = parsing_countwords(prompt);
-	
 	u = utils_init_struct(len_splited_prompt);
 	utils_alloc->splitted_prompt = parsing_split(prompt);
-
-	// // ! checking what's in splitted+prompt
-	// for (int i = 0; utils_alloc->splitted_prompt[i] != NULL; i++)
-	// 	printf("\033[1;31mSplitted Prompt #%i = %s\033[0m\n", i, utils_alloc->splitted_prompt[i]);
-	
 	utils_alloc->cleaned_prompt = ft_clean_prompt(utils_alloc->splitted_prompt, &u, s_env, pars);
-
-	// // ! checking what's in cleaned_prompt
-	// for (int i = 0; utils_alloc->cleaned_prompt[i] != NULL; i++)
-	// 	printf("\033[1;32mCleaned Prompt #%i = %s\033[0m\n", i, utils_alloc->cleaned_prompt[i]);
-	
 	utils_alloc->paths = extract_paths(s_env);
 	pars_alloc(pars, &utils_alloc);
 	free_s_utils(&u);
