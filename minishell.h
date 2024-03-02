@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 10:52:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 11:14:18 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,24 @@
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999
 
-// --------------------- PARSING ---------------------------------
+// ENVIRONMENT structure
+typedef struct s_env_list
+{
+	struct s_env_list	*next;
+	char				*original_envp;
+	char				*key;
+	char				*value;
+}	t_env_list;
 
-// Parsing structure
+// EXECUTION structure
+typedef struct s_all
+{
+	t_env_list	*env_lst;
+	char		**copy_envp;
+	char		*readline_line;
+}	t_all;
+
+// PARSING structure
 typedef struct s_pars
 {
 	struct s_command	*cmd;
@@ -70,6 +85,8 @@ typedef struct s_pars
 	bool				is_here_doc;
 	char				*here_doc;
 }						t_pars;
+
+// !--------------------- PARSING ---------------------------------
 
 // Sub_node for command
 typedef struct s_command
@@ -132,15 +149,6 @@ typedef struct s_split_utils
 	int		start;
 }	t_split_utils;
 
-// ENV structure
-typedef struct s_env_list
-{
-	struct s_env_list	*next;
-	char				*original_envp;
-	char				*key;
-	char				*value;
-}	t_env_list;
-
 // bools_parsing
 bool	is_token_opr(char *splited, char *cleaned);
 bool	is_token_redir_delim(char *cleaned);
@@ -157,6 +165,8 @@ bool	is_last_node_r_in_delim(t_pars **pars);
 bool	is_last_node_here_doc(t_pars **pars);
 bool	is_last_node_cmd(t_pars **pars);
 bool	is_last_node_file(t_pars **pars);
+void	search_redir_in(t_pars **pars, char **splited, char **cleaned);
+char	**extract_paths(t_env_list **s_env);
 
 // custom_splits
 char	**path_split(char const *s, char c);
@@ -201,11 +211,13 @@ char	**clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
 void	copying_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars);
 void	parsing_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pa);
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
+bool	unclosed_quotes(char *str);
+
 
 // main parsing function called in main
 void	turbo_parser(char *p, t_pars **pars, t_env_list **env, t_utils **s_u);
 
-// ------------- UTILS ---------------------------------
+// ! ------------- UTILS ---------------------------------
 
 // 2common_utils.c
 int		check_next_operator(t_pars *lst);
@@ -241,15 +253,7 @@ void	main_init(t_all **all, t_pars **pars, t_utils **u, char **envp);
 void	check_ctrl_d(t_all *all, t_pars *pars);
 void	masterkill_false(t_pars *pars, t_all *all, int *k);
 
-// ------------- EXECUTION ---------------------------------
-
-typedef struct s_all
-{
-	char	**copy_envp;
-	t_env_list	*env_lst;
-	char		*readline_line;
-}	t_all;
-
+// ! ------------- EXECUTION ---------------------------------
 
 typedef struct s_exit_status_list
 {
@@ -260,11 +264,11 @@ typedef struct s_exit_status_list
 /*Norm struct*/
 typedef struct s_pipe
 {
-	int	in_fd;
-	int	i;
-	int	**fds;
 	pid_t	*ch_pid;
-} t_pipe;
+	int		in_fd;
+	int		i;
+	int		**fds;
+}	t_pipe;
 
 typedef struct s_hrdoc
 {
@@ -273,70 +277,126 @@ typedef struct s_hrdoc
 	char	*rl_buff;
 }	t_hrdoc;
 
-/*Env*/
-void	copy_env_into_list(t_env_list **env, char **envp);
+// 2tils.c
+void	free_arr(void **array, int size);
+size_t	lstlen(t_pars *lst);
+size_t	size_of_ptr_ptr(void **arr);
 
-/*Builtins*/
-void	free_tokens(char **t);
-int		ft_echo(char **args, t_pars *pars);//char *s, t_all *all, 
-void	ft_cd(t_pars **pars, t_env_list **envp);
-void	ft_pwd(char **name_args, t_pars **pars);
-void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars);
-void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
-void	ft_env(char **args, t_all *all, t_pars **pars);
-void	ft_exit(char **name_option, t_all *all, t_pars **pars);
+// copy_envp_into_list.c
+t_env_list	*env_lstnew(char *s_key, char *s_value, char *envp);
+t_env_list	*env_lstlast(t_env_list *lst);
+void		env_lstadd_back(t_env_list **lst, t_env_list *new);
+void		copy_env_into_list(t_env_list **env, char **envp);
 
-
-
-/*Signal handler*/
-int		signals(t_pars *all);
-
-/*Pipes, redirections*/
-
-int		check_next_operator(t_pars *lst);
-void	exec_builtin(t_pars *pars, t_all *all, int pid);
-int		pipes(t_pars **lst, t_all *all, int fd_stdin);
-int		pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy);
+// pipe_helpers.c
 int		pipes_helper_1(t_pars **lst, t_all *all, int input_fd);
 void	pipes_helper_2(t_pars **lst, t_all *all, t_pipe pippy, int ifd);
 int		pipes_helper_3(t_pars **lst, t_all *all);
-int		redirect_input_delimitor(t_pars **lst, t_all *all);
+
+// pipes.c
+int		**create_pipes(t_pars **lst, pid_t **ch_pid, int *main_i);
+int		pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy);
+int		pipes(t_pars **lst, t_all *all, int input_fd);
+
+// redirection_helpers.c
+void	heredoc_helper_2(t_pars **lst, t_all *all, char **rl, int open_fd);
 void	heredoc_helper_1(t_hrdoc *doc);
 void	set_temp_perms(t_pars **lst);
 void	handle_eof_edgecase(t_pars **lst, char **rl_buff);
-void	heredoc_helper_2(t_pars **lst, t_all *all, char **rl, int open_fd);
+
+// redirections.c
+int		redirect_input_delimitor(t_pars **lst, t_all *all);
 int		redirect_input(t_pars **lst, t_all *all);
+int		rdr_out_chld_helper(t_pars **lst, int *open_fd);
 int		redirect_output(t_pars **lst, t_all *all, int input_fd);
 
-/*Utils*/
-size_t	size_of_ptr_ptr(void **arr);
-void	free_arr(void **array, int size);
-void	free_t_pars(t_pars **lst);
-size_t	lstlen(t_pars *lst);
-void	fork_error(int **fds, pid_t **ch_pid);
+// signals.c
+int		signals(t_pars *all);
+
+// utils.c
 size_t	num_of_pipes(t_pars *lst);
-int		num_of_out_redirs(t_pars *lst);
+void	fork_error(int **fds, pid_t **ch_pid);
 void	del_t_pars_node(t_pars *lst);
+int		num_of_out_redirs(t_pars *lst);
 
-/*Main helpers*/
-void	check_ops(t_pars **pars, t_all *all, int *k);
-void	main_init(t_all **all, t_pars **pars, t_utils **u, char **envp);
-void	check_ctrl_d(t_all *all, t_pars *pars);
-void	masterkill_false(t_pars *pars, t_all *all, int *k);
-int		exec_external_func(t_pars *lst, t_all *all);
-void	exec_builtin(t_pars *pars, t_all *all, int pid);
-
-/*Flo, but i don't want to touch his part of this .h*/
-t_pars	*init_1st_node_pars(void);
-void	free_firstnode_pars(t_pars **pars);
-t_all	*init_t_all_struct(char **envp);
-void	reset_t_pars(t_pars **pars);
-char	**convert_env_list_to_array(t_env_list **list);
-void	refresh_envp(t_all **all);
-
-void	free_all(t_all **all);
 
 // ------------- BUILTINS ---------------------------------
+
+void	ft_cd(t_pars **pars, t_env_list **envp);
+int		ft_echo(char **args, t_pars *pars);
+void	ft_env(char **args, t_all *all, t_pars **pars);
+void	ft_exit(char **name_option, t_all *all, t_pars **pars);
+void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars);
+void	ft_pwd(char **name_args, t_pars **pars);
+void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
+
+
+
+
+
+// /*Env*/
+// void	copy_env_into_list(t_env_list **env, char **envp);
+
+// /*Builtins*/
+// void	free_tokens(char **t);
+// int		ft_echo(char **args, t_pars *pars);//char *s, t_all *all, 
+// void	ft_cd(t_pars **pars, t_env_list **envp);
+// void	ft_pwd(char **name_args, t_pars **pars);
+// void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars);
+// void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
+// void	ft_env(char **args, t_all *all, t_pars **pars);
+// void	ft_exit(char **name_option, t_all *all, t_pars **pars);
+
+
+
+// /*Signal handler*/
+// int		signals(t_pars *all);
+
+// /*Pipes, redirections*/
+
+// int		check_next_operator(t_pars *lst);
+// void	exec_builtin(t_pars *pars, t_all *all, int pid);
+// int		pipes(t_pars **lst, t_all *all, int fd_stdin);
+// int		pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy);
+// int		pipes_helper_1(t_pars **lst, t_all *all, int input_fd);
+// void	pipes_helper_2(t_pars **lst, t_all *all, t_pipe pippy, int ifd);
+// int		pipes_helper_3(t_pars **lst, t_all *all);
+// int		redirect_input_delimitor(t_pars **lst, t_all *all);
+// void	heredoc_helper_1(t_hrdoc *doc);
+// void	set_temp_perms(t_pars **lst);
+// void	handle_eof_edgecase(t_pars **lst, char **rl_buff);
+// void	heredoc_helper_2(t_pars **lst, t_all *all, char **rl, int open_fd);
+// int		redirect_input(t_pars **lst, t_all *all);
+// int		redirect_output(t_pars **lst, t_all *all, int input_fd);
+
+// /*Utils*/
+// size_t	size_of_ptr_ptr(void **arr);
+// void	free_arr(void **array, int size);
+// void	free_t_pars(t_pars **lst);
+// size_t	lstlen(t_pars *lst);
+// void	fork_error(int **fds, pid_t **ch_pid);
+// size_t	num_of_pipes(t_pars *lst);
+// int		num_of_out_redirs(t_pars *lst);
+// void	del_t_pars_node(t_pars *lst);
+
+// /*Main helpers*/
+// void	check_ops(t_pars **pars, t_all *all, int *k);
+// void	main_init(t_all **all, t_pars **pars, t_utils **u, char **envp);
+// void	check_ctrl_d(t_all *all, t_pars *pars);
+// void	masterkill_false(t_pars *pars, t_all *all, int *k);
+// int		exec_external_func(t_pars *lst, t_all *all);
+// void	exec_builtin(t_pars *pars, t_all *all, int pid);
+
+// /*Flo, but i don't want to touch his part of this .h*/
+// t_pars	*init_1st_node_pars(void);
+// void	free_firstnode_pars(t_pars **pars);
+// t_all	*init_t_all_struct(char **envp);
+// void	reset_t_pars(t_pars **pars);
+// char	**convert_env_list_to_array(t_env_list **list);
+// void	refresh_envp(t_all **all);
+
+// void	free_all(t_all **all);
+
 
 
 #endif
