@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:46:42 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 10:15:42 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 11:38:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	check_next_operator(t_pars *lst)
 				return (2);
 			if (lst->operator->redir_in_delim == true)
 				return (3);
-			if (lst->operator->redir_out == true || lst->operator->redir_out_app == true)
+			if (lst->operator->redir_out == true
+				|| lst->operator->redir_out_app == true)
 				return (4);
 		}
 		lst = lst->next;
@@ -48,22 +49,13 @@ t_all	*init_t_all_struct(char **envp)
 {
 	t_all		*new_all;
 
-	// allocate two nodes for t_all and t_env_list
 	new_all = malloc(sizeof(t_all));
 	if (!new_all)
 		return (NULL);
-	
-	// Init sub_node to null
 	new_all->env_lst = NULL;
-	
-	// init readline buffer to null
 	new_all->readline_line = NULL;
-
-	// init env_list nodes from envp
 	copy_env_into_list(&new_all->env_lst, envp);
-
-	new_all->copy_envp = NULL; // ! NEW ALLOCATED STUFF
-	
+	new_all->copy_envp = NULL;
 	return (new_all);
 }
 
@@ -71,7 +63,7 @@ void	reset_t_pars(t_pars **pars)
 {
 	(*pars)->masterkill = false;
 	(*pars)->is_redir_in = false;
-	(*pars)->error_message = 0;	
+	(*pars)->error_message = 0;
 }
 
 char	**convert_env_list_to_array(t_env_list **list)
@@ -79,7 +71,7 @@ char	**convert_env_list_to_array(t_env_list **list)
 	t_env_list	*current;
 	char		**result;
 	int			size;
-	int			j; // buffer index
+	int			j;
 
 	current = *list;
 	size = 0;
@@ -102,10 +94,9 @@ char	**convert_env_list_to_array(t_env_list **list)
 
 void	refresh_envp(t_all **all)
 {
-	t_all *current;
+	t_all	*current;
 
 	current = *all;
-	
 	free_split(current->copy_envp);
 	current->copy_envp = convert_env_list_to_array(&current->env_lst);
 }

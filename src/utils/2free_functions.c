@@ -3,24 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   2free_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 18:08:01 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 18:09:52 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 11:39:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-
 void	free_split(char **to_free)
 {
 	char	**current;
 	int		i;
-	int 	len;
+	int		len;
 
 	if (!to_free)
-		return;
+		return ;
 	i = 0;
 	len = 0;
 	current = to_free;

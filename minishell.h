@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 11:30:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 11:36:28 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,67 +334,5 @@ void		ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
 // minishell.c
 void		exec_builtin(t_pars *pars, t_all *all, int pid);
 int			exec_external_func(t_pars *lst, t_all *all);
-
-
-// /*Env*/
-// void	copy_env_into_list(t_env_list **env, char **envp);
-
-// /*Builtins*/
-// void	free_tokens(char **t);
-// int		ft_echo(char **args, t_pars *pars);//char *s, t_all *all, 
-// void	ft_cd(t_pars **pars, t_env_list **envp);
-// void	ft_pwd(char **name_args, t_pars **pars);
-// void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars);
-// void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
-// void	ft_env(char **args, t_all *all, t_pars **pars);
-// void	ft_exit(char **name_option, t_all *all, t_pars **pars);
-
-// /*Signal handler*/
-// int		signals(t_pars *all);
-
-// /*Pipes, redirections*/
-
-// int		check_next_operator(t_pars *lst);
-// void	exec_builtin(t_pars *pars, t_all *all, int pid);
-// int		pipes(t_pars **lst, t_all *all, int fd_stdin);
-// int		pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy);
-// int		pipes_helper_1(t_pars **lst, t_all *all, int input_fd);
-// void	pipes_helper_2(t_pars **lst, t_all *all, t_pipe pippy, int ifd);
-// int		pipes_helper_3(t_pars **lst, t_all *all);
-// int		redirect_input_delimitor(t_pars **lst, t_all *all);
-// void	heredoc_helper_1(t_hrdoc *doc);
-// void	set_temp_perms(t_pars **lst);
-// void	handle_eof_edgecase(t_pars **lst, char **rl_buff);
-// void	heredoc_helper_2(t_pars **lst, t_all *all, char **rl, int open_fd);
-// int		redirect_input(t_pars **lst, t_all *all);
-// int		redirect_output(t_pars **lst, t_all *all, int input_fd);
-
-// /*Utils*/
-// size_t	size_of_ptr_ptr(void **arr);
-// void	free_arr(void **array, int size);
-// void	free_t_pars(t_pars **lst);
-// size_t	lstlen(t_pars *lst);
-// void	fork_error(int **fds, pid_t **ch_pid);
-// size_t	num_of_pipes(t_pars *lst);
-// int		num_of_out_redirs(t_pars *lst);
-// void	del_t_pars_node(t_pars *lst);
-
-// /*Main helpers*/
-// void	check_ops(t_pars **pars, t_all *all, int *k);
-// void	main_init(t_all **all, t_pars **pars, t_utils **u, char **envp);
-// void	check_ctrl_d(t_all *all, t_pars *pars);
-// void	masterkill_false(t_pars *pars, t_all *all, int *k);
-// int		exec_external_func(t_pars *lst, t_all *all);
-// void	exec_builtin(t_pars *pars, t_all *all, int pid);
-
-// /*Flo, but i don't want to touch his part of this .h*/
-// t_pars	*init_1st_node_pars(void);
-// void	free_firstnode_pars(t_pars **pars);
-// t_all	*init_t_all_struct(char **envp);
-// void	reset_t_pars(t_pars **pars);
-// char	**convert_env_list_to_array(t_env_list **list);
-// void	refresh_envp(t_all **all);
-
-// void	free_all(t_all **all);
 
 #endif
