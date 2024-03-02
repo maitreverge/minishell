@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 10:16:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 11:20:24 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ int	**create_pipes(t_pars **lst, pid_t **ch_pid, int *main_i)
 	return (fds);
 }
 
-int	pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy)
+int	pipes_child_func(t_pars **lst, t_all *all, int input, t_pipe pippy)
 {
-	if (input_fd != -1)
+	if (input != -1)
 	{
-		dup2(input_fd, STDIN_FILENO);
-		close(input_fd);
+		dup2(input, STDIN_FILENO);
+		close(input);
 	}
 	if ((*lst)->next != NULL)
 	{

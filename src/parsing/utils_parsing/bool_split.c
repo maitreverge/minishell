@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:43:54 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 10:35:52 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 11:22:51 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,17 @@ bool	alloc_part_4(t_alloc *cur, int *i, t_pars **pars)
 	return (false);
 }
 
-bool	alloc_part_5(t_alloc *cur, int *i, t_pars **pars, t_alloc **u_alloc)
+bool	alloc_part_5(t_alloc *cu, int *i, t_pars **pars, t_alloc **u_alloc)
 {
 	if (is_last_node_pipe(pars)
-		&& !is_token_opr(cur->splitted_prompt[(*i)], cur->cleaned_prompt[(*i)]))
+		&& !is_token_opr(cu->splitted_prompt[(*i)], cu->cleaned_prompt[(*i)]))
 		new_node_command(pars, u_alloc, i);
 	else if (is_last_node_redir(pars)
-		&& !is_token_opr(cur->splitted_prompt[(*i)], cur->cleaned_prompt[(*i)]))
-		new_node_file(pars, cur->cleaned_prompt[(*i)]);
+		&& !is_token_opr(cu->splitted_prompt[(*i)], cu->cleaned_prompt[(*i)]))
+		new_node_file(pars, cu->cleaned_prompt[(*i)]);
 	else if (is_last_node_r_in_delim(pars)
-		&& !is_token_opr(cur->splitted_prompt[(*i)], cur->cleaned_prompt[(*i)]))
-		new_node_here_doc(pars, cur->cleaned_prompt[(*i)]);
+		&& !is_token_opr(cu->splitted_prompt[(*i)], cu->cleaned_prompt[(*i)]))
+		new_node_here_doc(pars, cu->cleaned_prompt[(*i)]);
 	else
 	{
 		lstfirst(*pars)->masterkill = true;

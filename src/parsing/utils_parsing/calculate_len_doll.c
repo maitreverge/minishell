@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   calculate_len_doll.c                               :+:      :+:    :+:   */
+/*   calc_len_doll.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "../../../minishell.h"
 
-static void	part_1(char *buff, int *start, int *i, char **temp_str)
+static void	p_p_1(char *buff, int *start, int *i, char **temp_str)
 {
 	while (!is_any_quote(buff[(*i)]) && buff[(*i)] != DOLL_ENV
 		&& !is_whitespace(buff[(*i)]) && buff[(*i)])
@@ -21,7 +21,7 @@ static void	part_1(char *buff, int *start, int *i, char **temp_str)
 	ft_strncpy((*temp_str), &buff[(*start)], (*i));
 }
 
-void	calculate_len_doll(char *b, t_utils **u, t_env_list **env, t_pars **p)
+void	calc_len_doll(char *b, t_utils **u, t_env_list **env, t_pars **p)
 {
 	char		*temp_str;
 	int			i;
@@ -29,7 +29,7 @@ void	calculate_len_doll(char *b, t_utils **u, t_env_list **env, t_pars **p)
 
 	i = 0;
 	start = 0;
-	part_1(b, &start, &i, &temp_str);
+	p_p_1(b, &start, &i, &temp_str);
 	while (*env)
 	{
 		if (!ft_strcmp(temp_str, "?"))

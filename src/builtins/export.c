@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/29 09:49:48 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 11:19:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,27 +75,27 @@ static void	ft_export_2(t_env_list **e, char **s, t_env_list *cur, char *trim)
 		env_lstadd_back(e, env_lstnew(s[0], s[1], trim));
 }
 
-void	ft_export(t_env_list **envp, char **args, t_all *all, t_pars **pars)
+void	ft_export(t_env_list **envp, char **a, t_all *all, t_pars **pars)
 {
 	t_env_list	*current_env;
 	char		**split_t;
 
 	current_env = *envp;
-	if (!args[1])
+	if (!a[1])
 	{
-		ft_env(args, all, pars);
+		ft_env(a, all, pars);
 		return ;
 	}
-	if (ft_isdigit(args[1][0]))
+	if (ft_isdigit(a[1][0]))
 	{
 		ft_putendl_fd("export : token variable can't start with a number", 2);
 		lstfirst(*pars)->last_exit_status = 1;
 		return ;
 	}
-	if (!right_format(args[1], pars))
+	if (!right_format(a[1], pars))
 		return ;
-	split_t = ft_2_split(args[1], '=');
-	ft_export_2(envp, split_t, current_env, args[1]);
+	split_t = ft_2_split(a[1], '=');
+	ft_export_2(envp, split_t, current_env, a[1]);
 	lstfirst(*pars)->last_exit_status = 0;
 	free_split(split_t);
 }

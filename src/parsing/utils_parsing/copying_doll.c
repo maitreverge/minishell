@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:01:30 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 10:38:05 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 11:33:21 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	handle_exit_status(t_pars **pars, int *start, t_utils *u)
 	free(nbr);
 }
 
-static void	part_1(char *buff, int *start, int *i, char **temp_str)
+static void	j_1(char *buff, int *start, int *i, char **temp_str)
 {
 	while (!is_any_quote(buff[(*i)]) && buff[(*i)] != DOLL_ENV
 		&& !is_whitespace(buff[(*i)]) && buff[(*i)])
@@ -35,7 +35,7 @@ static void	part_1(char *buff, int *start, int *i, char **temp_str)
 	ft_strncpy((*temp_str), &buff[(*start)], (*i));
 }
 
-static void	part_2(t_env_list *current_env, int *start, t_utils *u)
+static void	j_2(t_env_list *current_env, int *start, t_utils *u)
 {
 	while (current_env->value[(*start)])
 	{
@@ -45,7 +45,7 @@ static void	part_2(t_env_list *current_env, int *start, t_utils *u)
 	}
 }
 
-void	copying_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars)
+void	cop_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars)
 {
 	char		*temp_str;
 	int			i;
@@ -54,7 +54,7 @@ void	copying_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars)
 	temp_str = NULL;
 	i = 0;
 	start = 0;
-	part_1(bu, &start, &i, &temp_str);
+	j_1(bu, &start, &i, &temp_str);
 	while (*s_env)
 	{
 		if (!ft_strcmp(temp_str, "?"))
@@ -64,7 +64,7 @@ void	copying_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars)
 		}
 		else if (!ft_strcmp(temp_str, (*s_env)->key))
 		{
-			part_2(*s_env, &start, (*u));
+			j_2(*s_env, &start, (*u));
 			break ;
 		}
 		(*s_env) = (*s_env)->next;
