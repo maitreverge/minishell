@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 10:48:01 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:52:52 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999
 
-// --------------------- Parsing ---------------------------------
+// --------------------- PARSING ---------------------------------
 
 // Parsing structure
 typedef struct s_pars
@@ -201,12 +201,14 @@ char	**clean_prompt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
 void	copying_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars);
 void	parsing_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pa);
 void	pars_alloc(t_pars **pars, t_alloc **u_alloc);
+
+// main parsing function called in main
 void	turbo_parser(char *p, t_pars **pars, t_env_list **env, t_utils **s_u);
 
 // ------------- UTILS ---------------------------------
 
 // 2common_utils.c
-int	check_next_operator(t_pars *lst);
+int		check_next_operator(t_pars *lst);
 t_all	*init_t_all_struct(char **envp);
 void	reset_t_pars(t_pars **pars);
 char	**convert_env_list_to_array(t_env_list **list);
@@ -219,7 +221,25 @@ void	free_s_utils(t_utils **utils);
 void	free_firstnode_pars(t_pars **pars);
 void	free_t_alloc(t_alloc *alloc);
 
+// common_utils.c
+bool	is_whitespace(char c);
+int		int_len(int n);
+int		ft_strcmp(char *s1, char *s2);
+char	*ft_strncpy(char *dest, char const *src, size_t n);
 
+// error_messages.c
+void	print_error(t_pars **pars);
+
+// free_functions.c
+void	free_t_pars(t_pars **pars);
+void	free_all(t_all **all);
+void	free_full_t_pars(t_pars **pars);
+
+// main_helper.c
+void	check_ops(t_pars **pars, t_all *all, int *k);
+void	main_init(t_all **all, t_pars **pars, t_utils **u, char **envp);
+void	check_ctrl_d(t_all *all, t_pars *pars);
+void	masterkill_false(t_pars *pars, t_all *all, int *k);
 
 // ------------- EXECUTION ---------------------------------
 
@@ -315,5 +335,8 @@ char	**convert_env_list_to_array(t_env_list **list);
 void	refresh_envp(t_all **all);
 
 void	free_all(t_all **all);
+
+// ------------- BUILTINS ---------------------------------
+
 
 #endif
