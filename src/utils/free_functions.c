@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 11:46:34 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 12:09:12 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	free_t_pars(t_pars **pars)
 	t_pars	*to_free;
 	t_pars	*temp;
 
-	first_node = *pars;
+	first_node = lstfirst(*pars);
 	to_free = first_node->next;
 	first_node->next = NULL;
 	while (to_free)
@@ -36,11 +36,11 @@ void	free_t_pars(t_pars **pars)
 		temp = to_free;
 		if (to_free->is_command && to_free->cmd)
 			free_cmd_node(to_free);
-		// else if (to_free->is_file && to_free->fl)
-		// {
-		// 	free(to_free->fl->file_name);
-		// 	free(to_free->fl);
-		// }
+		else if (to_free->is_file && to_free->fl)
+		{
+			free(to_free->fl->file_name);
+			free(to_free->fl);
+		}
 		else if (to_free->is_operator && to_free->operator)
 			free(to_free->operator);
 		else if (to_free->is_here_doc)
