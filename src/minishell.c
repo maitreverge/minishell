@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 18:29:03 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:14:02 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	main(int ac, char **av, char **envp)
 		all->readline_line = readline("minishell$ ");
 		check_ctrl_d(all, pars);
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
-		if (!pars->MasterKill)
+		if (!pars->masterkill)
 			masterkill_false(pars, all, &k);
 		if (pars && pars->next)
 			add_history(all->readline_line);

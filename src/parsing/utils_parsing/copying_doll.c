@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cpying_doll.c                                      :+:      :+:    :+:   */
+/*   copying_doll.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:01:30 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 14:41:46 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:38:05 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 static void	handle_exit_status(t_pars **pars, int *start, t_utils *u)
 {
@@ -45,7 +45,7 @@ static void	part_2(t_env_list *current_env, int *start, t_utils *u)
 	}
 }
 
-void	copying_doll(char *buff, t_utils **u, t_env_list **s_env, t_pars **pars)
+void	copying_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars)
 {
 	char		*temp_str;
 	int			i;
@@ -54,7 +54,7 @@ void	copying_doll(char *buff, t_utils **u, t_env_list **s_env, t_pars **pars)
 	temp_str = NULL;
 	i = 0;
 	start = 0;
-	part_1(buff, &start, &i, &temp_str);
+	part_1(bu, &start, &i, &temp_str);
 	while (*s_env)
 	{
 		if (!ft_strcmp(temp_str, "?"))

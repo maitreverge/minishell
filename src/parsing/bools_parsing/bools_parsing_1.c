@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 17:16:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 19:56:35 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:15:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool	is_last_node_operator(t_pars **pars)
 	t_pars	*last;
 
 	last = lstlast(*pars);
-	if (last->isOperator)
+	if (last->is_operator)
 		return (true);
 	return (false);
 }

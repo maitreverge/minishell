@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:52:19 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 19:36:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:16:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ static t_pars	*initialize_new_node(void)
 	node_operator = malloc(sizeof(t_operator));
 	if (!node_operator)
 		return (NULL);
-	new_node->isOperator = true;
+	new_node->is_operator = true;
 	new_node->operator = node_operator;
-	new_node->isCommand = false;
+	new_node->is_command = false;
 	new_node->cmd = NULL;
-	new_node->isFile = false;
+	new_node->is_file = false;
 	new_node->fl = NULL;
-	new_node->isHereDoc = false;
+	new_node->is_here_doc = false;
 	new_node->here_doc = NULL;
 	new_node->prev = NULL;
 	new_node->next = NULL;

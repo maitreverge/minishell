@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:21:39 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 17:26:26 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:16:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	masterkill_false(t_pars *pars, t_all *all, int *k)
 	check_ops(&pars, all, k);
 	if (check_next_operator(pars->next) == 0 && (*k != 123))
 	{
-		if (pars && pars->next && pars->next->cmd->isBuiltin == true)
+		if (pars && pars->next && pars->next->cmd->is_builtin == true)
 			exec_builtin(pars->next, all, 1);
 		else if (pars && pars->next)
 			exec_external_func(pars->next, all);

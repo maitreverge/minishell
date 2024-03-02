@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 15:44:22 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:16:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	pipes_child_func(t_pars **lst, t_all *all, int input_fd, t_pipe pippy)
 	}
 	close(pippy.fds[pippy.i][0]);
 	free_arr((void **)pippy.fds, size_of_ptr_ptr((void **)pippy.fds));
-	if ((*lst)->cmd->isBuiltin == true)
+	if ((*lst)->cmd->is_builtin == true)
 		exec_builtin(*lst, all, 0);
 	else
 	{
@@ -82,14 +82,14 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 	t_pipe	pippy;
 
 	pippy.fds = create_pipes(lst, &pippy.ch_pid, &pippy.i);
-	while ((*lst) != NULL && (*lst)->isCommand == true)
+	while ((*lst) != NULL && (*lst)->is_command == true)
 	{
 		if (pipes_helper_1(lst, all, input_fd) == 1)
 			break ;
 		pippy.ch_pid[pippy.i] = fork();
 		pipes_helper_2(lst, all, pippy, input_fd);
 		input_fd = pippy.fds[pippy.i++][0];
-		if ((*lst)->next && (*lst)->next->isOperator == true
+		if ((*lst)->next && (*lst)->next->is_operator == true
 			&& (*lst)->next->operator->pipe == true)
 			(*lst) = (*lst)->next->next;
 		else

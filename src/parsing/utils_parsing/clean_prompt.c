@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:07:25 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 18:09:39 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:36:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 static void	part_1(t_utils *u, char **buff, t_env_list **s_env, t_pars **pars)
 {

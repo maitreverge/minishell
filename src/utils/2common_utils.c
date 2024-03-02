@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2common_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:46:42 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 16:49:18 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:15:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_next_operator(t_pars *lst)
 	temp = lst;
 	while (lst)
 	{
-		if (lst->isOperator == true)
+		if (lst->is_operator == true)
 		{
 			if (lst->operator->pipe == true)
 				return (1);
@@ -69,8 +69,8 @@ t_all	*init_t_all_struct(char **envp)
 
 void	reset_t_pars(t_pars **pars)
 {
-	(*pars)->MasterKill = false;
-	(*pars)->isRedirIn = false;
+	(*pars)->masterkill = false;
+	(*pars)->is_redir_in = false;
 	(*pars)->error_message = 0;	
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:34:17 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 15:49:14 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:15:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ size_t	num_of_pipes(t_pars *lst)
 	len = 0;
 	while (lst)
 	{
-		if (lst->isOperator && lst->operator->pipe == true)
+		if (lst->is_operator && lst->operator->pipe == true)
 			len++;
 		lst = lst->next;
 	}
@@ -43,7 +43,7 @@ void	fork_error(int **fds, pid_t **ch_pid)
 */
 void	del_t_pars_node(t_pars *lst)
 {
-	if (lst->isCommand == true)
+	if (lst->is_command == true)
 	{
 		free(lst->cmd->command_name);
 		free(lst->cmd->command_path);
@@ -51,7 +51,7 @@ void	del_t_pars_node(t_pars *lst)
 			size_of_ptr_ptr((void **)lst->cmd->name_options_args));
 		free(lst->cmd);
 	}
-	else if (lst->isFile == true)
+	else if (lst->is_file == true)
 	{
 		free(lst->fl->file_name);
 		free(lst->fl);
@@ -68,7 +68,7 @@ int	num_of_out_redirs(t_pars *lst)
 	len = 0;
 	while (lst)
 	{
-		if (lst->isOperator && (lst->operator->redir_out == true
+		if (lst->is_operator && (lst->operator->redir_out == true
 				|| lst->operator->redir_out_app == true))
 			len++;
 		lst = lst->next;

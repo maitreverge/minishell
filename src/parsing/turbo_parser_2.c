@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 18:17:58 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:15:42 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ static void	last_checker(t_pars **pars)
 
 	first_node = *pars;
 	last = lstlast(*pars);
-	if (last->isOperator)
+	if (last->is_operator)
 	{
-		first_node->MasterKill = true;
+		first_node->masterkill = true;
 		ft_putendl_fd("Last token is an operator\n", 2);
 	}
-	else if (first_node->isOperator
+	else if (first_node->is_operator
 		&& first_node->operator->redir_in
-		&& first_node->next->isFile && !first_node->next->fl->file_exist)
+		&& first_node->next->is_file && !first_node->next->fl->file_exist)
 	{
-		first_node->MasterKill = true;
+		first_node->masterkill = true;
 		ft_putendl_fd("File does not exists\n", 2);
 	}
 }

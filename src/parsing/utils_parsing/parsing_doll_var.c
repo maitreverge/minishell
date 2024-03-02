@@ -6,11 +6,11 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:55:25 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 13:14:19 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:39:03 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 static void	part_1(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 {
@@ -94,7 +94,7 @@ static void	part_4(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 	u->j++;
 }
 
-void	parsing_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pars)
+void	parsing_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pa)
 {
 	t_utils	*u;
 
@@ -102,17 +102,17 @@ void	parsing_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pars)
 	u->expansion = true;
 	while (b[u->j])
 	{
-		part_1(u, b, env, pars);
+		part_1(u, b, env, pa);
 		if (is_any_quote(b[u->j]))
-			part_2(u, b, env, pars);
+			part_2(u, b, env, pa);
 	}
 	u->j = 0;
 	u->k = 0;
 	u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
 	while (b[u->j])
 	{
-		part_3(u, b, env, pars);
+		part_3(u, b, env, pa);
 		if (is_any_quote(b[u->j]))
-			part_4(u, b, env, pars);
+			part_4(u, b, env, pa);
 	}
 }

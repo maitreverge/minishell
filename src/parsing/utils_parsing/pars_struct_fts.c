@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 08:22:54 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 11:06:49 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:33:09 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-t_utils	*utils_init_struct(int len) // ! free this single node
+t_utils	*utils_init_struct(int len)
 {
 	t_utils	*current;
 

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:55:59 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/13 19:56:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:16:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	is_last_node_here_doc(t_pars **pars)
 	t_pars	*last;
 
 	last = lstlast(*pars);
-	if (last->isHereDoc)
+	if (last->is_here_doc)
 		return (true);
 	return (false);
 }
@@ -54,7 +54,7 @@ bool	is_last_node_cmd(t_pars **pars)
 	t_pars	*last;
 
 	last = lstlast(*pars);
-	if (last->isCommand)
+	if (last->is_command)
 		return (true);
 	return (false);
 }
@@ -64,7 +64,7 @@ bool	is_last_node_file(t_pars **pars)
 	t_pars	*last;
 
 	last = lstlast(*pars);
-	if (last->isFile)
+	if (last->is_file)
 		return (true);
 	return (false);
 }

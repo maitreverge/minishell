@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 15:19:29 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 16:24:11 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:16:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	redirect_input(t_pars **lst, t_all *all)
 	int		open_fd;
 	pid_t	ch_pid;
 
-	if ((*lst)->isCommand == false)
+	if ((*lst)->is_command == false)
 		return (ft_putendl_fd("Error: redirect input: redir to file.", 2), 1);
 	if ((*lst)->next->next->fl->file_exist == false)
 		return (ft_putendl_fd("Error: redirect input: nonexistant fl.", 2), 1);
@@ -118,7 +118,7 @@ static int	redir_out_child(t_pars **lst, t_all *all, int input_fd)
 		return (1);
 	dup2(open_fd, STDOUT_FILENO);
 	close(open_fd);
-	if ((*lst)->cmd->isBuiltin == true)
+	if ((*lst)->cmd->is_builtin == true)
 		exec_builtin(*lst, all, 0);
 	else
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args,

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/01 18:12:44 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:16:00 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_t_pars(t_pars **pars)
 	while (to_free)
 	{
 		temp = to_free;
-		if (to_free->isCommand && to_free->cmd)
+		if (to_free->is_command && to_free->cmd)
 		{
 			free(to_free->cmd->command_name);
 			if (to_free->cmd->command_path)
@@ -33,15 +33,15 @@ void	free_t_pars(t_pars **pars)
 			free_split(to_free->cmd->name_options_args);
 			free(to_free->cmd); // free the sub_node
 		}
-		// else if (to_free->isFile && to_free->fl)
+		// else if (to_free->is_file && to_free->fl)
 		// {
 		// 	free(to_free->fl->file_name);
 		// 	free(to_free->fl);
 		// }
-		else if (to_free->isOperator && to_free->operator)
+		else if (to_free->is_operator && to_free->operator)
 			free(to_free->operator);
 		
-		else if (to_free->isHereDoc) // only need to free the node
+		else if (to_free->is_here_doc) // only need to free the node
 		{
 			if (to_free->here_doc)
 				free(to_free->here_doc); // newly allocated node
@@ -76,7 +76,7 @@ void	free_full_t_pars(t_pars **pars)
 	while (to_free)
 	{
 		temp = to_free;
-		if (to_free->isCommand && to_free->cmd)
+		if (to_free->is_command && to_free->cmd)
 		{
 			free(to_free->cmd->command_name);
 			if (to_free->cmd->command_path)
@@ -84,15 +84,15 @@ void	free_full_t_pars(t_pars **pars)
 			free_split(to_free->cmd->name_options_args);
 			free(to_free->cmd);
 		}
-		else if (to_free->isFile)
+		else if (to_free->is_file)
 		{
 			free(to_free->fl->file_name);
 			free(to_free->fl);
 		}
-		if (to_free->isOperator && to_free->operator)
+		if (to_free->is_operator && to_free->operator)
 			free(to_free->operator);
 		
-		if (to_free->isHereDoc)
+		if (to_free->is_here_doc)
 			free(to_free->here_doc);
 		to_free = to_free->next;
 		free(temp);

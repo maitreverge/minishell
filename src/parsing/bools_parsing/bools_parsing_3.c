@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:58:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/02/29 18:31:09 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/02 10:14:44 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void	search_redir_in(t_pars **pars, char **splited, char **cleaned)
 		if (!ft_strcmp(cleaned[i], RED_IN)
 			&& !ft_strcmp(cleaned[i], splited[i]))
 		{
-			(*pars)->isRedirIn = true;
+			(*pars)->is_redir_in = true;
 			break ;
 		}
 		else if (!ft_strcmp(cleaned[i], RED_IN_DELIM)
 			&& !ft_strcmp(cleaned[i], splited[i]))
 		{
-			(*pars)->isRedirIn = true;
+			(*pars)->is_redir_in = true;
 			break ;
 		}
 		i++;

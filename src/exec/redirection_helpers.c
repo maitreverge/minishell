@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_helpers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:20:18 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/01 18:05:53 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:15:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	heredoc_helper_1(t_hrdoc *doc)
 
 void	set_temp_perms(t_pars **lst)
 {
-	(*lst)->next->next->isFile = true;
+	(*lst)->next->next->is_file = true;
 	(*lst)->next->next->fl = ft_calloc(sizeof(t_file), 1);
 	(*lst)->next->next->fl->file_exist = true;
 	(*lst)->next->next->fl->file_name = ft_strdup("/tmp/a0987654321aaa.tmp");
