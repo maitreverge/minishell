@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/12 22:13:42 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:44:49 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int	signals(t_pars *all)
 	sa.sa_handler = &handle_signal;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		return (-1);
-	all->last_exit_status = g_sig_received;
+	last_exit_status = g_sig_received;
 	return (g_sig_received);
 }

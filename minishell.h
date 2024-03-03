@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 14:40:35 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 14:42:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef struct s_pars
 	bool				masterkill;
 	bool				is_redir_in;
 	int					error_message;
-	int					last_exit_status;
+	// int					last_exit_status;
 	bool				is_command;
 	bool				is_file;
 	bool				is_operator;

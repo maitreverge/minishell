@@ -34,7 +34,7 @@ void	calc_len_doll(char *b, t_utils **u, t_env_list **env, t_pars **p)
 	{
 		if (!ft_strcmp(temp_str, "?"))
 		{
-			(*u)->real_len += int_len((*p)->last_exit_status);
+			(*u)->real_len += int_len(last_exit_status);
 			break ;
 		}
 		else if (!ft_strcmp(temp_str, (*env)->key))

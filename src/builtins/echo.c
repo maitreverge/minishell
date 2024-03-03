@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/02/28 17:48:33 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 14:43:37 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	ft_echo(char **args, t_pars *pars)
 
 	i = 0;
 	if (!args[1])
-		return (printf("\n"), lstfirst(pars)->last_exit_status = 0, 0);
+		return (printf("\n"), last_exit_status = 0, 0);
 	if (echo_full_minus_n(&args[1]))
-		return (lstfirst(pars)->last_exit_status = 0, 0);
+		return (last_exit_status = 0, 0);
 	start_printing = target_print_args(&args[1]);
 	if (start_printing == &args[1])
 		new_line = false;
@@ -91,6 +91,6 @@ int	ft_echo(char **args, t_pars *pars)
 	}
 	if (!new_line)
 		printf("\n");
-	lstfirst(pars)->last_exit_status = 0;
+	last_exit_status = 0;
 	return (0);
 }

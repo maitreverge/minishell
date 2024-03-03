@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 11:20:24 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 14:44:26 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	pipes_child_func(t_pars **lst, t_all *all, int input, t_pipe pippy)
 		if (!(*lst)->cmd->command_path)
 		{
 			printf("Command not found\n");
-			return (lstfirst(*lst)->last_exit_status = 127, 0);
+			return (last_exit_status = 127, 0);
 		}
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args,
 			all->copy_envp);
