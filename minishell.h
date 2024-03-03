@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 15:14:46 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:17:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999
 
-
+static int last_exit_status;
 // ENVIRONMENT structure
 typedef struct s_env_list
 {
