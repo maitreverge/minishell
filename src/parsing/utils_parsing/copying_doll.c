@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:01:30 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 14:45:41 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:04:40 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-static void	handle_exit_status(t_pars **pars, int *start, t_utils *u)
+static void	handle_exit_status(int *start, t_utils *u)
 {
 	char	*nbr;
 
@@ -45,7 +45,7 @@ static void	j_2(t_env_list *current_env, int *start, t_utils *u)
 	}
 }
 
-void	cop_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars)
+void	cop_doll(char *bu, t_utils **u, t_env_list **s_env)
 {
 	char		*temp_str;
 	int			i;
@@ -59,7 +59,7 @@ void	cop_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars)
 	{
 		if (!ft_strcmp(temp_str, "?"))
 		{
-			handle_exit_status(pars, &start, (*u));
+			handle_exit_status(&start, (*u));
 			break ;
 		}
 		else if (!ft_strcmp(temp_str, (*s_env)->key))

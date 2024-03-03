@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:55:25 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 11:34:16 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:08:57 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-static void	x_1(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
+static void	x_1(t_utils *u, char *buff, t_env_list **s_env)
 {
 	while (!is_any_quote(buff[u->j]) && buff[u->j])
 	{
@@ -20,7 +20,7 @@ static void	x_1(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 		if (buff[u->j] == DOLL_ENV && u->expansion)
 		{
 			u->j++;
-			calc_len_doll(&buff[u->j], &u, s_env, pars);
+			calc_len_doll(&buff[u->j], &u, s_env);
 		}
 		else
 		{
@@ -30,7 +30,7 @@ static void	x_1(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 	}
 }
 
-static void	x_2(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
+static void	x_2(t_utils *u, char *buff, t_env_list **s_env)
 {
 	u->starting_quote = buff[u->j];
 	u->j++;
@@ -41,7 +41,7 @@ static void	x_2(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 		if (buff[u->j] == DOLL_ENV && u->expansion)
 		{
 			u->j++;
-			calc_len_doll(&buff[u->j], &u, s_env, pars);
+			calc_len_doll(&buff[u->j], &u, s_env);
 		}
 		else
 		{
@@ -52,7 +52,7 @@ static void	x_2(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 	u->j++;
 }
 
-static void	x_3(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
+static void	x_3(t_utils *u, char *buff, t_env_list **s_env)
 {
 	while (!is_any_quote(buff[u->j]) && buff[u->j])
 	{
@@ -60,7 +60,7 @@ static void	x_3(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 		if (buff[u->j] == DOLL_ENV && u->expansion)
 		{
 			u->j++;
-			cop_doll(&buff[u->j], &u, s_env, pars);
+			cop_doll(&buff[u->j], &u, s_env);
 		}
 		else
 		{
@@ -71,7 +71,7 @@ static void	x_3(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 	}
 }
 
-static void	x_4(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
+static void	x_4(t_utils *u, char *buff, t_env_list **s_env)
 {
 	u->starting_quote = buff[u->j];
 	u->j++;
@@ -82,7 +82,7 @@ static void	x_4(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 		if (buff[u->j] == DOLL_ENV && u->expansion)
 		{
 			u->j++;
-			cop_doll(&buff[u->j], &u, s_env, pars);
+			cop_doll(&buff[u->j], &u, s_env);
 		}
 		else
 		{
@@ -94,7 +94,7 @@ static void	x_4(t_utils *u, char *buff, t_env_list **s_env, t_pars **pars)
 	u->j++;
 }
 
-void	par_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pa)
+void	par_doll_var(t_utils **ut, char *b, t_env_list **env)
 {
 	t_utils	*u;
 
@@ -102,17 +102,17 @@ void	par_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pa)
 	u->expansion = true;
 	while (b[u->j])
 	{
-		x_1(u, b, env, pa);
+		x_1(u, b, env);
 		if (is_any_quote(b[u->j]))
-			x_2(u, b, env, pa);
+			x_2(u, b, env);
 	}
 	u->j = 0;
 	u->k = 0;
 	u->result[u->i] = ft_calloc(sizeof(char), (u->real_len + 1));
 	while (b[u->j])
 	{
-		x_3(u, b, env, pa);
+		x_3(u, b, env);
 		if (is_any_quote(b[u->j]))
-			x_4(u, b, env, pa);
+			x_4(u, b, env);
 	}
 }

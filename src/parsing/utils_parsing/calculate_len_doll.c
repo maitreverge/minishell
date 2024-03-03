@@ -21,7 +21,7 @@ static void	p_p_1(char *buff, int *start, int *i, char **temp_str)
 	ft_strncpy((*temp_str), &buff[(*start)], (*i));
 }
 
-void	calc_len_doll(char *b, t_utils **u, t_env_list **env, t_pars **p)
+void	calc_len_doll(char *b, t_utils **u, t_env_list **env)
 {
 	char		*temp_str;
 	int			i;

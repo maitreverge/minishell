@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 14:42:26 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:14:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999
 
-int last_exit_status;
 
 // ENVIRONMENT structure
 typedef struct s_env_list
@@ -211,10 +210,10 @@ bool		alloc_part_2(t_alloc *cur, int *i, t_pars **pars);
 bool		alloc_part_3(t_alloc *cur, int *i, t_pars **pars);
 bool		alloc_part_4(t_alloc *cur, int *i, t_pars **pars);
 bool		alloc_part_5(t_alloc *cu, int *i, t_pars **pars, t_alloc **u_alloc);
-void		calc_len_doll(char *b, t_utils **u, t_env_list **env, t_pars **p);
-char		**clean_prpt(char **b, t_utils **ut, t_env_list **env, t_pars **p);
-void		cop_doll(char *bu, t_utils **u, t_env_list **s_env, t_pars **pars);
-void		par_doll_var(t_utils **ut, char *b, t_env_list **env, t_pars **pa);
+void		calc_len_doll(char *b, t_utils **u, t_env_list **env);
+char		**clean_prpt(char **b, t_utils **ut, t_env_list **env);
+void		cop_doll(char *bu, t_utils **u, t_env_list **s_env);
+void		par_doll_var(t_utils **ut, char *b, t_env_list **env);
 void		pars_alloc(t_pars **pars, t_alloc **u_alloc);
 bool		unclosed_quotes(char *str);
 
@@ -315,7 +314,7 @@ int			rdr_out_chld_helper(t_pars **lst, int *open_fd);
 int			redirect_output(t_pars **lst, t_all *all, int input_fd);
 
 // signals.c
-int			signals(t_pars *all);
+int			signals();
 
 // utils.c
 size_t		num_of_pipes(t_pars *lst);
@@ -326,11 +325,11 @@ int			num_of_out_redirs(t_pars *lst);
 // ------------- BUILTINS ---------------------------------
 
 void		ft_cd(t_pars **pars, t_env_list **envp);
-int			ft_echo(char **args, t_pars *pars);
-void		ft_env(char **args, t_all *all, t_pars **pars);
+int			ft_echo(char **args);
+void		ft_env(char **args, t_all *all);
 void		ft_exit(char **name_option, t_all *all, t_pars **pars);
-void		ft_export(t_env_list **envp, char **a, t_all *all, t_pars **pars);
-void		ft_pwd(char **name_args, t_pars **pars);
+void		ft_export(t_env_list **envp, char **a, t_all *all);
+void		ft_pwd(char **name_args);
 void		ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
 
 // minishell.c

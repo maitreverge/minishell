@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:30 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 14:43:46 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:01:18 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_env(char **args, t_all *all, t_pars **pars)
+void	ft_env(char **args, t_all *all)
 {
 	t_env_list	*temp;
 

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 14:44:49 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:00:07 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	handle_signal(int sig)
 
 /*all->last_exit_status = g_sig_received will surely be another struct,
 	fix it once you have the info. (for $?)*/
-int	signals(t_pars *all)
+int	signals(void)
 {
 	struct sigaction	sa;
 

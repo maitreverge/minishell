@@ -6,17 +6,17 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:07:25 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 11:32:41 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:10:37 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-static void	s_1(t_utils *u, char **buff, t_env_list **s_env, t_pars **pars)
+static void	s_1(t_utils *u, char **buff, t_env_list **s_env)
 {
 	u->j = 0;
 	u->real_len = 0;
-	par_doll_var(&u, buff[u->i], s_env, pars);
+	par_doll_var(&u, buff[u->i], s_env);
 	u->i++;
 }
 
@@ -64,7 +64,7 @@ static void	s_3(t_utils *u, char **buff)
 	}
 }
 
-char	**clean_prpt(char **b, t_utils **ut, t_env_list **env, t_pars **p)
+char	**clean_prpt(char **b, t_utils **ut, t_env_list **env)
 {
 	t_utils	*u;
 
@@ -72,7 +72,7 @@ char	**clean_prpt(char **b, t_utils **ut, t_env_list **env, t_pars **p)
 	while (b[u->i])
 	{
 		while (is_buff_valid_doll(b[u->i]))
-			s_1(u, b, env, p);
+			s_1(u, b, env);
 		if (!b[u->i])
 			break ;
 		u->j = 0;

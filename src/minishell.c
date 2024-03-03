@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 14:43:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:14:39 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@
 void	exec_builtin(t_pars *pars, t_all *all, int pid)
 {
 	if (!ft_strcmp(pars->cmd->name_options_args[0], "echo"))
-		ft_echo(pars->cmd->name_options_args, pars);
+		ft_echo(pars->cmd->name_options_args);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "cd"))
 		ft_cd(&pars, &all->env_lst);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "pwd"))
-		ft_pwd(pars->cmd->name_options_args, &pars);
+		ft_pwd(pars->cmd->name_options_args);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "env"))
-		ft_env(pars->cmd->name_options_args, all, &pars);
+		ft_env(pars->cmd->name_options_args, all);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "export"))
-		ft_export(&all->env_lst, pars->cmd->name_options_args, all, &pars);
+		ft_export(&all->env_lst, pars->cmd->name_options_args, all);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "unset"))
 		ft_unset(&all->env_lst, pars->cmd->name_options_args, &pars);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "exit"))
@@ -70,7 +70,7 @@ int	exec_external_func(t_pars *lst, t_all *all)
 	}
 	else if (ch_pid < 0)
 		return (perror("fork"), last_exit_status = errno, 1);
-	wait(last_exit_status);
+	wait(&last_exit_status);
 	last_exit_status = WEXITSTATUS(last_exit_status);
 	return (0);
 }
@@ -87,6 +87,7 @@ int	main(int ac, char **av, char **envp)
 	main_init(&all, &pars, &utils, envp);
 	while (1)
 	{
+		pars = init_1st_node_pars();
 		signals(pars);
 		reset_t_pars(&pars);
 		refresh_envp(&all);
@@ -98,6 +99,8 @@ int	main(int ac, char **av, char **envp)
 		if (pars && pars->next)
 			add_history(all->readline_line);
 		free(all->readline_line);
+		// free_t_pars(&pars);
 		free_t_pars(&pars);
+		free_full_t_pars(&pars);
 	}
 }

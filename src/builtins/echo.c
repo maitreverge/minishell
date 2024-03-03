@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:12:13 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 14:43:37 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:00:51 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static char	**target_print_args(char **args)
 	return (NULL);
 }
 
-int	ft_echo(char **args, t_pars *pars)
+int	ft_echo(char **args)
 {
 	char	**start_printing;
 	int		i;

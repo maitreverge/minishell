@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:46:42 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 11:38:46 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 14:49:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ t_all	*init_t_all_struct(char **envp)
 	return (new_all);
 }
 
-void	reset_t_pars(t_pars **pars)
+void	reset_t_pars(t_pars **pars) // ! no need to reset anymore
 {
 	(*pars)->masterkill = false;
-	(*pars)->is_redir_in = false;
+	(*pars)->is_redir_in = false; // ! check this one as well
 	(*pars)->error_message = 0;
 }
 

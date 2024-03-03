@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:47:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 10:15:42 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 14:53:46 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	last_checker(t_pars **pars)
 	t_pars	*last;
 	t_pars	*first_node;
 
-	first_node = *pars;
+	first_node = lstfirst(*pars);
 	last = lstlast(*pars);
 	if (last->is_operator)
 	{

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 14:44:02 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:02:43 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_env_list	*env_key_exist(t_env_list **envp, char *key)
 	return (current);
 }
 
-static bool	right_format(char *s_final_trim, t_pars **pars)
+static bool	right_format(char *s_final_trim)
 {
 	if (!correct_export_format(s_final_trim))
 	{
@@ -75,7 +75,7 @@ static void	ft_export_2(t_env_list **e, char **s, t_env_list *cur, char *trim)
 		env_lstadd_back(e, env_lstnew(s[0], s[1], trim));
 }
 
-void	ft_export(t_env_list **envp, char **a, t_all *all, t_pars **pars)
+void	ft_export(t_env_list **envp, char **a, t_all *all)
 {
 	t_env_list	*current_env;
 	char		**split_t;
@@ -83,7 +83,7 @@ void	ft_export(t_env_list **envp, char **a, t_all *all, t_pars **pars)
 	current_env = *envp;
 	if (!a[1])
 	{
-		ft_env(a, all, pars);
+		ft_env(a, all);
 		return ;
 	}
 	if (ft_isdigit(a[1][0]))
@@ -92,7 +92,7 @@ void	ft_export(t_env_list **envp, char **a, t_all *all, t_pars **pars)
 		last_exit_status = 1;
 		return ;
 	}
-	if (!right_format(a[1], pars))
+	if (!right_format(a[1]))
 		return ;
 	split_t = ft_2_split(a[1], '=');
 	ft_export_2(envp, split_t, current_env, a[1]);

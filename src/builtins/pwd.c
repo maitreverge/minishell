@@ -6,13 +6,13 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:11 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 14:44:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 15:01:29 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_pwd(char **name_args, t_pars **pars)
+void	ft_pwd(char **name_args)
 {
 	char		*cwd;
 
