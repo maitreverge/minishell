@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:01:30 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 15:04:40 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 17:25:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	handle_exit_status(int *start, t_utils *u)
 {
 	char	*nbr;
 
-	nbr = ft_itoa(last_exit_status);
+	nbr = ft_itoa(g_last_exit_status);
 	while (nbr[(*start)])
 	{
 		u->result[u->i][u->k] = nbr[(*start)];

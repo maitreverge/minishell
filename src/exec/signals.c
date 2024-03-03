@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 15:00:07 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 17:25:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	handle_signal(int sig)
 	}
 }
 
-/*all->last_exit_status = g_sig_received will surely be another struct,
+/*all->g_last_exit_status = g_sig_received will surely be another struct,
 	fix it once you have the info. (for $?)*/
 int	signals(void)
 {
@@ -41,6 +41,6 @@ int	signals(void)
 	sa.sa_handler = &handle_signal;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		return (-1);
-	last_exit_status = g_sig_received;
+	g_last_exit_status = g_sig_received;
 	return (g_sig_received);
 }

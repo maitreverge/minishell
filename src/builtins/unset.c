@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:58:42 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 14:44:22 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 17:25:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing)
 	if (!name_args[1])
 	{
 		ft_putendl_fd("unset : not enough arguments\n", 2);
-		last_exit_status = 1;
+		g_last_exit_status = 1;
 	}
 	extracted_key = ft_strdup((*parsing)->cmd->name_options_args[1]);
 	if (!ft_strcmp(first_node->key, extracted_key))
@@ -80,6 +80,6 @@ void	ft_unset(t_env_list **envp, char **name_args, t_pars **parsing)
 		del_last_node(current, extracted_key, last_node);
 	else
 		del_middle_node(envp, extracted_key);
-	last_exit_status = 0;
+	g_last_exit_status = 0;
 	free(extracted_key);
 }

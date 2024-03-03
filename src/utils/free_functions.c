@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 12:09:12 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 18:12:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,14 @@ void	free_full_t_pars(t_pars **pars)
 	while (to_free)
 	{
 		temp = to_free;
-		if (to_free->is_command && to_free->cmd)
+		if (to_free->cmd)
 			free_cmd_node(to_free);
 		else if (to_free->is_file)
 		{
 			free(to_free->fl->file_name);
 			free(to_free->fl);
 		}
-		if (to_free->is_operator && to_free->operator)
+		if (to_free->operator)
 			free(to_free->operator);
 		if (to_free->is_here_doc)
 			free(to_free->here_doc);

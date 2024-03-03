@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:21:39 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 14:59:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 18:10:53 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	check_ctrl_d(t_all *all, t_pars *pars)
 	{
 		ft_putendl_fd("exit", 2);
 		free_all(&all);
-		free_firstnode_pars(&pars);
+		// free_firstnode_pars(&pars);
+		free_full_t_pars(&pars);
 		exit(0);
 	}
 }

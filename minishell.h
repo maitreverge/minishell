@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 15:17:46 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 17:29:28 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999
 
-static int last_exit_status;
+extern int g_last_exit_status;
 // ENVIRONMENT structure
 typedef struct s_env_list
 {
@@ -79,7 +79,7 @@ typedef struct s_pars
 	bool				masterkill;
 	bool				is_redir_in;
 	int					error_message;
-	// int					last_exit_status;
+	// int					g_last_exit_status;
 	bool				is_command;
 	bool				is_file;
 	bool				is_operator;
@@ -196,7 +196,7 @@ char		**parsing_split(char *s);
 t_utils		*utils_init_struct(int len);
 t_pars		*init_1st_node_pars(void);
 t_pars		*lstfirst(t_pars *lst);
-t_pars		*lstnew(int exit_status);
+t_pars		*lstnew(void);
 t_pars		*lstlast(t_pars *lst);
 void		lstadd_back(t_pars **lst, t_pars *new);
 void		lstadd_front(t_pars **lst, t_pars *new);

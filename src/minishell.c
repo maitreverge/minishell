@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 15:46:11 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 18:00:17 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ static void	asdf(int sig)
 int	exec_external_func(t_pars *lst, t_all *all)
 {
 	pid_t	ch_pid;
-	t_pars	*frst;
+	// t_pars	*frst;
 
-	frst = lstfirst(lst);
+	// frst = lstfirst(lst);
 	ch_pid = fork();
 	if (ch_pid > 0)
 	{
@@ -63,17 +63,18 @@ int	exec_external_func(t_pars *lst, t_all *all)
 	{
 		if (!lst->cmd->command_path)
 			return (printf("Command not found\n"),
-				last_exit_status = 127, exit(127), 1);
+				g_last_exit_status = 127, exit(127), 1);
 		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args,
 				all->copy_envp) < 0)
 			return (perror("execve"), exit(EXIT_FAILURE), 1);
 	}
 	else if (ch_pid < 0)
-		return (perror("fork"), last_exit_status = errno, 1);
-	wait(&last_exit_status);
-	last_exit_status = WEXITSTATUS(last_exit_status);
+		return (perror("fork"), g_last_exit_status = errno, 1);
+	wait(&g_last_exit_status);
+	g_last_exit_status = WEXITSTATUS(g_last_exit_status);
 	return (0);
 }
+int g_last_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -100,7 +101,6 @@ int	main(int ac, char **av, char **envp)
 			add_history(all->readline_line);
 		free(all->readline_line);
 		// free_t_pars(&pars);
-		free_t_pars(&pars);
 		free_full_t_pars(&pars);
 	}
 }

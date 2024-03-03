@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:59:20 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 15:02:43 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 17:25:58 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static bool	right_format(char *s_final_trim)
 {
 	if (!correct_export_format(s_final_trim))
 	{
-		last_exit_status = 1;
+		g_last_exit_status = 1;
 		ft_putendl_fd("Wrong export format\n", 2);
 		return (false);
 	}
@@ -89,13 +89,13 @@ void	ft_export(t_env_list **envp, char **a, t_all *all)
 	if (ft_isdigit(a[1][0]))
 	{
 		ft_putendl_fd("export : token variable can't start with a number", 2);
-		last_exit_status = 1;
+		g_last_exit_status = 1;
 		return ;
 	}
 	if (!right_format(a[1]))
 		return ;
 	split_t = ft_2_split(a[1], '=');
 	ft_export_2(envp, split_t, current_env, a[1]);
-	last_exit_status = 0;
+	g_last_exit_status = 0;
 	free_split(split_t);
 }
