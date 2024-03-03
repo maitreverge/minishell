@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/02 11:36:28 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/03 14:40:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@
 # define RED_OUT_APP ">>"
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999
+
+int last_exit_status;
 
 // ENVIRONMENT structure
 typedef struct s_env_list
