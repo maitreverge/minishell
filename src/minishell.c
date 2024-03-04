@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 14:15:10 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 14:23:15 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		pars = init_1st_node_pars();
-		signals(pars);
+		signals();
 		reset_t_pars(&pars);
 		refresh_envp(&all);
 		all->readline_line = readline("minishell$ ");
