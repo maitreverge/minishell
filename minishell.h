@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 14:18:56 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 16:18:16 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,7 @@ int			ft_echo(char **args);
 void		ft_env(char **args, t_all *all);
 void		ft_exit(char **name_option, t_all *all, t_pars **pars);
 void		ft_export(t_env_list **envp, char **a, t_all *all);
-void		ft_pwd(char **name_args);
+void		ft_pwd(void);
 void		ft_unset(t_env_list **envp, char **name_args, t_pars **parsing);
 
 // minishell.c
