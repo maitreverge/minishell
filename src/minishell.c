@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 15:25:39 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:18:39 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exec_builtin(t_pars *pars, t_all *all, int pid)
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "cd"))
 		ft_cd(&pars, &all->env_lst);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "pwd"))
-		ft_pwd(pars->cmd->name_options_args);
+		ft_pwd();
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "env"))
 		ft_env(pars->cmd->name_options_args, all);
 	else if (!ft_strcmp(pars->cmd->name_options_args[0], "export"))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:02:38 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 15:27:16 by glambrig         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:27:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	signals(void)
 {
 	struct sigaction	sa;
 
-	// g_sig_received = 0;
 	signal(SIGQUIT, SIG_IGN);
 	sigemptyset(&sa.sa_mask);
 	sigaddset(&sa.sa_mask, SIGSTOP);
@@ -41,6 +40,5 @@ int	signals(void)
 	sa.sa_handler = &handle_signal;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		return (-1);
-	// g_last_exit_status = g_sig_received;
 	return (g_last_exit_status);
 }
