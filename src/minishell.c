@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: glambrig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 14:40:03 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 15:25:39 by glambrig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ static void	asdf(int sig)
 	kill(g_pid, SIGINT);
 }
 
+int	g_last_exit_status;
+
 int	exec_external_func(t_pars *lst, t_all *all)
 {
 	pid_t	ch_pid;
-	int test = 0;
 
 	ch_pid = fork();
 	if (ch_pid > 0)
@@ -62,7 +63,7 @@ int	exec_external_func(t_pars *lst, t_all *all)
 	{
 		if (!lst->cmd->command_path)
 			return (printf("Command not found\n"),
-				g_last_exit_status = 127, exit(127), 1);
+				g_last_exit_status = 127, exit(127), 127);
 		else if (execve(lst->cmd->command_path, lst->cmd->name_options_args,
 				all->copy_envp) < 0)
 			return (perror("execve"), exit(EXIT_FAILURE), 1);
@@ -74,8 +75,6 @@ int	exec_external_func(t_pars *lst, t_all *all)
 	return (0);
 }
 
-int	g_last_exit_status;
-
 int	main(int ac, char **av, char **envp)
 {
 	t_all		*all;
@@ -85,7 +84,6 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
-	g_last_exit_status = 0;
 	main_init(&all, &pars, &utils, envp);
 	while (1)
 	{
