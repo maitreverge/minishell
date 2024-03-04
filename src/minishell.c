@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 14:23:15 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 14:40:03 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	asdf(int sig)
 int	exec_external_func(t_pars *lst, t_all *all)
 {
 	pid_t	ch_pid;
+	int test = 0;
 
 	ch_pid = fork();
 	if (ch_pid > 0)
@@ -73,7 +74,7 @@ int	exec_external_func(t_pars *lst, t_all *all)
 	return (0);
 }
 
-int	g_last_exit_status = 0;
+int	g_last_exit_status;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -84,6 +85,7 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	g_last_exit_status = 0;
 	main_init(&all, &pars, &utils, envp);
 	while (1)
 	{
@@ -96,7 +98,8 @@ int	main(int ac, char **av, char **envp)
 		turbo_parser(all->readline_line, &pars, &all->env_lst, &utils);
 		if (!lstfirst(pars)->masterkill)
 			masterkill_false(pars, all, &k);
-		add_history(all->readline_line);
+		if (all->readline_line[0] != '\0')
+			add_history(all->readline_line);
 		free(all->readline_line);
 		free_full_t_pars(&pars);
 	}
