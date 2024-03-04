@@ -26,9 +26,9 @@ void	calc_len_doll(char *b, t_utils **u, t_env_list **env)
 	char		*temp_str;
 	int			i;
 	int			start;
-	t_env_list *temp;
+	t_env_list	*temp;
 
-	temp = *env; // * fixed leaks
+	temp = *env;
 	i = 0;
 	start = 0;
 	p_p_1(b, &start, &i, &temp_str);

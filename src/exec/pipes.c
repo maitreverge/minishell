@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 10:52:23 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:37:31 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	**create_pipes(t_pars **lst, pid_t **ch_pid, int *main_i)
 	return (fds);
 }
 
+	// return (free_full_t_pars(lst), exit(0), 0);
 int	pipes_child_func(t_pars **lst, t_all *all, int input, t_pipe pippy)
 {
 	if (input != -1)
@@ -69,7 +70,6 @@ int	pipes_child_func(t_pars **lst, t_all *all, int input, t_pipe pippy)
 		execve((*lst)->cmd->command_path, (*lst)->cmd->name_options_args,
 			all->copy_envp);
 	}
-	// return (free_full_t_pars(lst), exit(0), 0);
 	return (exit(0), 0);
 }
 
@@ -81,10 +81,9 @@ int	pipes_child_func(t_pars **lst, t_all *all, int input, t_pipe pippy)
 int	pipes(t_pars **lst, t_all *all, int input_fd)
 {
 	t_pipe	pippy;
-
 	t_pars	*cur;
-	cur = *lst;
 
+	cur = *lst;
 	pippy.fds = create_pipes(lst, &pippy.ch_pid, &pippy.i);
 	while (cur != NULL && cur->is_command == true)
 	{
@@ -95,7 +94,7 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 		input_fd = pippy.fds[pippy.i++][0];
 		if (cur->next && cur->next->is_operator == true
 			&& cur->next->operator->pipe == true)
-			cur = cur->next->next; // leaks comes from the old version where you played with the whole struct
+			cur = cur->next->next;
 		else
 		{
 			pipes_helper_3(&cur, all);

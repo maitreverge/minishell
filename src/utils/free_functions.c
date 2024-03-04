@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 09:40:52 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 18:12:58 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:35:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,11 @@ static void	free_cmd_node(t_pars *to_free)
 // ! Function free every node of t_pars except the first one
 void	free_t_pars(t_pars **pars)
 {
-	t_pars	*first_node;
 	t_pars	*to_free;
 	t_pars	*temp;
 
-	first_node = lstfirst(*pars);
-	to_free = first_node->next;
-	first_node->next = NULL;
+	to_free = lstfirst(*pars)->next;
+	lstfirst(*pars)->next = NULL;
 	while (to_free)
 	{
 		temp = to_free;

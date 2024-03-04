@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:07:25 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/04 13:15:20 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:40:36 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	**clean_prpt(char **b, t_utils **ut, t_env_list **env)
 	while (b[u->i])
 	{
 		while (is_buff_valid_doll(b[u->i]))
-			s_1(u, b, env); // ! leak
+			s_1(u, b, env);
 		if (!b[u->i])
 			break ;
 		u->j = 0;

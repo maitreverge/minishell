@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 10:15:38 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:44:45 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ static void	asdf(int sig)
 int	exec_external_func(t_pars *lst, t_all *all)
 {
 	pid_t	ch_pid;
-	// t_pars	*frst;
 
-	// frst = lstfirst(lst);
 	ch_pid = fork();
 	if (ch_pid > 0)
 	{
@@ -74,7 +72,8 @@ int	exec_external_func(t_pars *lst, t_all *all)
 	g_last_exit_status = WEXITSTATUS(g_last_exit_status);
 	return (0);
 }
-int g_last_exit_status = 0;
+
+int	g_last_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -82,7 +81,6 @@ int	main(int ac, char **av, char **envp)
 	t_utils		*utils;
 	t_pars		*pars;
 	int			k;
-	t_pars *first_node;
 
 	(void)ac;
 	(void)av;
@@ -101,9 +99,6 @@ int	main(int ac, char **av, char **envp)
 		if (pars && pars->next)
 			add_history(all->readline_line);
 		free(all->readline_line);
-		first_node = lstfirst(pars);
-		// free_t_pars(&pars);
-		// free_full_t_pars(&pars);
-		free_full_t_pars(&first_node);
+		free_full_t_pars(&pars);
 	}
 }

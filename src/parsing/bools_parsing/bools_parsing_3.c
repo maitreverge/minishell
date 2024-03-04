@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:58:47 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 20:25:18 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:39:19 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,9 @@ char	**extract_paths(t_env_list **s_env)
 {
 	t_env_list	*current;
 	char		**result;
-	char		*paths_value = NULL;
+	char		*paths_value;
 
+	paths_value = NULL;
 	current = *s_env;
 	while (current)
 	{
@@ -105,7 +106,7 @@ char	**extract_paths(t_env_list **s_env)
 		current = current->next;
 	}
 	if (!paths_value)
-		return NULL;
+		return (NULL);
 	result = path_split(paths_value, ':');
 	return (result);
 }

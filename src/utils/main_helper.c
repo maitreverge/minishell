@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:21:39 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 13:02:54 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:32:15 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	main_init(t_all **all, t_pars **pars, t_utils **u, char **envp)
 	*u = NULL;
 	*pars = NULL;
 	*all = init_t_all_struct(envp);
-	// *pars = init_1st_node_pars();
 }
 
 void	check_ctrl_d(t_all *all, t_pars *pars)
@@ -55,7 +54,6 @@ void	check_ctrl_d(t_all *all, t_pars *pars)
 		ft_putendl_fd("exit", 2);
 		free_full_t_pars(&pars);
 		free_all(&all);
-		// free_firstnode_pars(&pars);
 		exit(0);
 	}
 }

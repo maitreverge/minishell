@@ -6,20 +6,19 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 04:25:36 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 17:25:58 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:39:50 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
 
-t_pars	*lstnew()
+t_pars	*lstnew(void)
 {
 	t_pars	*new_node;
 
 	new_node = (t_pars *)malloc(sizeof(t_pars));
 	if (!new_node)
 		return (NULL);
-	// new_node->g_last_exit_status = exit_status;
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	return (new_node);
