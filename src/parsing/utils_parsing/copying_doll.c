@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:01:30 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 17:25:58 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:26:35 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,27 @@ void	cop_doll(char *bu, t_utils **u, t_env_list **s_env)
 	char		*temp_str;
 	int			i;
 	int			start;
+	t_env_list *cur; // ! fixed leak for t_env_list
+
+	cur = *s_env;
 
 	temp_str = NULL;
 	i = 0;
 	start = 0;
 	j_1(bu, &start, &i, &temp_str);
-	while (*s_env)
+	while (cur)
 	{
 		if (!ft_strcmp(temp_str, "?"))
 		{
 			handle_exit_status(&start, (*u));
 			break ;
 		}
-		else if (!ft_strcmp(temp_str, (*s_env)->key))
+		else if (!ft_strcmp(temp_str, cur->key))
 		{
-			j_2(*s_env, &start, (*u));
+			j_2(cur, &start, (*u));
 			break ;
 		}
-		(*s_env) = (*s_env)->next;
+		cur = cur->next;
 	}
 	(*u)->j += i;
 	free(temp_str);

@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:55:25 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/03 15:08:57 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 13:17:34 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	x_1(t_utils *u, char *buff, t_env_list **s_env)
 		if (buff[u->j] == DOLL_ENV && u->expansion)
 		{
 			u->j++;
-			calc_len_doll(&buff[u->j], &u, s_env);
+			calc_len_doll(&buff[u->j], &u, s_env); // ! leaks
 		}
 		else
 		{
@@ -102,7 +102,7 @@ void	par_doll_var(t_utils **ut, char *b, t_env_list **env)
 	u->expansion = true;
 	while (b[u->j])
 	{
-		x_1(u, b, env);
+		x_1(u, b, env); // ! leaks
 		if (is_any_quote(b[u->j]))
 			x_2(u, b, env);
 	}

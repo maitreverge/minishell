@@ -26,23 +26,25 @@ void	calc_len_doll(char *b, t_utils **u, t_env_list **env)
 	char		*temp_str;
 	int			i;
 	int			start;
+	t_env_list *temp;
 
+	temp = *env; // * fixed leaks
 	i = 0;
 	start = 0;
 	p_p_1(b, &start, &i, &temp_str);
-	while (*env)
+	while (temp)
 	{
 		if (!ft_strcmp(temp_str, "?"))
 		{
 			(*u)->real_len += int_len(g_last_exit_status);
 			break ;
 		}
-		else if (!ft_strcmp(temp_str, (*env)->key))
+		else if (!ft_strcmp(temp_str, temp->key))
 		{
-			(*u)->real_len += ft_strlen((*env)->value);
+			(*u)->real_len += ft_strlen(temp->value);
 			break ;
 		}
-		(*env) = (*env)->next;
+		temp = temp->next;
 	}
 	(*u)->j += i;
 	free(temp_str);
