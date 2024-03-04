@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:56:20 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 18:39:50 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 10:52:23 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,17 @@ int	pipes(t_pars **lst, t_all *all, int input_fd)
 	pippy.fds = create_pipes(lst, &pippy.ch_pid, &pippy.i);
 	while (cur != NULL && cur->is_command == true)
 	{
-		if (pipes_helper_1(lst, all, input_fd) == 1)
+		if (pipes_helper_1(&cur, all, input_fd) == 1)
 			break ;
 		pippy.ch_pid[pippy.i] = fork();
-		pipes_helper_2(lst, all, pippy, input_fd);
+		pipes_helper_2(&cur, all, pippy, input_fd);
 		input_fd = pippy.fds[pippy.i++][0];
 		if (cur->next && cur->next->is_operator == true
 			&& cur->next->operator->pipe == true)
 			cur = cur->next->next; // leaks comes from the old version where you played with the whole struct
 		else
 		{
-			pipes_helper_3(lst, all);
+			pipes_helper_3(&cur, all);
 			break ;
 		}
 	}

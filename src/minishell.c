@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 13:37:40 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 18:00:17 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 10:15:38 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	main(int ac, char **av, char **envp)
 	t_utils		*utils;
 	t_pars		*pars;
 	int			k;
+	t_pars *first_node;
 
 	(void)ac;
 	(void)av;
@@ -100,7 +101,9 @@ int	main(int ac, char **av, char **envp)
 		if (pars && pars->next)
 			add_history(all->readline_line);
 		free(all->readline_line);
+		first_node = lstfirst(pars);
 		// free_t_pars(&pars);
-		free_full_t_pars(&pars);
+		// free_full_t_pars(&pars);
+		free_full_t_pars(&first_node);
 	}
 }
