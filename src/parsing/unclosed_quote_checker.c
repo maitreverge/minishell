@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:51:14 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/02 11:03:54 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 14:07:23 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	unclosed_quotes(char *str)
 	size_t	i;
 
 	i = 0;
-	if (!str)
+	if (str == NULL)
 		return (true);
 	while (str[i])
 	{

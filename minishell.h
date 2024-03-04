@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/03 17:29:28 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 14:11:50 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ void		pars_alloc(t_pars **pars, t_alloc **u_alloc);
 bool		unclosed_quotes(char *str);
 
 // main parsing function called in main
-void		turbo_parser(char *p, t_pars **pa, t_env_list **env, t_utils **s_u);
+int		turbo_parser(char *p, t_pars **pa, t_env_list **env, t_utils **s_u);
 
 // ! ------------- UTILS ---------------------------------
 
