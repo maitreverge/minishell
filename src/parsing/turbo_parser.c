@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 16:55:31 by flverge           #+#    #+#             */
-/*   Updated: 2024/03/04 14:14:57 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 15:58:30 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	turbo_parser(char *p, t_pars **pa, t_env_list **env, t_utils **s_u)
 	{
 		return ((*pa)->masterkill = true, g_last_exit_status = 1,
 			free(utils),
-			ft_putendl_fd("error : unclosed quotes detected\n", 2), 0);
+			ft_putendl_fd("error : unclosed quotes detected", 2), 0);
 	}
 	len_splited_prompt = parsing_countwords(p);
 	u = utils_init_struct(len_splited_prompt);
 	utils->splitted_prompt = parsing_split(p);
 	utils->cleaned_prompt = clean_prpt(utils->splitted_prompt, &u, env);
-	utils->paths = extract_paths(env);
+	utils->paths = extract_paths(env); // turn master kill on rempalcer par une fonction
 	pars_alloc(pa, &utils);
 	free_s_utils(&u);
 	free_t_alloc(utils);
