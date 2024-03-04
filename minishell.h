@@ -6,7 +6,7 @@
 /*   By: flverge <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:04:35 by glambrig          #+#    #+#             */
-/*   Updated: 2024/03/04 14:11:50 by flverge          ###   ########.fr       */
+/*   Updated: 2024/03/04 14:18:56 by flverge          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define DOLL_ENV '$'
 # define EMPTY_EXIT_LIST -999
 
-extern int g_last_exit_status;
+extern int	g_last_exit_status;
 // ENVIRONMENT structure
 typedef struct s_env_list
 {
@@ -218,7 +218,7 @@ void		pars_alloc(t_pars **pars, t_alloc **u_alloc);
 bool		unclosed_quotes(char *str);
 
 // main parsing function called in main
-int		turbo_parser(char *p, t_pars **pa, t_env_list **env, t_utils **s_u);
+int			turbo_parser(char *p, t_pars **pa, t_env_list **env, t_utils **s_u);
 
 // ! ------------- UTILS ---------------------------------
 
@@ -314,7 +314,7 @@ int			rdr_out_chld_helper(t_pars **lst, int *open_fd);
 int			redirect_output(t_pars **lst, t_all *all, int input_fd);
 
 // signals.c
-int			signals();
+int			signals(void);
 
 // utils.c
 size_t		num_of_pipes(t_pars *lst);
