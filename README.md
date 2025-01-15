@@ -20,11 +20,11 @@ Start by clonning the repo :
 git clone git@github.com:maitreverge/minishell.git && cd minishell
 ```
 
-[!IMPORTANT]
-The program must replicate the behavior of a shell in interactive and non-interactive modes, following the project’s strict guidelines.
+> [!IMPORTANT]
+> The program must replicate the behavior of a shell in interactive and non-interactive modes, following the project’s strict guidelines.
 
-[!WARNING]
-Undefined behavior, such as unclosed quotes or incorrect handling of special characters, should be avoided.
+> [!WARNING]
+> Undefined behavior, such as unclosed quotes or incorrect handling of special characters, should be avoided.
 
 The program should:
 
@@ -69,7 +69,7 @@ The program implements the following core functionalities:
 
 ### Command Execution
 
-Search and execute commands based on the PATH environment variable or absolute/relative paths.
+- Search and execute commands based on the PATH environment variable or absolute/relative paths.
 
 ### Built-in Commands
 
@@ -101,7 +101,7 @@ The following built-in commands must be implemented:
 
 ### Pipes
 
-Handle pipelines (|), chaining multiple commands together so the output of one becomes the input of the next.
+- Handle pipelines `|`, chaining multiple commands together so the output of one becomes the input of the next.
 
 ### Signal Handling
 
@@ -113,9 +113,9 @@ Handle pipelines (|), chaining multiple commands together so the output of one b
 
 ### Environment Variables
 
-Handle `$` expansion to substitute environment variables.
+- Handle `$` expansion to substitute environment variables.
 
-Handle `$?` to display the exit status of the last executed command.
+- Handle `$?` to display the exit status of the last executed command.
 
 ## 💻 EXAMPLE
 
