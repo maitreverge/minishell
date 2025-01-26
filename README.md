@@ -133,5 +133,13 @@ minishell
 minishell$ exit
 ```
 
+## 🧑‍💻 AUTHORS
+
+This project was developed by the following contributors:
+- **George LAMBRIGHT** ([@glambrig](https://github.com/glambrig)) – Specialized in `minishell` execution (pipelines, redirections), signal handling and crafting the built-ins.
+- **Florian VERGE** ([@maitreverge](https://github.com/maitreverge)) – Managed `minishell` parsing, environment variables and `$?` last exit status.
+
+The project started in Febuary 2024 and was completed over the course of 5 weeks.
+
 ## 🤝 CONTRIBUTION
 Contributions are open, open a Github Issue or submit a PR 🚀
